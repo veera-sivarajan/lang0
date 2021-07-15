@@ -51,9 +51,10 @@ class Token {
 private:
     TokenType type;
     string lexeme;
+    Object literal;
     int line; 
 
 public:
-    Token (TokenType type, string lexeme, int line);
+    Token (TokenType type, string lexeme, Object literal, int line);
     string toString();
 };

@@ -45,9 +45,10 @@ Object Object::make_nil_obj() {
     return nil_obj;
 }
 
-Token::Token (TokenType type, string lexeme, int line) {
+Token::Token (TokenType type, string lexeme, Object literal, int line) {
     type = type;
     lexeme = lexeme;
+    literal = literal;
     line = line;
 }
 

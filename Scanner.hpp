@@ -22,6 +22,14 @@ private:
     void scanToken();
     char advance();
     void addToken(TokenType type);
+    void addToken(TokenType type, Object literal);
+    bool match(char expected);
+    char peek();
+    char peekNext();
+    void makeString();
+    void makeNumber();
+    void makeIdentifier();
+    
 
 public:
     Scanner(string source);
