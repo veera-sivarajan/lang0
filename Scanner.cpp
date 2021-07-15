@@ -1,39 +1,34 @@
 # include "./Token.hpp"
 
-# include <string>
-# include <iostream>
-# include <list>
-
-using std::string;
-using std::list;
-
-class Scanner {
-    int start = 0;
-    int current = 0;
-    int line = 1;
-    string source;
-    list <Token> tokens;  
-
-    Scanner (string source) {
-        source = source;
+vector<Token> Scanner::scanTokens() {
+    while(!isAtEnd()) {
+        // Beginning of next lexeme
+        start = current;
+        scanToken();
     }
+    Token token(EOF_TOKEN, "", line);
+    tokens.push_back(token);
+    return tokens;
+}
 
-    list <Token> scanTokens() {
-        while (!isAtEnd()) {
-            start = current;
-            scanTokens();
-        }
+bool Scanner::isAtEnd() {
+    return current >= source.length();
+}
 
-        tokens.push_back(Token(END, "", line));
-        return tokens;
+void Scanner::scanToken() {
+    char c = advance();
+
+    switch(c) {
+    case '(': addToken(LEFT_PAREN); break;
+    case ')': addToken(RIGHT_PAREN); break;
+    case '{': addToken(LEFT_BRACE); break;
+    case '}': addToken(RIGHT_BRACE); break;
+    case ',': addToken(COMMA); break;
+    case '.': addToken(DOT); break;
+    case '-': addToken(MINUS); break;
+    case '+': addToken(PLUS); break;
+    case ';': addToken(SEMICOLON); break;
+    case '*': addToken(STAR); break;
     }
-
-    int isAtEnd () {
-        return 1;
-    }
-};
-
-int main () {
-    return 0;
 }
     

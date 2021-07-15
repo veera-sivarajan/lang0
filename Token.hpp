@@ -16,7 +16,7 @@ enum TokenType {
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR, PRINT, RETURN, SUPER,
     THIS, TRUE, VAR, WHILE,
 
-    END
+    EOF_TOKEN                // Using this instead of EOF becuase EOF is keyword
 };
 
 class Token {
