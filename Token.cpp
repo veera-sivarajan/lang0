@@ -14,6 +14,8 @@ string Object::toString() {
         return boolean ? "1" : "0";
     case Object_str:
         return str;
+    default:
+        return "Object::toString(): Unknown value in switch case\n";
     }
 }
 

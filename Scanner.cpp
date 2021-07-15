@@ -1,4 +1,14 @@
-# include "./Token.hpp"
+# include "./Scanner.hpp"
+# include <string>
+# include <iostream>
+# include <vector>
+# include <map>
+
+using std::string;
+using std::vector;
+using std::map;
+using std::stod;
+using std::endl;
 
 vector<Token> Scanner::scanTokens() {
     while(!isAtEnd()) {
@@ -6,13 +16,13 @@ vector<Token> Scanner::scanTokens() {
         start = current;
         scanToken();
     }
-    Token token(EOF_TOKEN, "", line);
+    Token token(EOF_TOKEN, "", Object::make_str_obj(""), line);
     tokens.push_back(token);
     return tokens;
 }
 
 bool Scanner::isAtEnd() {
-    return current >= source.length();
+    return current >= static_cast<int>(source.length());
 }
 
 void Scanner::scanToken() {
@@ -33,7 +43,7 @@ void Scanner::scanToken() {
     case '!': addToken(match('=') ? BANG_EQUAL : BANG); break;
     case '=': addToken(match('=') ? EQUAL_EQUAL : EQUAL); break;
     case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
-    case '>': addToken(match('=') ? GREATER_EQUAL : GREAT); break;
+    case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
 
     case '/':
         if (match('/')) {
@@ -66,7 +76,7 @@ void Scanner::scanToken() {
         } else if (isAlpha(c)) {
             makeIdentifier();
         } else {
-            cout << "Unexpected character\n";
+            std::cout << "Unexpected character\n";
         }
         break;
     } 
@@ -77,15 +87,15 @@ char Scanner::advance() {
     return source.at(current - 1); // returns character under consideration
 }
 
-void Scanner::addToken(TokenType type) {
-    addToken(type, make_str_obj(""));
-}
-
 void Scanner::addToken(TokenType type, Object literal) {
     // .substr(first_character, number of character after first)
     string text = source.substr(start, current - start); 
     Token token(type, text, literal, line);
     tokens.push_back(token);
+}
+
+void Scanner::addToken(TokenType type) {
+    addToken(type, Object::make_str_obj(""));
 }
 
 bool Scanner::match(char expected) {
@@ -111,7 +121,7 @@ void Scanner::makeString() {
     // Unterminated String 
     if (isAtEnd()) {
         // Print error message
-        cout << "Unterminated String\n";
+        std::cout << "Unterminated String\n";
         return;
     }
 
@@ -128,7 +138,7 @@ bool Scanner::isDigit(char c) {
 }
 
 char Scanner::peekNext() {
-    if (current + 1 > source.length()) return '\0';
+    if (current + 1 > static_cast<int>(source.length())) return '\0';
     return source.at(current + 1);
 }
 
@@ -142,7 +152,7 @@ void Scanner::makeNumber() {
         while (isDigit(peek())) advance();
     }
 
-    double number = stod(soure.substr(start, current - start)); 
+    double number = stod(source.substr(start, current - start)); 
     addToken(NUMBER, Object::make_num_obj(number));
 }
 
@@ -174,10 +184,10 @@ map<string, TokenType> Scanner::keywords = {
     {"true", TRUE},
     {"var", VAR},
     {"while", WHILE}
-}
+};
 
 void Scanner::makeIdentifier() {
-    while (isAlphaNumeic(peek())) advance();
+    while (isAlphaNumeric(peek())) advance();
     string text = source.substr(start, current - start);
     auto found = keywords.find(text); // found is an iterator
     TokenType type;
@@ -187,6 +197,10 @@ void Scanner::makeIdentifier() {
         type = IDENTIFIER;
     }
     addToken(type);
+}
+
+int main(void) {
+    return 0;
 }
 
 

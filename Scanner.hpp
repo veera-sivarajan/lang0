@@ -3,9 +3,13 @@
 # include <string>
 # include <iostream>
 # include <vector>
+# include <map>
 
 using std::string;
 using std::vector;
+using std::map;
+using std::stod;
+using std::endl;
 
 class Scanner {
 private:
@@ -34,5 +38,7 @@ private:
 
 public:
     Scanner(string source);
+    vector<Token> scanTokens();
     bool isAtEnd();
+};
     
