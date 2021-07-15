@@ -14,6 +14,7 @@ private:
     int line = 1;    // line # of current
     string source;
     vector<Token> tokens;
+    static map<string, TokenType> keywords;
 
     bool isAlpha(char c);
     bool isAlphaNumeric(char c);

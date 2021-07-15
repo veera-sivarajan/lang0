@@ -157,9 +157,37 @@ bool Scanner::isAlphaNumeric(char c) {
     return isAlpha(c) || isDigit(c);
 }
 
+map<string, TokenType> Scanner::keywords = {
+    {"and", AND},
+    {"class", CLASS},
+    {"else", ELSE},
+    {"false", FALSE},
+    {"for", FOR},
+    {"fun", FUN},
+    {"if", IF},
+    {"nil", NIL},
+    {"or", OR},
+    {"print", PRINT},
+    {"return", RETURN},
+    {"super", SUPER},
+    {"this", THIS},
+    {"true", TRUE},
+    {"var", VAR},
+    {"while", WHILE}
+}
+
 void Scanner::makeIdentifier() {
     while (isAlphaNumeic(peek())) advance();
-
-    addToken(IDENTIFIER);
+    string text = source.substr(start, current - start);
+    auto found = keywords.find(text); // found is an iterator
+    TokenType type;
+    if (found != keywords.end()) {
+        type = found->second; // returns the value for key text
+    } else {
+        type = IDENTIFIER;
+    }
+    addToken(type);
 }
+
+
     
