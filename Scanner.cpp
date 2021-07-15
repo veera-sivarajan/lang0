@@ -31,4 +31,13 @@ void Scanner::scanToken() {
     case '*': addToken(STAR); break;
     }
 }
+
+char Scanner::advance() {
+    current += 1;
+    return source.at(current); // returns character at current
+}
+
+void Scanner::addToken(TokenType type) {
+    addToken(type
+    
     

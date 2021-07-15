@@ -20,6 +20,8 @@ private:
     bool isDigit(char c);
 
     void scanToken();
+    char advance();
+    void addToken(TokenType type);
 
 public:
     Scanner(string source);
