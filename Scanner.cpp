@@ -1,8 +1,9 @@
 # include "./Scanner.hpp"
 # include "./Dlox.hpp"
+# include "./magic_enum.hpp"
 # include <string>
 # include <iostream>
-# include <vector>              // 
+# include <vector>            
 # include <map>
 
 using std::string;
@@ -20,7 +21,12 @@ vector<Token> Scanner::scanTokens() {
         start = current;
         scanToken();
     }
-    Token token(EOF_TOKEN, "", Object::make_str_obj(""), line);
+    // Token token(EOF_TOKEN, "", Object::make_str_obj(""), line);
+    Token token;
+    token.type = TokenType::EOF_TOKEN;
+    token.line = line;
+    token.length = current - start;
+    token.lexeme = "";
     tokens.push_back(token);
     return tokens;
 }
@@ -33,21 +39,26 @@ void Scanner::scanToken() {
     char c = advance();
 
     switch(c) {
-    case '(': addToken(LEFT_PAREN); break;
-    case ')': addToken(RIGHT_PAREN); break;
-    case '{': addToken(LEFT_BRACE); break;
-    case '}': addToken(RIGHT_BRACE); break;
-    case ',': addToken(COMMA); break;
-    case '.': addToken(DOT); break;
-    case '-': addToken(MINUS); break;
-    case '+': addToken(PLUS); break;
-    case ';': addToken(SEMICOLON); break;
-    case '*': addToken(STAR); break;
+    case '(': addToken(TokenType::LEFT_PAREN); break;
+    case ')': addToken(TokenType::RIGHT_PAREN); break;
+    case '{': addToken(TokenType::LEFT_BRACE); break;
+    case '}': addToken(TokenType::RIGHT_BRACE); break;
+    case ',': addToken(TokenType::COMMA); break;
+    case '.': addToken(TokenType::DOT); break;
+    case '-': addToken(TokenType::MINUS); break;
+    case '+': addToken(TokenType::PLUS); break;
+    case ';': addToken(TokenType::SEMICOLON); break;
+    case '*': addToken(TokenType::STAR); break;
 
-    case '!': addToken(match('=') ? BANG_EQUAL : BANG); break;
-    case '=': addToken(match('=') ? EQUAL_EQUAL : EQUAL); break;
-    case '<': addToken(match('=') ? LESS_EQUAL : LESS); break;
-    case '>': addToken(match('=') ? GREATER_EQUAL : GREATER); break;
+    case '!':
+        addToken(match('=') ? TokenType::BANG_EQUAL : TokenType::BANG); break;
+    case '=':
+        addToken(match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL); break;
+    case '<':
+        addToken(match('=') ? TokenType::LESS_EQUAL : TokenType::LESS); break;
+    case '>':
+        addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
+        break;
 
     case '/':
         if (match('/')) {
@@ -56,7 +67,7 @@ void Scanner::scanToken() {
                 advance();
             }
         } else {
-            addToken(SLASH);
+            addToken(TokenType::SLASH);
         }
         break;
 
@@ -91,15 +102,19 @@ char Scanner::advance() {
     return source.at(current - 1); // returns character under consideration
 }
 
-void Scanner::addToken(TokenType type, Object literal) {
+void Scanner::addToken(TokenType type, string literal) {
     // .substr(first_character, number of character after first)
+    Token token;
     string text = source.substr(start, current - start); 
-    Token token(type, text, literal, line);
+    token.type = type;
+    token.line = line;
+    token.length = current - start;
+    token.lexeme = literal;
     tokens.push_back(token);
 }
 
 void Scanner::addToken(TokenType type) {
-    addToken(type, Object::make_str_obj(""));
+    addToken(type, "");
 }
 
 bool Scanner::match(char expected) {
@@ -134,7 +149,7 @@ void Scanner::makeString() {
 
     // Strin without surrounding quotes
     string value = source.substr(start + 1, current - start - 2);
-    addToken(STRING, Object::make_str_obj(value));
+    addToken(TokenType::STRING, value);
 }
 
 bool Scanner::isDigit(char c) {
@@ -156,8 +171,8 @@ void Scanner::makeNumber() {
         while (isDigit(peek())) advance();
     }
 
-    double number = stod(source.substr(start, current - start)); 
-    addToken(NUMBER, Object::make_num_obj(number));
+    string number = source.substr(start, current - start);
+    addToken(TokenType::NUMBER, number);
 }
 
 bool Scanner::isAlpha(char c) {
@@ -179,8 +194,13 @@ void Scanner::makeIdentifier() {
     if (found != keywords.end()) {
         type = found->second; // returns the value for key text
     } else {
-        type = IDENTIFIER;
+        type = TokenType::IDENTIFIER;
     }
     addToken(type);
+}
+
+void Scanner::printToken(Token token) {
+    std::cout << magic_enum::enum_name(token.type) << " "
+              << token.lexeme << "\n";
 }
 

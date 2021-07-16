@@ -29,8 +29,7 @@ void Dlox::run(string source) {
     vector<Token> tokens = scanner.scanTokens();
 
     for (auto token : tokens) {
-        cout << token.toString();
-        cout << "\n";
+        scanner.printToken(token);
     }
 }
     

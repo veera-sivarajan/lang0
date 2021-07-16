@@ -19,22 +19,22 @@ private:
     string source;
     vector<Token> tokens;
     map<string, TokenType> keywords = {
-        {"and", AND},
-        {"class", CLASS},
-        {"else", ELSE},
-        {"false", FALSE},
-        {"for", FOR},
-        {"fun", FUN},
-        {"if", IF},
-        {"nil", NIL},
-        {"or", OR},
-        {"print", PRINT},
-        {"return", RETURN},
-        {"super", SUPER},
-        {"this", THIS},
-        {"true", TRUE},
-        {"var", VAR},
-        {"while", WHILE}
+        {"and",   TokenType::AND},
+        {"class", TokenType::CLASS},
+        {"else",  TokenType::ELSE},
+        {"false", TokenType::FALSE},
+        {"for",   TokenType::FOR},
+        {"fun",   TokenType::FUN},
+        {"if",    TokenType::IF},
+        {"nil",   TokenType::NIL},
+        {"or",    TokenType::OR},
+        {"print", TokenType::PRINT},
+        {"return",TokenType::RETURN},
+        {"super", TokenType::SUPER},
+        {"this",  TokenType::THIS},
+        {"true",  TokenType::TRUE},
+        {"var",   TokenType::VAR},
+        {"while", TokenType::WHILE}
     };
 
     bool isAlpha(char c);
@@ -45,7 +45,7 @@ private:
     void scanToken();
     char advance();
     void addToken(TokenType type);
-    void addToken(TokenType type, Object literal);
+    void addToken(TokenType type, string literal);
     char peek();
     char peekNext();
     void makeString();
@@ -54,6 +54,7 @@ private:
     
 public:
     void setSource(string source);
+    void printToken(Token token);
     vector<Token> scanTokens();
     bool isAtEnd();
 };
