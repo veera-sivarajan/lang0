@@ -1,6 +1,5 @@
 # include "./Scanner.hpp"
 # include "./Dlox.hpp"
-# include "./magic_enum.hpp"
 # include <string>
 # include <iostream>
 # include <vector>            
@@ -197,10 +196,5 @@ void Scanner::makeIdentifier() {
         type = TokenType::IDENTIFIER;
     }
     addToken(type);
-}
-
-void Scanner::printToken(Token token) {
-    std::cout << magic_enum::enum_name(token.type) << " "
-              << token.lexeme << "\n";
 }
 

@@ -24,5 +24,6 @@ struct Token {
     int line{ 0 };
     int length{ 0 };
     string lexeme;
+    void print();
 };
     
