@@ -4,6 +4,7 @@
 # include <iostream>
 
 using std::string;
+using std::to_string;
 
 string Object::toString() {
     switch(type) {
@@ -46,14 +47,10 @@ Object Object::make_nil_obj() {
     return nil_obj;
 }
 
-Token::Token(TokenType type, string lexeme, Object literal, int line) {
-    type = type;
-    lexeme = lexeme;
-    literal = literal;
-    line = line;
-}
+Token::Token(TokenType type, string lexeme, Object literal, int line)
+: type(type), lexeme(lexeme), literal(literal), line(line) {}
 
 string Token::toString() {
-    return type + " " + lexeme;
+     return to_string(type) + " " + lexeme + " " + literal.toString();       
 }
 

@@ -24,13 +24,14 @@ void Dlox::error(int line, string message) {
 }
 
 void Dlox::run(string source) {
-    cout << "Inside run\n";
     Scanner *scanner = new Scanner(source);
     vector<Token> tokens = scanner->scanTokens();
 
     for (auto token : tokens) {
         cout << token.toString();
+        cout << "\n";
     }
+    delete scanner;
 }
     
 void Dlox::runFile(string path) {
@@ -56,6 +57,6 @@ void Dlox::runPrompt() {
 }
 
 int main(void) {
-    Dlox::runPrompt();
+    Dlox::runFile("./test.dlox");
     return 0;
 }

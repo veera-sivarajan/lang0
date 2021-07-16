@@ -1,4 +1,5 @@
 # include "./Scanner.hpp"
+# include "./Dlox.hpp"
 # include <string>
 # include <iostream>
 # include <vector>              // 
@@ -28,9 +29,7 @@ bool Scanner::isAtEnd() {
 }
 
 void Scanner::scanToken() {
-    std::cout << "Inside scan tokens\n";
     char c = advance();
-    std::cout << c << "\n";
 
     switch(c) {
     case '(': addToken(LEFT_PAREN); break;
@@ -117,7 +116,6 @@ char Scanner::peek() {
 }
     
 void Scanner::makeString() {
-    std::cout << "Inside makeString()\n";
     while (peek() != '"' && !isAtEnd()) {
         if (peek() == '\n') line += 1;
         advance();
@@ -126,7 +124,7 @@ void Scanner::makeString() {
     // Unterminated String 
     if (isAtEnd()) {
         // Print error message
-        std::cout << "Unterminated String\n";
+        Dlox::error(line, "Unterminated string.");
         return;
     }
 
@@ -192,7 +190,6 @@ map<string, TokenType> Scanner::keywords = {
 };
 
 void Scanner::makeIdentifier() {
-    std::cout << "Inside makeIdentifier\n";
     while (isAlphaNumeric(peek())) advance();
     string text = source.substr(start, current - start);
     auto found = keywords.find(text); // found is an iterator
