@@ -24,14 +24,14 @@ void Dlox::error(int line, string message) {
 }
 
 void Dlox::run(string source) {
-    Scanner *scanner = new Scanner(source);
-    vector<Token> tokens = scanner->scanTokens();
+    Scanner scanner;
+    scanner.setSource(source);
+    vector<Token> tokens = scanner.scanTokens();
 
     for (auto token : tokens) {
         cout << token.toString();
         cout << "\n";
     }
-    delete scanner;
 }
     
 void Dlox::runFile(string path) {
