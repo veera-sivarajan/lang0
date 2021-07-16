@@ -15,7 +15,7 @@ using std::cin;
 bool Dlox::hadError = false;
 
 void Dlox::report(int line, string where, string message) {
-    cout << "\"[line " << line << " \"] Error" << where << ": " << message;
+    cout << "[line " << line << "] Error" << where << ": " << message;
 }
 
 void Dlox::error(int line, string message) {
@@ -56,6 +56,6 @@ void Dlox::runPrompt() {
 }
 
 int main(void) {
-    Dlox::runFile("./test.dlox");
+    Dlox::runPrompt();
     return 0;
 }
