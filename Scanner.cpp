@@ -9,9 +9,10 @@ using std::string;
 using std::vector;
 using std::map;
 using std::stod;
-// using std::endl;
 
-Scanner::Scanner(string source): source(source) {}
+void Scanner::setSource(string source) {
+    this->source = source;
+}
 
 vector<Token> Scanner::scanTokens() {
     while(!isAtEnd()) {
@@ -169,25 +170,6 @@ bool Scanner::isAlpha(char c) {
 bool Scanner::isAlphaNumeric(char c) {
     return isAlpha(c) || isDigit(c);
 }
-
-map<string, TokenType> Scanner::keywords = {
-    {"and", AND},
-    {"class", CLASS},
-    {"else", ELSE},
-    {"false", FALSE},
-    {"for", FOR},
-    {"fun", FUN},
-    {"if", IF},
-    {"nil", NIL},
-    {"or", OR},
-    {"print", PRINT},
-    {"return", RETURN},
-    {"super", SUPER},
-    {"this", THIS},
-    {"true", TRUE},
-    {"var", VAR},
-    {"while", WHILE}
-};
 
 void Scanner::makeIdentifier() {
     while (isAlphaNumeric(peek())) advance();

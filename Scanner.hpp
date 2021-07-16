@@ -18,26 +18,42 @@ private:
     int line = 1;    // line # of current
     string source;
     vector<Token> tokens;
-    static map<string, TokenType> keywords;
+    map<string, TokenType> keywords = {
+        {"and", AND},
+        {"class", CLASS},
+        {"else", ELSE},
+        {"false", FALSE},
+        {"for", FOR},
+        {"fun", FUN},
+        {"if", IF},
+        {"nil", NIL},
+        {"or", OR},
+        {"print", PRINT},
+        {"return", RETURN},
+        {"super", SUPER},
+        {"this", THIS},
+        {"true", TRUE},
+        {"var", VAR},
+        {"while", WHILE}
+    };
 
     bool isAlpha(char c);
     bool isAlphaNumeric(char c);
     bool isDigit(char c);
+    bool match(char expected);
 
     void scanToken();
     char advance();
     void addToken(TokenType type);
     void addToken(TokenType type, Object literal);
-    bool match(char expected);
     char peek();
     char peekNext();
     void makeString();
     void makeNumber();
     void makeIdentifier();
     
-
 public:
-    Scanner(string source);
+    void setSource(string source);
     vector<Token> scanTokens();
     bool isAtEnd();
 };
