@@ -9,6 +9,10 @@ mt-collatz : $(OBJECTS)
 
 .PHONY: clean run
 
+test:
+	$(CC) $(CFLAGS) test.cpp -o test
+	./test
+
 clean:
 	rm -f $(TODELETE)
 
