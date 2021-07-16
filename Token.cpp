@@ -5,7 +5,6 @@
 
 using std::string;
 
-
 string Object::toString() {
     switch(type) {
     case Object_nil:
@@ -47,14 +46,14 @@ Object Object::make_nil_obj() {
     return nil_obj;
 }
 
-Token::Token (TokenType type, string lexeme, Object literal, int line) {
+Token::Token(TokenType type, string lexeme, Object literal, int line) {
     type = type;
     lexeme = lexeme;
     literal = literal;
     line = line;
 }
 
-string Token::toString () {
+string Token::toString() {
     return type + " " + lexeme;
 }
 

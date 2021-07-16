@@ -1,14 +1,16 @@
 # include "./Scanner.hpp"
 # include <string>
 # include <iostream>
-# include <vector>
+# include <vector>              // 
 # include <map>
 
 using std::string;
 using std::vector;
 using std::map;
 using std::stod;
-using std::endl;
+// using std::endl;
+
+Scanner::Scanner(string source): source(source) {}
 
 vector<Token> Scanner::scanTokens() {
     while(!isAtEnd()) {
@@ -26,7 +28,9 @@ bool Scanner::isAtEnd() {
 }
 
 void Scanner::scanToken() {
+    std::cout << "Inside scan tokens\n";
     char c = advance();
+    std::cout << c << "\n";
 
     switch(c) {
     case '(': addToken(LEFT_PAREN); break;
@@ -113,6 +117,7 @@ char Scanner::peek() {
 }
     
 void Scanner::makeString() {
+    std::cout << "Inside makeString()\n";
     while (peek() != '"' && !isAtEnd()) {
         if (peek() == '\n') line += 1;
         advance();
@@ -187,6 +192,7 @@ map<string, TokenType> Scanner::keywords = {
 };
 
 void Scanner::makeIdentifier() {
+    std::cout << "Inside makeIdentifier\n";
     while (isAlphaNumeric(peek())) advance();
     string text = source.substr(start, current - start);
     auto found = keywords.find(text); // found is an iterator
@@ -199,9 +205,3 @@ void Scanner::makeIdentifier() {
     addToken(type);
 }
 
-int main(void) {
-    return 0;
-}
-
-
-    
