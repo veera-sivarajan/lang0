@@ -19,11 +19,16 @@ enum class TokenType {
     EOF_TOKEN                // Using this instead of EOF becuase EOF is keyword
 };
 
-struct Token {
-    TokenType type{ TokenType::NIL };  
-    int line{ 0 };
-    int length{ 0 };
+class Token {
+private:
+    TokenType type = TokenType::NIL;
+    int line = 0;
+    int length = 0;
     string lexeme;
+
+public:
+    Token(TokenType type, int line, int length, string lexeme);
     void print();
 };
+    
     

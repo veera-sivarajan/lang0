@@ -20,12 +20,7 @@ vector<Token> Scanner::scanTokens() {
         start = current;
         scanToken();
     }
-    // Token token(EOF_TOKEN, "", Object::make_str_obj(""), line);
-    Token token;
-    token.type = TokenType::EOF_TOKEN;
-    token.line = line;
-    token.length = current - start;
-    token.lexeme = "";
+    Token token(TokenType::EOF_TOKEN, line, current - start, "");
     tokens.push_back(token);
     return tokens;
 }
@@ -103,12 +98,7 @@ char Scanner::advance() {
 
 void Scanner::addToken(TokenType type, string literal) {
     // .substr(first_character, number of character after first)
-    Token token;
-    string text = source.substr(start, current - start); 
-    token.type = type;
-    token.line = line;
-    token.length = current - start;
-    token.lexeme = literal;
+    Token token(type, line, current - start, literal);
     tokens.push_back(token);
 }
 
@@ -146,7 +136,7 @@ void Scanner::makeString() {
     // Consume closing "
     advance();
 
-    // Strin without surrounding quotes
+    // String without surrounding quotes
     string value = source.substr(start + 1, current - start - 2);
     addToken(TokenType::STRING, value);
 }
