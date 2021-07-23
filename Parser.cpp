@@ -48,3 +48,46 @@ std::shared_ptr<Expr> Parser::equality() {
     }
     return expr;
 }
+
+std::shared_ptr<Expr> Parser::comparison() {
+    std::shared_ptr<Expr> expr = term();
+    vector<TokenType> types;
+    types.push_back(TokenType::GREATER);
+    types.push_back(TokenType::GREATER_EQUAL);
+    types.push_back(TokenType::LESS);
+    types.push_back(TokenType::LESS_EQUAL);
+    while (match(types)) {
+        Token oper = previous();
+        std::shared_ptr<Expr> right = term();
+        expr = std::make_shared<Binary>(expr, oper, right);
+    }
+    return expr;
+}
+
+// Subtraction and Addition
+std::shared_ptr<Expr> Parser::term() {
+    std::shared_ptr<Expr> expr = factor();
+    vector<TokenType> types;
+    types.push_back(TokenType::MINUS);
+    types.push_back(TokenType::PLUS);
+    while (match(types)) {
+        Token oper = previous();
+        std::shared_ptr<Expr> right = factor();
+        expr = std::make_shared<Binary>(expr, oper, right);
+    }
+    return expr;
+}
+
+// Division and Multiplication
+std::shared_ptr<Expr> Parser::factor() {
+    std::shared_ptr<Expr> expr = unary();
+    vector<TokenType> types;
+    types.push_back(TokenType::SLASH);
+    types.push_back(TokenType::STAR);
+    while (match(types)) {
+        Token oper = previous();
+        std::shared_ptr<Expr> right = unary();
+        expr = std::make_shared<Binary>(expr, oper, right);
+    }
+    return expr;
+}
