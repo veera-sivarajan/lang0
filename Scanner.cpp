@@ -187,4 +187,3 @@ void Scanner::makeIdentifier() {
     }
     addToken(type);
 }
-
