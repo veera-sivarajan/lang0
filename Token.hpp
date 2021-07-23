@@ -21,13 +21,13 @@ enum class TokenType {
 
 class Token {
 private:
-    TokenType type = TokenType::NIL;
-    int line = 0;
-    int length = 0;
+    int line; 
+    int length ;
     string lexeme;
 
 public:
     Token(TokenType type, int line, int length, string lexeme);
+    TokenType type;
     void print();
 };
     
