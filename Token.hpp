@@ -1,7 +1,10 @@
 # include <iostream>
 # include <string>
+# include <any>
 
 using std::string;
+using std::any;
+
 
 enum class TokenType {
     // Single Character Tokens
@@ -20,14 +23,13 @@ enum class TokenType {
 };
 
 class Token {
-private:
-    int line; 
-    int length ;
-    string lexeme;
-
 public:
-    Token(TokenType type, int line, int length, string lexeme);
     TokenType type;
+    int line; 
+    string text;
+    any literal;
+
+    Token(TokenType type, int line, string text, any literal);
     void print();
 };
     

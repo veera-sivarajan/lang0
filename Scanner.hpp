@@ -45,7 +45,7 @@ private:
     void scanToken();
     char advance();
     void addToken(TokenType type);
-    void addToken(TokenType type, string literal);
+    void addToken(TokenType type, any literal);
     char peek();
     char peekNext();
     void makeString();

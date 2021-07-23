@@ -9,6 +9,7 @@ using std::string;
 using std::vector;
 using std::map;
 using std::stod;
+using std::any;
 
 void Scanner::setSource(string source) {
     this->source = source;
@@ -20,8 +21,9 @@ vector<Token> Scanner::scanTokens() {
         start = current;
         scanToken();
     }
-    Token token(TokenType::EOF_TOKEN, line, current - start, "");
-    tokens.push_back(token);
+    // Token token(TokenType::EOF_TOKEN, line, current - start, "");
+    // tokens.push_back(token);
+    tokens.emplace_back(TokenType::EOF_TOKEN, line, "", nullptr);
     return tokens;
 }
 
@@ -96,10 +98,12 @@ char Scanner::advance() {
     return source.at(current - 1); // returns character under consideration
 }
 
-void Scanner::addToken(TokenType type, string literal) {
+void Scanner::addToken(TokenType type, any literal) {
     // .substr(first_character, number of character after first)
-    Token token(type, line, current - start, literal);
-    tokens.push_back(token);
+    // Token token(type, line, current - start, literal);
+    // tokens.push_back(token);
+    string text = source.substr(start, current - start);
+    tokens.emplace_back(type, line, text, literal);
 }
 
 void Scanner::addToken(TokenType type) {
@@ -160,7 +164,7 @@ void Scanner::makeNumber() {
         while (isDigit(peek())) advance();
     }
 
-    string number = source.substr(start, current - start);
+    int number = std::stod(source.substr(start, current - start));
     addToken(TokenType::NUMBER, number);
 }
 
