@@ -21,6 +21,8 @@ private:
     std::shared_ptr<Expr> comparison();
     std::shared_ptr<Expr> term();
     std::shared_ptr<Expr> factor();
+    std::shared_ptr<Expr> unary();
+    std::shared_ptr<Expr> primary();
 
 
 public:

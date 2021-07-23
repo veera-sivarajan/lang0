@@ -91,3 +91,48 @@ std::shared_ptr<Expr> Parser::factor() {
     }
     return expr;
 }
+
+std::shared_ptr<Expr> Parser::unary() {
+    vector<TokenType> types;
+    types.push_back(TokenType::BANG);
+    types.push_back(TokenType::MINUS);
+    if (match(types)) {
+        Token oper = previous();
+        std::shared_ptr<Expr> right = unary();
+        return std::make_shared<Unary>(oper, right);
+    }
+    return primary();
+}
+
+std::shared_ptr<Expr> Parser::primary() {
+    vector<TokenType> types, f_type, t_type, n_type, lit_types, left_paren;
+    types.push_back(TokenType::FALSE); // 1
+    types.push_back(TokenType::TRUE); // 2
+    types.push_back(TokenType::NIL); // 3
+    types.push_back(TokenType::NUMBER); // 4
+    types.push_back(TokenType::STRING); // 5
+    types.push_back(TokenType::LEFT_PAREN); // 6
+
+    f_type = vector<TokenType>(types.begin(), types.end() - 5);
+    if (match(f_type))
+        return std::make_shared<Literal>(false);
+
+    t_type = vector<TokenType>(types.begin() + 1, types.end() - 4);
+    if (match(t_type))
+        return std::make_shared<Literal>(true);
+
+    n_type = vector<TokenType>(types.begin() + 2, types.end() - 3);
+    if (match(n_type))
+        return std::make_shared<Literal>(nullptr);
+
+    lit_types = vector<TokenType>(types.begin() + 3, types.end() - 1);
+    if (match(lit_types))
+        return std::make_shared<Literal>(previous().literal);
+
+    left_paren = vector<TokenType>(types.begin() + 5, types.end());
+    if (match(left_paren)) {
+        std::shared_ptr<Expr> expr = expression();
+        consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
+        return std::make_shared<Grouping>(expr);
+    }
+} 
