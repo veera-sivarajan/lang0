@@ -7,6 +7,10 @@ Token Parser::peek() {
     return tokens.at(current);
 }
 
+Token Parser::previous() {
+    return tokens.at(current - 1);
+}
+
 bool Parser::isAtEnd() {
     return peek().type == TokenType::EOF_TOKEN;
 }
@@ -30,6 +34,14 @@ bool Parser::match(vector<TokenType> types) {
         }
     }
     return false;
+}
+
+std::shared_ptr<Expr> Parser::parse() {
+    try {
+        return expression();
+    } catch (ParseError error) {
+        return nullptr;
+    }
 }
 
 std::shared_ptr<Expr> Parser::expression() {
@@ -113,6 +125,8 @@ std::shared_ptr<Expr> Parser::primary() {
     types.push_back(TokenType::STRING); // 5
     types.push_back(TokenType::LEFT_PAREN); // 6
 
+    // slice the only necessary types
+    // shitty code but it works
     f_type = vector<TokenType>(types.begin(), types.end() - 5);
     if (match(f_type))
         return std::make_shared<Literal>(false);
@@ -135,4 +149,38 @@ std::shared_ptr<Expr> Parser::primary() {
         consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
         return std::make_shared<Grouping>(expr);
     }
+    // does not match any terminals
+    throw error(peek(), "Expect expression.");
 } 
+
+Token Parser::consume(TokenType type, string message) {
+    if (check(type)) return advance();
+    throw error(peek(), message);
+}
+
+void Parser::synchronize() {
+    advance();
+
+    while (!isAtEnd()) {
+        if (previous().type == TokenType::SEMICOLON) return;
+        switch(peek().type) {
+        case TokenType::CLASS:
+        case TokenType::FUN:
+        case TokenType::VAR:
+        case TokenType::FOR:
+        case TokenType::IF:
+        case TokenType::WHILE:
+        case TokenType::PRINT:
+        case TokenType::RETURN:
+        default:
+            return;
+        }
+        advance();
+    }
+
+}
+
+Parser::ParseError Parser::error(Token token, string message) {
+    Dlox::error(token, message);
+    return ParseError{""};
+}
