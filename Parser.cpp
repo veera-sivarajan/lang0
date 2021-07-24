@@ -26,12 +26,11 @@ Token Parser::advance() {
 }
 
 // check if current type is equal to any of the argument type
-bool Parser::match(vector<TokenType> types) {
-    for (auto type : types) {
-        if (check(type)) {
-            advance();
-            return true;
-        }
+template<class... T>
+bool Parser::match(T... types) {
+    if ((... || check(types))) {
+        advance();
+        return true;
     }
     return false;
 }
@@ -50,10 +49,7 @@ std::shared_ptr<Expr> Parser::expression() {
 
 std::shared_ptr<Expr> Parser::equality() {
     std::shared_ptr<Expr> expr = comparison();
-    vector<TokenType> types;
-    types.push_back(TokenType::BANG_EQUAL);
-    types.push_back(TokenType::EQUAL_EQUAL);
-    while (match(types)) {
+    while (match(TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL)) {
         Token oper = previous();
         std::shared_ptr<Expr> right = comparison();
         expr = std::make_shared<Binary>(expr, oper, right);
@@ -63,12 +59,8 @@ std::shared_ptr<Expr> Parser::equality() {
 
 std::shared_ptr<Expr> Parser::comparison() {
     std::shared_ptr<Expr> expr = term();
-    vector<TokenType> types;
-    types.push_back(TokenType::GREATER);
-    types.push_back(TokenType::GREATER_EQUAL);
-    types.push_back(TokenType::LESS);
-    types.push_back(TokenType::LESS_EQUAL);
-    while (match(types)) {
+    while (match(TokenType::GREATER, TokenType::GREATER_EQUAL, TokenType::LESS,
+                 TokenType::LESS_EQUAL)) {
         Token oper = previous();
         std::shared_ptr<Expr> right = term();
         expr = std::make_shared<Binary>(expr, oper, right);
@@ -79,10 +71,7 @@ std::shared_ptr<Expr> Parser::comparison() {
 // Subtraction and Addition
 std::shared_ptr<Expr> Parser::term() {
     std::shared_ptr<Expr> expr = factor();
-    vector<TokenType> types;
-    types.push_back(TokenType::MINUS);
-    types.push_back(TokenType::PLUS);
-    while (match(types)) {
+    while (match(TokenType::MINUS, TokenType::PLUS)) {
         Token oper = previous();
         std::shared_ptr<Expr> right = factor();
         expr = std::make_shared<Binary>(expr, oper, right);
@@ -93,10 +82,7 @@ std::shared_ptr<Expr> Parser::term() {
 // Division and Multiplication
 std::shared_ptr<Expr> Parser::factor() {
     std::shared_ptr<Expr> expr = unary();
-    vector<TokenType> types;
-    types.push_back(TokenType::SLASH);
-    types.push_back(TokenType::STAR);
-    while (match(types)) {
+    while (match(TokenType::SLASH, TokenType::STAR)) {
         Token oper = previous();
         std::shared_ptr<Expr> right = unary();
         expr = std::make_shared<Binary>(expr, oper, right);
@@ -105,10 +91,7 @@ std::shared_ptr<Expr> Parser::factor() {
 }
 
 std::shared_ptr<Expr> Parser::unary() {
-    vector<TokenType> types;
-    types.push_back(TokenType::BANG);
-    types.push_back(TokenType::MINUS);
-    if (match(types)) {
+    if (match(TokenType::BANG, TokenType::MINUS)) {
         Token oper = previous();
         std::shared_ptr<Expr> right = unary();
         return std::make_shared<Unary>(oper, right);
@@ -117,34 +100,14 @@ std::shared_ptr<Expr> Parser::unary() {
 }
 
 std::shared_ptr<Expr> Parser::primary() {
-    vector<TokenType> types, f_type, t_type, n_type, lit_types, left_paren;
-    types.push_back(TokenType::FALSE); // 1
-    types.push_back(TokenType::TRUE); // 2
-    types.push_back(TokenType::NIL); // 3
-    types.push_back(TokenType::NUMBER); // 4
-    types.push_back(TokenType::STRING); // 5
-    types.push_back(TokenType::LEFT_PAREN); // 6
+    if (match(TokenType::FALSE)) return std::make_shared<Literal>(false);
+    if (match(TokenType::TRUE)) return std::make_shared<Literal>(true);
+    if (match(TokenType::NIL)) return std::make_shared<Literal>(nullptr);
 
-    // slice the only necessary types
-    // shitty code but it works
-    f_type = vector<TokenType>(types.begin(), types.end() - 5);
-    if (match(f_type))
-        return std::make_shared<Literal>(false);
-
-    t_type = vector<TokenType>(types.begin() + 1, types.end() - 4);
-    if (match(t_type))
-        return std::make_shared<Literal>(true);
-
-    n_type = vector<TokenType>(types.begin() + 2, types.end() - 3);
-    if (match(n_type))
-        return std::make_shared<Literal>(nullptr);
-
-    lit_types = vector<TokenType>(types.begin() + 3, types.end() - 1);
-    if (match(lit_types))
+    if (match(TokenType::NUMBER, TokenType::STRING))
         return std::make_shared<Literal>(previous().literal);
 
-    left_paren = vector<TokenType>(types.begin() + 5, types.end());
-    if (match(left_paren)) {
+    if (match(TokenType::LEFT_PAREN)) {
         std::shared_ptr<Expr> expr = expression();
         consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
         return std::make_shared<Grouping>(expr);

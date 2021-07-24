@@ -26,7 +26,8 @@ private:
 
     bool isAtEnd();
     bool check(TokenType type);
-    bool match(vector<TokenType> types);
+    template<class... T>
+    bool match(T... types);
 
     std::shared_ptr<Expr> parse();
     std::shared_ptr<Expr> expression();
@@ -36,7 +37,6 @@ private:
     std::shared_ptr<Expr> factor();
     std::shared_ptr<Expr> unary();
     std::shared_ptr<Expr> primary();
-
 
 public:
     Parser(const vector<Token> tokens);
