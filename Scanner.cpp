@@ -1,5 +1,5 @@
 # include "./Scanner.hpp"
-# include "./Dlox.hpp"
+# include "./Error.hpp"
 # include <string>
 # include <iostream>
 # include <vector>            
@@ -133,7 +133,7 @@ void Scanner::makeString() {
     // Unterminated String 
     if (isAtEnd()) {
         // Print error message
-        Dlox::error(line, "Unterminated string.");
+        Error::log(line, "Unterminated string.");
         return;
     }
 

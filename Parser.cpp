@@ -181,6 +181,6 @@ void Parser::synchronize() {
 }
 
 Parser::ParseError Parser::error(Token token, string message) {
-    Dlox::error(token, message);
+    Error::log(token, message);
     return ParseError{""};
 }

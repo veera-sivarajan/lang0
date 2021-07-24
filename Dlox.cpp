@@ -12,25 +12,6 @@ using std::vector;
 using std::cout;
 using std::cin;
 
-bool Dlox::hadError = false;
-
-void Dlox::report(int line, string where, string message) {
-    hadError = true;
-    cout << "[line " << line << "] Error" << where << ": " << message;
-}
-
-void Dlox::error(int line, string message) {
-    report(line, "", message);
-}
-
-void Dlox::error(Token token, string message) {
-    if (token.type == TokenType::EOF_TOKEN) {
-        report(token.line, " at end", message);
-    } else {
-        report(token.line, " at '"+ token.text + "'", message);
-    }
-}
-
 void Dlox::run(string source) {
     Scanner scanner;
     scanner.setSource(source);
@@ -59,7 +40,6 @@ void Dlox::runPrompt() {
         cout << "Dlox> ";
         getline(cin, input);
         run(input);
-        hadError = false;
     }
 }
 

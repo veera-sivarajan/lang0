@@ -2,7 +2,7 @@
 # include <stdexcept>
 # include "./Scanner.hpp"
 # include "./Expression.hpp"
-# include "./Dlox.hpp"
+# include "./Error.hpp"
 
 using std::vector;
 
