@@ -102,12 +102,12 @@ void Scanner::addToken(TokenType type, any literal) {
     // .substr(first_character, number of character after first)
     // Token token(type, line, current - start, literal);
     // tokens.push_back(token);
-    string text = source.substr(start, current - start);
+    string text{source.substr(start, current - start)};
     tokens.emplace_back(type, line, text, literal);
 }
 
 void Scanner::addToken(TokenType type) {
-    addToken(type, "");
+    addToken(type, nullptr);
 }
 
 bool Scanner::match(char expected) {
@@ -141,7 +141,7 @@ void Scanner::makeString() {
     advance();
 
     // String without surrounding quotes
-    string value = source.substr(start + 1, current - start - 2);
+    string value{source.substr(start + 1, current - start - 2)};
     addToken(TokenType::STRING, value);
 }
 
@@ -164,7 +164,7 @@ void Scanner::makeNumber() {
         while (isDigit(peek())) advance();
     }
 
-    int number = std::stod(source.substr(start, current - start));
+    int number = std::stod(std::string{source.substr(start, current - start)});
     addToken(TokenType::NUMBER, number);
 }
 
@@ -181,7 +181,7 @@ bool Scanner::isAlphaNumeric(char c) {
 
 void Scanner::makeIdentifier() {
     while (isAlphaNumeric(peek())) advance();
-    string text = source.substr(start, current - start);
+    string text{source.substr(start, current - start)};
     auto found = keywords.find(text); // found is an iterator
     TokenType type;
     if (found != keywords.end()) {
