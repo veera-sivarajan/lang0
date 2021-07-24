@@ -9,7 +9,7 @@ private:
     static void report(int line, string where, string message);
 
 public:
-    static bool hadError;
+    inline static bool hadError = false;
     static void log(int line, string message);
     static void log(Token token, string message);
 };

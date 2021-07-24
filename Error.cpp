@@ -2,7 +2,7 @@
 
 using std::cout;
 
-bool Error::hadError = false;
+// inline bool Error::hadError = false;
 
 void Error::report(int line, string where, string message) {
     hadError = true;

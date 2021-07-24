@@ -40,6 +40,7 @@ void Dlox::runPrompt() {
         cout << "Dlox> ";
         getline(cin, input);
         run(input);
+        Error::hadError = false;
     }
 }
 
