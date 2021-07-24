@@ -4,6 +4,8 @@
 # include <memory> 
 # include <any>
 
+# include "./Token.hpp"
+
 using std::any;
 
 struct Binary;
