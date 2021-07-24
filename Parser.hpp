@@ -3,6 +3,7 @@
 # include "./Scanner.hpp"
 # include "./Expression.hpp"
 # include "./Error.hpp"
+# include "./Ast.hpp"
 
 using std::vector;
 
@@ -14,6 +15,7 @@ private:
 
     const vector<Token> tokens;  // consume tokens from scanner
     int current = 0; // points to next token 
+    void peek_print();
 
     ParseError error(Token token, string message);
 
@@ -29,7 +31,6 @@ private:
     template<class... T>
     bool match(T... types);
 
-    std::shared_ptr<Expr> parse();
     std::shared_ptr<Expr> expression();
     std::shared_ptr<Expr> equality();
     std::shared_ptr<Expr> comparison();
@@ -39,7 +40,8 @@ private:
     std::shared_ptr<Expr> primary();
 
 public:
-    Parser(const vector<Token> tokens);
+    Parser(const vector<Token> &tokens);
+    std::shared_ptr<Expr> parse();
 };
 
 
