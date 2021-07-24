@@ -1,4 +1,6 @@
+# pragma once
 # include <string>
+# include "./Token.hpp"
 
 using std::string;
 
@@ -10,6 +12,7 @@ private:
 
 public:
     static void error(int line, string message);
+    static void error(Token token, string message);
     static void runPrompt();
     static void runFile(string path);
 };
