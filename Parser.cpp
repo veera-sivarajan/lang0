@@ -39,7 +39,7 @@ bool Parser::match(vector<TokenType> types) {
 std::shared_ptr<Expr> Parser::parse() {
     try {
         return expression();
-    } catch (ParseError error) {
+    } catch (ParseError &error) {
         return nullptr;
     }
 }
