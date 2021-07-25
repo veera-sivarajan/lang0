@@ -172,7 +172,6 @@ void Parser::synchronize() {
         }
         advance();
     }
-
 }
 
 Parser::ParseError Parser::error(Token token, string message) {
