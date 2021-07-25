@@ -9,14 +9,7 @@ using std::any;
 class Ast: public ExprVisitor {
 private:
     template<class... E>
-    string parenthesize(std::string_view name, E... expr) {
-        assert((... && std::is_same_v<E, std::shared_ptr<Expr>>));
-        std::ostringstream buffer;
-        buffer << "(" << name;
-        ((buffer << " " << print(expr)), ...);
-        buffer << ")";
-        return buffer.str();
-    }
+    string parenthesize(std::string_view name, E... expr);
 public:
     string print(std::shared_ptr<Expr> expr);
 

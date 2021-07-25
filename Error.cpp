@@ -1,12 +1,16 @@
 # include "./Error.hpp"
 
+# define RESET "\033[0m"
+# define RED   "\033[31m"      /* Red color */
+
 using std::cout;
 
 // inline bool Error::hadError = false;
 
 void Error::report(int line, string where, string message) {
     hadError = true;
-    cout << "[line " << line << "] Error" << where << ": " << message;
+    cout << RED << "[line " << line << "] Error" << RESET
+         << where << ": " << message << "\n";
 }
 
 void Error::log(int line, string message) {
