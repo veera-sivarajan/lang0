@@ -11,12 +11,9 @@ private:
     template<class... E>
     string parenthesize(std::string_view name, E... expr) {
         assert((... && std::is_same_v<E, std::shared_ptr<Expr>>));
-        std::cout << "parenthesize...\n";
         std::ostringstream buffer;
         buffer << "(" << name;
-        std::cout << "calling print...\n";
         ((buffer << " " << print(expr)), ...);
-        std::cout << "out of print...\n";
         buffer << ")";
         return buffer.str();
     }

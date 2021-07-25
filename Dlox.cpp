@@ -17,9 +17,9 @@ void Dlox::run(string source) {
     Scanner scanner;
     scanner.setSource(source);
     vector<Token> tokens = scanner.scanTokens();
-    for (auto token : tokens) {
-        token.print();
-    }
+    // for (auto token : tokens) {
+    //     token.print();
+    // }
     Parser parser{tokens};
     std::shared_ptr<Expr> expr = parser.parse();
     if (Error::hadError) return;

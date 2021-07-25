@@ -6,7 +6,6 @@ std::string Ast::print(std::shared_ptr<Expr> expr) {
     }
     catch (const std::bad_any_cast &e) {
         std::cout << "Ast::print -> " << e.what() << "\n";
-        return "something";
     }
 }
 
@@ -40,7 +39,6 @@ any Ast::visitLiteralExpr(std::shared_ptr<Literal> expr) {
         }
     }
     else if (type == typeid(int)) {
-        std::cout << "TYPE == int\n";
         try {
             return std::to_string(std::any_cast<int>(expr->value));
         } catch (const std::bad_any_cast &e) {
@@ -49,14 +47,11 @@ any Ast::visitLiteralExpr(std::shared_ptr<Literal> expr) {
         }
     }
     else if (type == typeid(bool)) {
-        std::cout << "TYPE == bool\n";
         try {
             if (std::any_cast<bool>(expr->value)) {
-                std::cout << "RETURNING TRUE...\n";
                 std::string result{"true"};
                 return result;
             } else {
-                std::cout << "RETURNING FALSE...\n";
                 std::string result{"false"};
                 return result;
             }
