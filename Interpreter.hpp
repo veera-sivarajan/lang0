@@ -2,9 +2,9 @@
 
 # include <any>
 # include <string>
-# include "./RuntimeError.hpp"
 # include "./Token.hpp"
 # include "./Expression.hpp"
+# include "./Error.hpp"
 
 class Interpreter: public ExprVisitor {
 private:
@@ -13,6 +13,16 @@ private:
                              const std::any &right);
 
     bool isEqual(const std::any &left, const std::any &right);
+    bool isTruthy(const std::any &object);
+
+    std::string stringify(const std::any &object);
+
+    std::any evaluate(std::shared_ptr<Expr> expr);
 
 public:
     std::any visitBinaryExpr(std::shared_ptr<Binary> expr);
+    std::any visitLiteralExpr(std::shared_ptr<Literal> expr);
+    std::any visitUnaryExpr(std::shared_ptr<Unary> expr);
+
+    void interpret(std::shared_ptr<Expr> expr);
+};
