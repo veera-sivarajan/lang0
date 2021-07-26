@@ -152,3 +152,7 @@ void Interpreter::interpret(std::shared_ptr<Expr> expr) {
     }
 }
 
+std::any Interpreter::visitGroupingExpr(std::shared_ptr<Grouping> expr) {
+    return evaluate(expr->expression);
+}
+
