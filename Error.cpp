@@ -3,14 +3,12 @@
 # define RESET "\033[0m"
 # define RED   "\033[31m"      /* Red color */
 
-using std::cout;
-
 // inline bool Error::hadError = false;
 
 void Error::report(int line, string where, string message) {
     hadError = true;
-    cout << RED << "[line " << line << "] Error" << RESET
-         << where << ": " << message << "\n";
+    std::cerr << RED << "[line " << line << "] Error" << RESET
+              << where << ": " << message << "\n";
 }
 
 void Error::log(int line, string message) {
@@ -26,7 +24,8 @@ void Error::log(Token token, string message) {
 }
 
 void Error::runtimeError(const RuntimeError &error) {
-    std::cerr << error.what() << "\n[line " << error.token.line << "]\n";
+    std::cerr << RED << "[line " << error.token.line
+              << "] Error: " << RESET << error.what() << "\n";
     hadRuntimeError = true;
 }
 

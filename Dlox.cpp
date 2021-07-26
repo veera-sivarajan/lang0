@@ -9,10 +9,12 @@
 # include <fstream>
 # include <sstream>
 
+# define BLUE    "\033[34m"    
+# define RESET   "\033[0m"
+
 using std::string;
 using std::vector;
 using std::cout;
-using std::cin;
 
 Interpreter interpreter{};
 
@@ -29,7 +31,6 @@ void Dlox::run(string source) {
 
     // std::cout << Ast{}.print(expr) << "\n";
     interpreter.interpret(expr);
-
 }
     
 void Dlox::runFile(string path) {
@@ -50,15 +51,16 @@ void Dlox::runFile(string path) {
 void Dlox::runPrompt() {
     string input;
     while (1) {
-        cout << "Dlox> ";
-        getline(cin, input);
+        cout << BLUE << "Dlox> " << RESET;
+        std::getline(std::cin, input);
+        if (input.empty()) continue;
         run(input);
         Error::hadError = false;
     }
 }
 
 int main(void) {
-    Dlox::runFile("./test.dlox");
-    // Dlox::runPrompt();
+    // Dlox::runFile("./test.dlox");
+    Dlox::runPrompt();
     return 0;
 }
