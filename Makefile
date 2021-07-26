@@ -17,4 +17,4 @@ clean:
 	rm -f $(TODELETE)
 
 run:
-	./interpreter
+	./dlox
