@@ -85,7 +85,8 @@ std::any Interpreter::visitBinaryExpr(std::shared_ptr<Binary> expr) {
     case TokenType::STAR:
         checkNumberOperands(expr->oper, left, right);
         return std::any_cast<int>(left) * std::any_cast<int>(right);
-
+    default:
+        return {};
     }
 }
 
@@ -110,6 +111,8 @@ std::any Interpreter::visitUnaryExpr(std::shared_ptr<Unary> expr) {
     case TokenType::MINUS:
         checkNumberOperand(expr->oper, right);
         return -std::any_cast<int>(right);
+    default:
+        return {};
     }
 }
 
@@ -138,7 +141,6 @@ std::string Interpreter::stringify(const std::any &object) {
     return "stringify: cannot recognize type";
 }
 
-
 std::any Interpreter::evaluate(std::shared_ptr<Expr> expr) {
     return expr->accept(*this);
 }
@@ -147,7 +149,7 @@ void Interpreter::interpret(std::shared_ptr<Expr> expr) {
     try {
         std::any value = evaluate(expr);
         std::cout << stringify(value) <<  "\n";
-    } catch (RuntimeError error) {
+    } catch (RuntimeError &error) {
         Error::runtimeError(error);
     }
 }
