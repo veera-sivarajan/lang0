@@ -1,6 +1,7 @@
 # include "./Dlox.hpp"
 # include "./Parser.hpp"
 # include "./Ast.hpp"
+# include "./Interpreter.hpp"
 
 # include <string>
 # include <iostream>
@@ -13,6 +14,8 @@ using std::vector;
 using std::cout;
 using std::cin;
 
+Interpreter interpreter{};
+
 void Dlox::run(string source) {
     Scanner scanner;
     scanner.setSource(source);
@@ -24,7 +27,8 @@ void Dlox::run(string source) {
     std::shared_ptr<Expr> expr = parser.parse();
     if (Error::hadError) return;
 
-    std::cout << Ast{}.print(expr) << "\n";
+    // std::cout << Ast{}.print(expr) << "\n";
+    interpreter.interpret(expr);
 
 }
     
@@ -38,6 +42,9 @@ void Dlox::runFile(string path) {
     std::string sourceStr = strStream.str();
 
     run(sourceStr);
+
+    if (Error::hadError) std::exit(65);
+    if (Error::hadRuntimeError) std::exit(70);
 }
 
 void Dlox::runPrompt() {
