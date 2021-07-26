@@ -1,6 +1,7 @@
 # pragma once
 # include <string>
 # include "./Token.hpp"
+# include "./RuntimeError.hpp"
 
 using std::string;
 
@@ -10,6 +11,8 @@ private:
 
 public:
     inline static bool hadError = false;
+    inline static bool hadRuntimeError = false;
     static void log(int line, string message);
     static void log(Token token, string message);
+    static void runtimeError(const RuntimeError &error);
 };

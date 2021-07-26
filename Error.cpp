@@ -24,3 +24,9 @@ void Error::log(Token token, string message) {
         report(token.line, " at '"+ token.text + "'", message);
     }
 }
+
+void Error::runtimeError(const RuntimeError &error) {
+    std::cerr << error.what() << "\n[line " << error.token.line << "]\n";
+    hadRuntimeError = true;
+}
+
