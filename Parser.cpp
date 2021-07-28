@@ -46,12 +46,40 @@ bool Parser::match(T... types) {
     return false;
 }
 
-std::shared_ptr<Expr> Parser::parse() {
-    try {
-        return expression();
-    } catch (ParseError &error) {
-        return nullptr;
+// Was used when the interpreter was bare bones and
+// could handly only numeric expressions
+// std::shared_ptr<Expr> Parser::parse() {
+//     try {
+//         return expression();
+//     } catch (ParseError &error) {
+//         return nullptr;
+//     }
+// }
+
+std::shared_ptr<Stmt> Parser::printStatement() {
+    std::shared_ptr<Expr> value = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after value.");
+    return std::make_shared<Print>(value);
+}
+
+// what is expression statement?
+std::shared_ptr<Stmt> Parser::expressionStatement() {
+    std::shared_ptr<Expr> expr = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after value.");
+    return std::make_shared<Expression>(expr);
+}
+
+std::shared_ptr<Stmt> Parser::statement() {
+    if (match(TokenType::PRINT)) return printStatement();
+    return expressionStatement();
+}
+
+std::vector<std::shared_ptr<Stmt>> Parser::parse() {
+    std::vector<std::shared_ptr<Stmt>> statements;
+    while (!isAtEnd()) {
+        statements.push_back(statement());
     }
+    return statements;
 }
 
 std::shared_ptr<Expr> Parser::expression() {

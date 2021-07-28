@@ -145,10 +145,35 @@ std::any Interpreter::evaluate(std::shared_ptr<Expr> expr) {
     return expr->accept(*this);
 }
 
-void Interpreter::interpret(std::shared_ptr<Expr> expr) {
+std::any Interpreter::visitExpressionStmt(std::shared_ptr<Expression> stmt) {
+    std::any value = evaluate(stmt->expression);
+    return {};
+}
+
+std::any Interpreter::visitPrintStmt(std::shared_ptr<Print> stmt) {
+    std::any value = evaluate(stmt->expression);
+    std::cout << stringify(value) << "\n";
+    return {};
+}
+
+// void Interpreter::interpret(std::shared_ptr<Expr> expr) {
+//     try {
+//         std::any value = evaluate(expr);
+//         std::cout << stringify(value) <<  "\n";
+//     } catch (RuntimeError &error) {
+//         Error::runtimeError(error);
+//     }
+// }
+
+void Interpreter::execute(std::shared_ptr<Stmt> statement) {
+    statement->accept(*this);
+}
+
+void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> &statements) {
     try {
-        std::any value = evaluate(expr);
-        std::cout << stringify(value) <<  "\n";
+        for (std::shared_ptr<Stmt> &statement : statements) {
+            execute(statement);
+        }
     } catch (RuntimeError &error) {
         Error::runtimeError(error);
     }
@@ -156,4 +181,12 @@ void Interpreter::interpret(std::shared_ptr<Expr> expr) {
 
 std::any Interpreter::visitGroupingExpr(std::shared_ptr<Grouping> expr) {
     return evaluate(expr->expression);
+}
+
+std::any Interpreter::visitBlockStmt(std::shared_ptr<Block> stmt) {
+    return {};
+}
+
+std::any Interpreter::visitVarStmt(std::shared_ptr<Var> stmt) {
+    return {};
 }

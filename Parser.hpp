@@ -2,6 +2,7 @@
 # include <stdexcept>
 # include "./Scanner.hpp"
 # include "./Expression.hpp"
+# include "./Statement.hpp"
 # include "./Error.hpp"
 # include "./Ast.hpp"
 
@@ -39,9 +40,14 @@ private:
     std::shared_ptr<Expr> unary();
     std::shared_ptr<Expr> primary();
 
+    std::shared_ptr<Stmt> statement();
+    std::shared_ptr<Stmt> printStatement();
+    std::shared_ptr<Stmt> expressionStatement();
+
 public:
     Parser(const vector<Token> &tokens);
-    std::shared_ptr<Expr> parse();
+    // std::shared_ptr<Expr> parse();
+    std::vector<std::shared_ptr<Stmt>> parse();
 };
 
 

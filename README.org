@@ -20,9 +20,20 @@ Most of the mainstream programming languages only have 'and', 'or' and 'not' ope
    
 
 * Quick Look
-1. Expression statements:
- Expressions with side effects or Expressions that change the state of the program. 
-2. Imperative programming:
+1. *Expression statements:*
+   By book's definition, expression statements are expressions with side effects. An other book (K&R) explains expression statements to be expression followed by semicolons and that expression statements do all the real work in C. For example, method calls followed by ~;~ is an expression statement.   
+
+   Since the exact difference between expression and statement is unclear, I'm going to diffrentiate expression and statement. 
+
+   | Expression                      | Statement                        |
+   |---------------------------------+----------------------------------|
+   | Expression evaluates to a value | Changes the state of the program |
+   | Does not have side effects      | Has atleast one side effect      |
+   | Eg. ~1 + 2~, ~2~, ~(1 + 4 / 2)~ | Eg. ~print "Hello, world!"~      |
+
+   The points mentioned above are highly generalized and can differ from language to language. 
+
+2. *Imperative programming:*
    Programs that use a sequence of statements to produce the desired output. Statements usually have side effects and it comes in two forms:
    A. Produce output -> print statements
    B. Change the state of the program.

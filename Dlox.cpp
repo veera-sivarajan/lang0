@@ -26,11 +26,13 @@ void Dlox::run(string source) {
     //     token.print();
     // }
     Parser parser{tokens};
-    std::shared_ptr<Expr> expr = parser.parse();
+    // std::shared_ptr<Expr> expr = parser.parse();
+    std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
     if (Error::hadError) return;
 
     // std::cout << Ast{}.print(expr) << "\n";
-    interpreter.interpret(expr);
+    // interpreter.interpret(expr);
+    interpreter.interpret(statements);
 }
     
 void Dlox::runFile(string path) {
@@ -60,7 +62,7 @@ void Dlox::runPrompt() {
 }
 
 int main(void) {
-    // Dlox::runFile("./test.dlox");
-    Dlox::runPrompt();
+    Dlox::runFile("./test.dlox");
+    // Dlox::runPrompt();
     return 0;
 }

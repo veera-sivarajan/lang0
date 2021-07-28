@@ -4,13 +4,14 @@
 # include <string>
 # include "./Token.hpp"
 # include "./Expression.hpp"
+# include "./Statement.hpp"
 # include "./Error.hpp"
 
 // An interpreter object is also an object of ExprVisitor
 // because interpreter is a subclass of ExprVisitor or ExprVisitor
 // is the base class of Interpreter
 
-class Interpreter: public ExprVisitor {
+class Interpreter: public ExprVisitor, public StmtVisitor {
 private:
     void checkNumberOperand(const Token &oper, const std::any &operand);
     void checkNumberOperands(const Token &oper, const std::any &left,
@@ -29,5 +30,11 @@ public:
     std::any visitUnaryExpr(std::shared_ptr<Unary> expr) override;
     std::any visitGroupingExpr(std::shared_ptr<Grouping> expr) override;
 
-    void interpret(std::shared_ptr<Expr> expr);
+    std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) override;
+    std::any visitPrintStmt(std::shared_ptr<Print> stmt) override;
+    std::any visitBlockStmt(std::shared_ptr<Block> stmt) override;
+    std::any visitVarStmt(std::shared_ptr<Var> stmt) override;
+
+    void interpret(std::vector<std::shared_ptr<Stmt>> &statements);
+    void execute(std::shared_ptr<Stmt> statement);
 };
