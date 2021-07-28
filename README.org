@@ -1,0 +1,28 @@
+#+TITLE: Dlox: A simple interpreter
+
+* Features
+** TODO nor and nand operator
+Most of the mainstream programming languages only have 'and', 'or' and 'not' operators. I'm going to try and add 'nor' and 'nand' operator into my language as I felt its need today while writing the interpreter. I think it might come handy at times. 
+
+* Questions
+1. How does the visitor pattern work?
+
+   I'm not sure how to explain it clearly but I think I have a basic understanding of the concept.
+
+   Essentially, visitor pattern makes it easy to add more operations to existing classes. In Dlox, there are four core classes: Binary, Grouping, Literal and Unary. As I continue to work on the Dlox, I would be adding a number of methods to manipulate the data inside eash of the classes. Generally, without the use of visitor pattern, I would have to add these methods inside every class. But this would make similar methods spread all over the code base. For example, the interpret method for Binary expressions would be nested inside Binary class and the interpret method for Unary expression would be inside Unary class. 
+
+   With the use of Visitor pattern, I could implement similar operations for any number of classes in one file and with the help of polymorphism, make the object access the right method. For interpretring the parsed source code, I have implemented all the operations inside Interpreter.cpp. ~Interpreter::interpret~ is passed a pointer pointing to the Abstract Syntax Tree(AST) and this tree is composed of expressions of types Binary, Literal, Grouping and Unary. For evaluating the tree, ~evaluate()~ calls ~accept()~ method on the passed expression pointer with a pointer to interpreter object itself as argument. Now polymorphism comes into action and helps the interpreter access the right method based on the type of the expression pointer. If the expression pointer points to to a Binary object, it would access ~Interpreter::visitBinaryExpr()~ and if pointer points to some other object, it would call the method specific for that object. This shows how we can group all the methods for interpreting various types of expressions into one file. If not for visitor pattern, I would have implemented the interpret method for every type inside its own class. 
+
+   To make the visitor pattern work, I'm adding a level of indirection: the evaluate method in a Interpreter object, passes itself to a type class (Binary, Unary, Literal, Grouping) and in return the type class calls its specific method (visit[Binary, Literal, Grouping, Unary]Expr()) inside the interpreter object passing a pointer to itself as argument. Now the execution comes back to the interpreter object and the expression is recursively evaluated. To summarize, it follows the path Interpreter -> Expression Type -> Interpreter. The first step (Interpreter -> Expression Type) decides which method gets called (polymorphism) inside the Interpreter object. So this layer of indirection allows us to easily add operations to existing types without modifying the type classes. 
+
+   Usually, its hard to add new operations on existing types without touching the types in OOP style whereas in Functional programming it is easier to add new operations. So essentially the visitor pattern enables us to approximate functional style within OOP. 
+
+   
+
+* Quick Look
+1. Expression statements:
+ Expressions with side effects or Expressions that change the state of the program. 
+2. Imperative programming:
+   Programs that use a sequence of statements to produce the desired output. Statements usually have side effects and it comes in two forms:
+   A. Produce output -> print statements
+   B. Change the state of the program.

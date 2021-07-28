@@ -6,6 +6,10 @@
 # include "./Expression.hpp"
 # include "./Error.hpp"
 
+// An interpreter object is also an object of ExprVisitor
+// because interpreter is a subclass of ExprVisitor or ExprVisitor
+// is the base class of Interpreter
+
 class Interpreter: public ExprVisitor {
 private:
     void checkNumberOperand(const Token &oper, const std::any &operand);
