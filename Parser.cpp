@@ -74,11 +74,32 @@ std::shared_ptr<Stmt> Parser::statement() {
     return expressionStatement();
 }
 
+std::shared_ptr<Stmt> Parser::varDeclaration() {
+    Token name = consume(TokenType::IDENTIFIER, "Expect variable name.");
+
+    std::shared_ptr<Expr> init = nullptr;
+    if (match(TokenType::EQUAL)) {
+        init = expression();
+    }
+    consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
+    return std::make_shared<Var>(name, init);
+}
+
+std::shared_ptr<Stmt> Parser::declaration() {
+    try {
+        if (match(TokenType::VAR)) return varDeclaration();
+        return statement();
+    } catch (ParseError &error) {
+        synchronize();
+        return nullptr;
+    }
+}
+
 std::vector<std::shared_ptr<Stmt>> Parser::parse() {
     std::vector<std::shared_ptr<Stmt>> statements;
     try {
         while (!isAtEnd()) {
-            statements.push_back(statement());
+            statements.push_back(declaration());
         }
     } catch (ParseError &error) {
         
@@ -144,13 +165,15 @@ std::shared_ptr<Expr> Parser::unary() {
 
 std::shared_ptr<Expr> Parser::primary() {
     if (match(TokenType::FALSE)) return std::make_shared<Literal>(false);
-    else if (match(TokenType::TRUE)) return std::make_shared<Literal>(true);
-    else if (match(TokenType::NIL)) return std::make_shared<Literal>(nullptr);
+    if (match(TokenType::TRUE)) return std::make_shared<Literal>(true);
+    if (match(TokenType::NIL)) return std::make_shared<Literal>(nullptr);
+    if (match(TokenType::IDENTIFIER))
+        return std::make_shared<Variable>(previous());
 
-    else if (match(TokenType::NUMBER, TokenType::STRING))
+    if (match(TokenType::NUMBER, TokenType::STRING))
         return std::make_shared<Literal>(previous().literal);
 
-    else if (match(TokenType::LEFT_PAREN)) {
+    if (match(TokenType::LEFT_PAREN)) {
         std::shared_ptr<Expr> expr = expression();
         consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
         return std::make_shared<Grouping>(expr);

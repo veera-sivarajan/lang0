@@ -188,5 +188,16 @@ std::any Interpreter::visitBlockStmt(std::shared_ptr<Block> stmt) {
 }
 
 std::any Interpreter::visitVarStmt(std::shared_ptr<Var> stmt) {
+    std::any value = nullptr;
+    if (stmt->init != nullptr) {
+        value = evaluate(stmt->init);
+    }
+    environment->define(stmt->name.text, std::move(value));
     return {};
 }
+
+std::any Interpreter::visitVariableExpr(std::shared_ptr<Variable> expr) {
+    return environment->get(expr->name);
+}
+
+

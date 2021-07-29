@@ -6,6 +6,7 @@
 # include "./Expression.hpp"
 # include "./Statement.hpp"
 # include "./Error.hpp"
+# include "./Environment.hpp"
 
 // An interpreter object is also an object of ExprVisitor
 // because interpreter is a subclass of ExprVisitor or ExprVisitor
@@ -13,6 +14,8 @@
 
 class Interpreter: public ExprVisitor, public StmtVisitor {
 private:
+    std::shared_ptr<Env> environment{new Env};
+
     void checkNumberOperand(const Token &oper, const std::any &operand);
     void checkNumberOperands(const Token &oper, const std::any &left,
                              const std::any &right);
@@ -29,6 +32,7 @@ public:
     std::any visitLiteralExpr(std::shared_ptr<Literal> expr) override;
     std::any visitUnaryExpr(std::shared_ptr<Unary> expr) override;
     std::any visitGroupingExpr(std::shared_ptr<Grouping> expr) override;
+    std::any visitVariableExpr(std::shared_ptr<Variable> expr) override;
 
     std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) override;
     std::any visitPrintStmt(std::shared_ptr<Print> stmt) override;

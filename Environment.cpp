@@ -1,6 +1,6 @@
 # include "./Environment.hpp"
 
-void Env::define(std::string &name, std::any value) {
+void Env::define(const std::string &name, std::any value) {
     values[name] = std::move(value);
 }
 
