@@ -37,3 +37,10 @@ Variable::Variable(Token name) :
 std::any Variable::accept(ExprVisitor &visitor) {
     return visitor.visitVariableExpr(shared_from_this());
 }
+
+Assign::Assign(Token name, std::shared_ptr<Expr> value) :
+    name{std::move(name)}, value{std::move(value)} {}
+
+std::any Assign::accept(ExprVisitor &visitor) {
+    return visitor.visitAssignExpr(shared_from_this());
+}

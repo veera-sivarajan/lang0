@@ -33,6 +33,7 @@ public:
     std::any visitUnaryExpr(std::shared_ptr<Unary> expr) override;
     std::any visitGroupingExpr(std::shared_ptr<Grouping> expr) override;
     std::any visitVariableExpr(std::shared_ptr<Variable> expr) override;
+    std::any visitAssignExpr(std::shared_ptr<Assign> expr) override;
 
     std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) override;
     std::any visitPrintStmt(std::shared_ptr<Print> stmt) override;

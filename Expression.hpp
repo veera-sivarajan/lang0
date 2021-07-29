@@ -13,6 +13,7 @@ struct Grouping;
 struct Literal;
 struct Unary;
 struct Variable;
+struct Assign;
 
 struct ExprVisitor {
     //pure virutal functions
@@ -21,6 +22,7 @@ struct ExprVisitor {
     virtual any visitLiteralExpr(std::shared_ptr<Literal> expr) = 0;
     virtual any visitUnaryExpr(std::shared_ptr<Unary> expr) = 0;
     virtual any visitVariableExpr(std::shared_ptr<Variable> expr) = 0;
+    virtual any visitAssignExpr(std::shared_ptr<Assign> expr) = 0;
     virtual ~ExprVisitor() = default;
 };
 
@@ -65,3 +67,12 @@ struct Variable: Expr, public std::enable_shared_from_this<Variable> {
     Variable(Token name);
     std::any accept(ExprVisitor &visitor) override;
 };
+
+struct Assign: Expr, public std::enable_shared_from_this<Assign> {
+    const Token name;
+    const std::shared_ptr<Expr> value;
+
+    Assign(Token name, std::shared_ptr<Expr> value);
+    std::any accept(ExprVisitor &visitor) override;
+};
+        

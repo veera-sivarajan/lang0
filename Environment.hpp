@@ -11,6 +11,7 @@ private:
     std::map<std::string, std::any> values;
 
 public:
+    void assign(const Token &name, std::any value);
     void define(const std::string &name, std::any value);
     std::any get(const Token &name);
 };

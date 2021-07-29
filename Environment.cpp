@@ -12,3 +12,13 @@ std::any Env::get(const Token &name) {
 
     throw RuntimeError(name, "Undefined variable '" + name.text + "'.");
 }
+
+void Env::assign(const Token &name, std::any value) {
+    auto elem = values.find(name.text);
+    if (elem != values.end()) {
+        elem->second = std::move(value);
+        return;
+    }
+    throw RuntimeError(name, "Undefined variable '" + name.text + "'.");
+}
+        
