@@ -16,5 +16,5 @@ test:
 clean:
 	rm -f $(TODELETE)
 
-run:
-        valgrind -s --tool=memcheck --track-origins=yes ./dlox
+run:	dlox
+	valgrind -s --tool=memcheck --track-origins=yes ./dlox
