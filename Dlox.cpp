@@ -56,6 +56,7 @@ void Dlox::runPrompt() {
         cout << BLUE << "Dlox> " << RESET;
         std::getline(std::cin, input);
         if (input.empty()) continue;
+        if (input == "exit") std::exit(0);
         run(input);
         Error::hadError = false;
     }
