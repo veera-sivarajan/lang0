@@ -76,8 +76,12 @@ std::shared_ptr<Stmt> Parser::statement() {
 
 std::vector<std::shared_ptr<Stmt>> Parser::parse() {
     std::vector<std::shared_ptr<Stmt>> statements;
-    while (!isAtEnd()) {
-        statements.push_back(statement());
+    try {
+        while (!isAtEnd()) {
+            statements.push_back(statement());
+        }
+    } catch (ParseError &error) {
+        
     }
     return statements;
 }
