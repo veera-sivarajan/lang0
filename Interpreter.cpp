@@ -215,7 +215,11 @@ std::any Interpreter::visitVarStmt(std::shared_ptr<Var> stmt) {
 }
 
 std::any Interpreter::visitVariableExpr(std::shared_ptr<Variable> expr) {
-    return curr_env->get(expr->name);
+    // return curr_env->get(expr->name);
+    std::any value = curr_env->get(expr->name);
+    if (value.type() == typeid(nullptr))
+        throw RuntimeError{expr->name, "Variable has not be initialized."};
+    return value;
 }
 
 std::any Interpreter::visitAssignExpr(std::shared_ptr<Assign> expr) {
