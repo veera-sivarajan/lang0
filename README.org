@@ -4,6 +4,8 @@
 ** TODO nor and nand operator
 Most of the mainstream programming languages only have 'and', 'or' and 'not' operators. I'm going to try and add 'nor' and 'nand' operator into my language as I felt its need today while writing the interpreter. I think it might come handy at times. 
 
+** TODO Remove semicolons
+Its a little annoying to use semicolons in Dlox because for the most part the syntax resembles Python and it does not have semi colons. I get that the author has designed the syntax based on Dart as he works on it for a living. However, in Dlox the use of semicolons is unappealing. So I'm planning to remove it once I add all the features in the language. 
 * Questions
 1. How does the visitor pattern work?
 
@@ -17,6 +19,32 @@ Most of the mainstream programming languages only have 'and', 'or' and 'not' ope
 
    Usually, its hard to add new operations on existing types without touching the types in OOP style whereas in Functional programming it is easier to add new operations. So essentially the visitor pattern enables us to approximate functional style within OOP. 
 
+2. Difference between Dynamic and Lexical scope? 
+   #+begin_src python
+     a = 10
+     def add(b):
+         return a + b
+     
+     def temp():
+         a = 50
+         return add(10)
+     
+     print(temp())
+   #+end_src
+
+   *Lexical scope:*
+   #+RESULTS:
+   : 20
+   In lexical scope, the scope of the variable can be determined by its location in the source code. For example, in the python code above, the value of ~a~ is 50 inside ~temp()~ and in other places its value is 10. Thus we can determine the value of ~a~ inside ~temp()~ by examining the source code. 
+
+   Almost all recent programming language offer lexical scoping as default. 
+
+   *Dynamic scope:*
+   #+RESULTS:
+   : 60
+   In dynamic scope, a reference to the variable points to the most recently initialized value. If the above mentioned code had dynamic scope, the value of ~a~ inside ~add()~ when it is called from ~temp()~ would be 50. Thus the most recently initialized value of 50 is referenced instead of 10. 
+
+   Emacs Lisp used to have dynamic scope by default until version 27. Also, bash and the original version of Lisp are examples of dynamically scoped programming languages. 
    
 
 * Quick Look
