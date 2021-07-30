@@ -165,8 +165,25 @@ std::any Interpreter::visitPrintStmt(std::shared_ptr<Print> stmt) {
 //     }
 // }
 
+
+
 void Interpreter::execute(std::shared_ptr<Stmt> statement) {
     statement->accept(*this);
+}
+
+void Interpreter::executeBlock(const std::vector<std::shared_ptr<Stmt>>
+                               &statements, std::shared_ptr<Env> new_env) {
+    std::shared_ptr<Env> previous = this->curr_env;
+    try {
+        this->curr_env = new_env;
+        for (const std::shared_ptr<Stmt> &statement : statements) {
+            execute(statement);
+        }
+    } catch(...) {
+        this->curr_env = previous;
+        throw;
+    }
+    this->curr_env = previous;
 }
 
 void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> &statements) {
@@ -184,6 +201,7 @@ std::any Interpreter::visitGroupingExpr(std::shared_ptr<Grouping> expr) {
 }
 
 std::any Interpreter::visitBlockStmt(std::shared_ptr<Block> stmt) {
+    executeBlock(stmt->statements, std::make_shared<Env>(curr_env)); 
     return {};
 }
 
@@ -192,16 +210,16 @@ std::any Interpreter::visitVarStmt(std::shared_ptr<Var> stmt) {
     if (stmt->init != nullptr) {
         value = evaluate(stmt->init);
     }
-    environment->define(stmt->name.text, std::move(value));
+    curr_env->define(stmt->name.text, std::move(value));
     return {};
 }
 
 std::any Interpreter::visitVariableExpr(std::shared_ptr<Variable> expr) {
-    return environment->get(expr->name);
+    return curr_env->get(expr->name);
 }
 
 std::any Interpreter::visitAssignExpr(std::shared_ptr<Assign> expr) {
     std::any value = evaluate(expr->value);
-    environment->assign(expr->name, value);
+    curr_env->assign(expr->name, value);
     return value;
 }

@@ -47,6 +47,8 @@ private:
     std::shared_ptr<Stmt> declaration();
     std::shared_ptr<Stmt> varDeclaration();
 
+    std::vector<std::shared_ptr<Stmt>> block();
+
 public:
     Parser(const vector<Token> &tokens);
     // std::shared_ptr<Expr> parse();

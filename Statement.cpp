@@ -1,7 +1,7 @@
 # include "./Statement.hpp"
 
 Block::Block(std::vector<std::shared_ptr<Stmt>> statements) :
-    statements(statements) {} // FIXME: I have passed it without using std::move
+    statements{std::move(statements)} {}
 
 std::any Block::accept(StmtVisitor &visitor) {
     return visitor.visitBlockStmt(shared_from_this());

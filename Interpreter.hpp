@@ -14,7 +14,7 @@
 
 class Interpreter: public ExprVisitor, public StmtVisitor {
 private:
-    std::shared_ptr<Env> environment{new Env};
+    std::shared_ptr<Env> curr_env{new Env};
 
     void checkNumberOperand(const Token &oper, const std::any &operand);
     void checkNumberOperands(const Token &oper, const std::any &left,
@@ -42,4 +42,6 @@ public:
 
     void interpret(std::vector<std::shared_ptr<Stmt>> &statements);
     void execute(std::shared_ptr<Stmt> statement);
+    void executeBlock(const std::vector<std::shared_ptr<Stmt>> &statements,
+                      std::shared_ptr<Env> new_env);
 };
