@@ -46,16 +46,6 @@ bool Parser::match(T... types) {
     return false;
 }
 
-// Was used when the interpreter was bare bones and
-// could handly only numeric expressions
-// std::shared_ptr<Expr> Parser::parse() {
-//     try {
-//         return expression();
-//     } catch (ParseError &error) {
-//         return nullptr;
-//     }
-// }
-
 std::shared_ptr<Stmt> Parser::printStatement() {
     std::shared_ptr<Expr> value = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
