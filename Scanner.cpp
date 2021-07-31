@@ -164,7 +164,8 @@ void Scanner::makeNumber() {
         while (isDigit(peek())) advance();
     }
 
-    int number = std::stod(std::string{source.substr(start, current - start)});
+    string text = source.substr(start, current - start);
+    double number = std::stod(std::string{text});
     addToken(TokenType::NUMBER, number);
 }
 

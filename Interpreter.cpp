@@ -2,13 +2,13 @@
 
 void Interpreter::checkNumberOperand(const Token &oper,
                                      const std::any &operand) {
-    if (operand.type() == typeid(int)) return;
+    if (operand.type() == typeid(double)) return;
     throw RuntimeError{oper, "Operand must be a number."};
 }
 
 void Interpreter::checkNumberOperands(const Token &oper, const std::any &left,
                                       const std::any &right) {
-    if (left.type() == typeid(int) && right.type() == typeid(int)) return;
+    if (left.type() == typeid(double) && right.type() == typeid(double)) return;
     throw RuntimeError{oper, "Operand must be a number."};
 }
 
@@ -21,8 +21,8 @@ bool Interpreter::isEqual(const std::any &left, const std::any &right) {
         return false;
     }
 
-    if (left.type() == typeid(int) && right.type() == typeid(int)) {
-        return std::any_cast<int>(left) == std::any_cast<int>(right);
+    if (left.type() == typeid(double) && right.type() == typeid(double)) {
+        return std::any_cast<double>(left) == std::any_cast<double>(right);
     }
 
     if (left.type() == typeid(std::string) &&
@@ -51,27 +51,27 @@ std::any Interpreter::visitBinaryExpr(std::shared_ptr<Binary> expr) {
 
     case TokenType::GREATER:
         checkNumberOperands(expr->oper, left, right);
-        return std::any_cast<int>(left) > std::any_cast<int>(right);
+        return std::any_cast<double>(left) > std::any_cast<double>(right);
 
     case TokenType::GREATER_EQUAL:
         checkNumberOperands(expr->oper, left, right);
-        return std::any_cast<int>(left) >= std::any_cast<int>(right);
+        return std::any_cast<double>(left) >= std::any_cast<double>(right);
 
     case TokenType::LESS:
         checkNumberOperands(expr->oper, left, right);
-        return std::any_cast<int>(left) < std::any_cast<int>(right);
+        return std::any_cast<double>(left) < std::any_cast<double>(right);
 
     case TokenType::LESS_EQUAL:
         checkNumberOperands(expr->oper, left, right);
-        return std::any_cast<int>(left) <= std::any_cast<int>(right);
+        return std::any_cast<double>(left) <= std::any_cast<double>(right);
 
     case TokenType::MINUS:
         checkNumberOperands(expr->oper, left, right);
-        return std::any_cast<int>(left) - std::any_cast<int>(right);
+        return std::any_cast<double>(left) - std::any_cast<double>(right);
 
     case TokenType::PLUS:
-        if (left.type() == typeid(int) && right.type() == typeid(int)) {
-            return std::any_cast<int>(left) + std::any_cast<int>(right);
+        if (left.type() == typeid(double) && right.type() == typeid(double)) {
+            return std::any_cast<double>(left) + std::any_cast<double>(right);
         } 
         if (left.type() == typeid(string) && right.type() == typeid(string)) {
             return std::any_cast<string>(left) + std::any_cast<string>(right);
@@ -80,11 +80,11 @@ std::any Interpreter::visitBinaryExpr(std::shared_ptr<Binary> expr) {
         
     case TokenType::SLASH:
         checkNumberOperands(expr->oper, left, right);
-        return std::any_cast<int>(left) / std::any_cast<int>(right);
+        return std::any_cast<double>(left) / std::any_cast<double>(right);
 
     case TokenType::STAR:
         checkNumberOperands(expr->oper, left, right);
-        return std::any_cast<int>(left) * std::any_cast<int>(right);
+        return std::any_cast<double>(left) * std::any_cast<double>(right);
     default:
         return {};
     }
@@ -110,7 +110,7 @@ std::any Interpreter::visitUnaryExpr(std::shared_ptr<Unary> expr) {
         return !isTruthy(right);
     case TokenType::MINUS:
         checkNumberOperand(expr->oper, right);
-        return -std::any_cast<int>(right);
+        return -std::any_cast<double>(right);
     default:
         return {};
     }
@@ -119,8 +119,8 @@ std::any Interpreter::visitUnaryExpr(std::shared_ptr<Unary> expr) {
 std::string Interpreter::stringify(const std::any &object) {
     if (object.type() == typeid(nullptr)) return "nil";
 
-    if (object.type() == typeid(int)) {
-        std::string text = std::to_string(std::any_cast<int>(object));
+    if (object.type() == typeid(double)) {
+        std::string text = std::to_string(std::any_cast<double>(object));
         return text;
     }
 

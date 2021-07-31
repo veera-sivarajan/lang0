@@ -8,7 +8,6 @@
 # include <vector>
 # include <fstream>
 # include <sstream>
-
 # define BLUE    "\033[34m"    
 # define RESET   "\033[0m"
 
@@ -63,7 +62,7 @@ void Dlox::runPrompt() {
 }
 
 int main(void) {
-    Dlox::runFile("./test.dlox");
-    // Dlox::runPrompt();
+    // Dlox::runFile("./test.dlox");
+    Dlox::runPrompt();
     return 0;
 }

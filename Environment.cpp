@@ -33,4 +33,3 @@ void Env::assign(const Token &name, std::any value) {
     }
     throw RuntimeError(name, "Undefined variable '" + name.text + "'.");
 }
-        

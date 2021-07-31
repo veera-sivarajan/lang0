@@ -27,8 +27,8 @@ any Ast::visitLiteralExpr(std::shared_ptr<Literal> expr) {
         } catch (const std::bad_any_cast &e) {
             std::cout << "Ast::visitLiteralExpr -> " << e.what() << "\n";
         }
-    } else if (type == typeid(int)) {
-        return std::to_string(std::any_cast<int>(expr->value));
+    } else if (type == typeid(double)) {
+        return std::to_string(std::any_cast<double>(expr->value));
     } else if (type == typeid(bool)) {
         if (std::any_cast<bool>(expr->value)) {
             std::string result{"true"};
