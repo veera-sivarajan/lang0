@@ -27,3 +27,12 @@ Var::Var(Token name, std::shared_ptr<Expr> init) :
 std::any Var::accept(StmtVisitor &visitor) {
     return visitor.visitVarStmt(shared_from_this());
 }
+
+If::If(std::shared_ptr<Expr> condition, std::shared_ptr<Stmt> thenBranch,
+       std::shared_ptr<Stmt> elseBranch) :
+    condition{std::move(condition)}, thenBranch{std::move(thenBranch)},
+    elseBranch{std::move(elseBranch)} {}
+
+If::accept(StmtVisitor &visitor) {
+    visitor.visitIfStmt(shared_from_this());
+}
