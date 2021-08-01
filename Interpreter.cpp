@@ -94,6 +94,7 @@ std::any Interpreter::visitLiteralExpr(std::shared_ptr<Literal> expr) {
     return expr->value;
 }
 
+// In Dlox, any value other than nil and false is true
 bool Interpreter::isTruthy(const std::any &object) {
     if (object.type() == typeid(nullptr)) return false;
     if (object.type() == typeid(bool)) {
@@ -217,6 +218,15 @@ std::any Interpreter::visitVarStmt(std::shared_ptr<Var> stmt) {
     return {};
 }
 
+std::any Interpreter::visitIfStmt(std::shared_ptr<If> stmt) {
+    if (isTruthy(evaluate(stmt->condition))) {
+        execute(stmt->thenBranch);
+    } else if (stmt->elseBranch != nullptr) {
+        execute(stmt->elseBranch);
+    }
+    return {};
+}
+    
 std::any Interpreter::visitVariableExpr(std::shared_ptr<Variable> expr) {
     // return curr_env->get(expr->name);
     std::any value = curr_env->get(expr->name);

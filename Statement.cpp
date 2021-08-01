@@ -33,6 +33,6 @@ If::If(std::shared_ptr<Expr> condition, std::shared_ptr<Stmt> thenBranch,
     condition{std::move(condition)}, thenBranch{std::move(thenBranch)},
     elseBranch{std::move(elseBranch)} {}
 
-If::accept(StmtVisitor &visitor) {
+std::any If::accept(StmtVisitor &visitor) {
     visitor.visitIfStmt(shared_from_this());
 }
