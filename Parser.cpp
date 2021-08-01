@@ -125,7 +125,7 @@ std::shared_ptr<Expr> Parser::logicalAnd() {
     while (match(TokenType::AND)) {
         Token oper = previous();
         std::shared_ptr<Expr> right = equality();
-        expr = std::make_shared<Expr>(expr, std::move(oper), right);
+        expr = std::make_shared<Logical>(expr, std::move(oper), right);
     }
     return expr;
 }
