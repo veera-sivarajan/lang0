@@ -97,4 +97,3 @@ struct Call: Expr, public std::enable_shared_from_this<Call> {
          std::vector<std::shared_ptr<Expr>> arguments);
     std::any accept(ExprVisitor &visitor) override;
 };
-    

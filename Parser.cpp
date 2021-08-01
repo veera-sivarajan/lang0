@@ -256,13 +256,39 @@ std::shared_ptr<Expr> Parser::factor() {
     return expr;
 }
 
+std::shared_ptr<Expr> Parser::finishCall(std::shared_ptr<Expr> callee) {
+    std::vector<std::shared_ptr<Expr>> arguments;
+    if (!check(TokenType::RIGHT_PAREN)) {
+        do {
+            if (arguments.size() >= 255) {
+                error(peek(), "Can't have more than 255 arguments.");
+            }
+            arguments.push_back(expression());
+        } while (match(TokenType::COMMA));
+    }
+    Token paren = consume(TokenType::RIGHT_PAREN, "Expect ')' after arguments");
+    return std::make_shared<Call>(callee, paren, arguments);
+}
+
+std::shared_ptr<Expr> Parser::call() {
+    std::shared_ptr<Expr> expr = primary(); // parses the callee
+    while (true) {
+        if (match(TokenType::LEFT_PAREN)) {
+            expr = finishCall(expr); // to support currying
+        } else {
+            break;
+        }
+    }
+    return expr;
+}
+
 std::shared_ptr<Expr> Parser::unary() {
     if (match(TokenType::BANG, TokenType::MINUS)) {
         Token oper = previous();
         std::shared_ptr<Expr> right = unary();
         return std::make_shared<Unary>(oper, right);
     }
-    return primary();
+    return call();
 }
 
 std::shared_ptr<Expr> Parser::primary() {
