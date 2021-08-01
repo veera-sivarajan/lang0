@@ -240,3 +240,13 @@ std::any Interpreter::visitAssignExpr(std::shared_ptr<Assign> expr) {
     curr_env->assign(expr->name, value);
     return value;
 }
+
+std::any Interpreter::visitLogicalExpr(std::shared_ptr<Logical> expr) {
+    std::any left = evaluate(expr->left);
+    if (expr->oper.type == TokenType::OR) {
+        if (isTruthy(left)) return left; // or is true if one exp is true
+    } else {
+        if (!isTruthy(left)) return left; // and is false if one exp is false
+    }
+    return evaluate(expr->right);
+}

@@ -120,18 +120,36 @@ std::vector<std::shared_ptr<Stmt>> Parser::parse() {
     return statements;
 }
 
+std::shared_ptr<Expr> Parser::logicalAnd() {
+    std::shared_ptr<Expr> expr = equality();
+    while (match(TokenType::AND)) {
+        Token oper = previous();
+        std::shared_ptr<Expr> right = equality();
+        expr = std::make_shared<Expr>(expr, std::move(oper), right);
+    }
+    return expr;
+}
+
+std::shared_ptr<Expr> Parser::logicalOr() {
+    std::shared_ptr<Expr> expr = logicalAnd();
+    while (match(TokenType::OR)) {
+        Token oper = previous();
+        std::shared_ptr<Expr> right = logicalAnd();
+        expr = std::make_shared<Logical>(expr, std::move(oper), right);
+    }
+    return expr;
+}
+
 // c = b = d = 4; 
 std::shared_ptr<Expr> Parser::assignment() {
-    std::shared_ptr<Expr> expr = equality();
+    std::shared_ptr<Expr> expr = logicalOr();
     if (match(TokenType::EQUAL)) {
         Token equals = previous();
         std::shared_ptr<Expr> value = assignment();
-
         if (Variable *e = dynamic_cast<Variable *>(expr.get())) {
             Token name = e->name;
             return std::make_shared<Assign>(std::move(name), value);
         }
-
         error(std::move(equals), "Invalid assignment target.");
     }
     return expr;
