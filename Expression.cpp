@@ -53,3 +53,11 @@ std::any Logical::accept(ExprVisitor &visitor) {
     return visitor.visitLogicalExpr(shared_from_this());
 }
     
+Call::Call(std::shared_ptr<Expr> callee, Token paren,
+           std::vector<std::shared_ptr<Expr>> arguments) :
+    callee{std::move(callee)}, paren{std::move(paren)}
+    arguments{std::move(arguments)} {}
+
+std::any Call::accept(ExprVisitor &visitor) {
+    return visitor.visitCallExpr(shared_from_this());
+}

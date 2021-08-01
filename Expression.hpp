@@ -13,6 +13,7 @@ struct Unary;
 struct Variable;
 struct Assign;
 struct Logical;
+struct Call;
 
 struct ExprVisitor {
     //pure virutal functions
@@ -23,6 +24,7 @@ struct ExprVisitor {
     virtual std::any visitVariableExpr(std::shared_ptr<Variable> expr) = 0;
     virtual std::any visitAssignExpr(std::shared_ptr<Assign> expr) = 0;
     virtual std::any visitLogicalExpr(std::shared_ptr<Logical> expr) = 0;
+    virtual std::any visitCallExpr(std::shared_ptr<Call> expr) = 0;
     virtual ~ExprVisitor() = default;
 };
 
@@ -83,6 +85,16 @@ struct Logical: Expr, public std::enable_shared_from_this<Logical> {
 
     Logical(std::shared_ptr<Expr> left, Token oper,
             std::shared_ptr<Expr> right);
+    std::any accept(ExprVisitor &visitor) override;
+};
+
+struct Call: Expr, public std::enable_shared_from_this<Call> {
+    std::shared_ptr<Expr> callee;
+    Token paren;
+    std::vector<std::shared_ptr<Expr>> arguments;
+
+    Call(std::shared_ptr<Expr> callee, Token paren,
+         std::vector<std::shared_ptr<Expr>> arguments);
     std::any accept(ExprVisitor &visitor) override;
 };
     
