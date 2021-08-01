@@ -6,8 +6,6 @@
 
 # include "./Token.hpp"
 
-using std::any;
-
 struct Binary;
 struct Grouping;
 struct Literal;
@@ -18,18 +16,18 @@ struct Logical;
 
 struct ExprVisitor {
     //pure virutal functions
-    virtual any visitBinaryExpr(std::shared_ptr<Binary> expr) = 0;
-    virtual any visitGroupingExpr(std::shared_ptr<Grouping> expr) = 0;
-    virtual any visitLiteralExpr(std::shared_ptr<Literal> expr) = 0;
-    virtual any visitUnaryExpr(std::shared_ptr<Unary> expr) = 0;
-    virtual any visitVariableExpr(std::shared_ptr<Variable> expr) = 0;
-    virtual any visitAssignExpr(std::shared_ptr<Assign> expr) = 0;
-    virtual any visitLogicalExpr(std::shared_ptr<Logical> expr) = 0;
+    virtual std::any visitBinaryExpr(std::shared_ptr<Binary> expr) = 0;
+    virtual std::any visitGroupingExpr(std::shared_ptr<Grouping> expr) = 0;
+    virtual std::any visitLiteralExpr(std::shared_ptr<Literal> expr) = 0;
+    virtual std::any visitUnaryExpr(std::shared_ptr<Unary> expr) = 0;
+    virtual std::any visitVariableExpr(std::shared_ptr<Variable> expr) = 0;
+    virtual std::any visitAssignExpr(std::shared_ptr<Assign> expr) = 0;
+    virtual std::any visitLogicalExpr(std::shared_ptr<Logical> expr) = 0;
     virtual ~ExprVisitor() = default;
 };
 
 struct Expr {
-    virtual any accept(ExprVisitor &visitor) = 0;
+    virtual std::any accept(ExprVisitor &visitor) = 0;
 };
 
 struct Binary: Expr, public std::enable_shared_from_this<Binary> {
@@ -38,21 +36,21 @@ struct Binary: Expr, public std::enable_shared_from_this<Binary> {
     std::shared_ptr<Expr> right;
 
     Binary(std::shared_ptr<Expr> left, Token oper, std::shared_ptr<Expr> right);
-    any accept(ExprVisitor &visitor) override;
+    std::any accept(ExprVisitor &visitor) override;
 };
 
 struct Grouping: Expr, public std::enable_shared_from_this<Grouping> {
     std::shared_ptr<Expr> expression;
 
     Grouping(std::shared_ptr<Expr> expression);
-    any accept(ExprVisitor &visitor) override;
+    std::any accept(ExprVisitor &visitor) override;
 };
 
 struct Literal: Expr, public std::enable_shared_from_this<Literal> {
-    any value;
+    std::any value;
 
-    Literal(any value);
-    any accept(ExprVisitor &visitor) override;
+    Literal(std::any value);
+    std::any accept(ExprVisitor &visitor) override;
 };
 
 struct Unary: Expr, public std::enable_shared_from_this<Unary> {
@@ -60,7 +58,7 @@ struct Unary: Expr, public std::enable_shared_from_this<Unary> {
     std::shared_ptr<Expr> right;
 
     Unary(Token oper, std::shared_ptr<Expr> right);
-    any accept(ExprVisitor &visitor) override;
+    std::any accept(ExprVisitor &visitor) override;
 };
 
 struct Variable: Expr, public std::enable_shared_from_this<Variable> {
