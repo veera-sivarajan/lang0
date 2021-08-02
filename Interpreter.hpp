@@ -10,13 +10,14 @@
 # include "./Error.hpp"
 # include "./Environment.hpp"
 # include "./DloxCallable.hpp"
+# include "./DloxFunction.hpp"
 
 // An interpreter object is also an object of ExprVisitor
 // because interpreter is a subclass of ExprVisitor or ExprVisitor
 // is the base class of Interpreter
 
 class Clock: public DloxCallable {
-public:
+public: 
     int arity() override;
     std::any call(Interpreter &interpreter,
                   std::vector<std::any> arguments) override;
@@ -24,6 +25,7 @@ public:
 };
 
 class Interpreter: public ExprVisitor, public StmtVisitor {
+public: std::shared_ptr<Env> global{new Env};
 private:
     std::shared_ptr<Env> curr_env = global;
     friend class DloxFunction;
@@ -55,6 +57,7 @@ public:
     std::any visitVarStmt(std::shared_ptr<Var> stmt) override;
     std::any visitIfStmt(std::shared_ptr<If> stmt) override;
     std::any visitWhileStmt(std::shared_ptr<While> stmt) override;
+    std::any visitFunctionStmt(std::shared_ptr<Function> stmt) override;
 
     void interpret(std::vector<std::shared_ptr<Stmt>> &statements);
     void execute(std::shared_ptr<Stmt> statement);
@@ -62,5 +65,4 @@ public:
                       std::shared_ptr<Env> new_env);
 
     Interpreter();
-    std::shared_ptr<Env> global{new Env};
 };

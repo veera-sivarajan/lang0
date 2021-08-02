@@ -4,7 +4,7 @@ int Clock::arity() {
     return 0;
 }
 
-std::any Clock::cal(Interpreter &interpreter,
+std::any Clock::call(Interpreter &interpreter,
                     std::vector<std::any> arguments) {
     auto ticks = std::chrono::system_clock::now().time_since_epoch();
     return std::chrono::duration<double>{ticks}.count() / 1000.0;
@@ -15,7 +15,7 @@ std::string Clock::toString() {
 }
 
 Interpreter::Interpreter() {
-    globals->define("clock", std::shared_ptr<Clock>{});
+    global->define("clock", std::shared_ptr<Clock>{});
 }
 
 void Interpreter::checkNumberOperand(const Token &oper,
@@ -293,12 +293,18 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
                 "Can only call functions and classes."};
     }
 
-    if (arguments.size() != function->arity()) {
+    // NOTE: Checking arity
+    if (static_cast<int>(arguments.size()) != function->arity()) {
         throw RuntimeError{expr->paren,
                 "Expected " + std::to_string(function->arity()) +
                 " arguments but got " + std::to_string(arguments.size()) + "."};
     }
-    return function.call(*this, std::move(arguments));
+    return function->call(*this, std::move(arguments));
 }
 
+std::any Interpreter::visitFunctionStmt(std::shared_ptr<Function> stmt) {
+    auto function = std::make_shared<DloxFunction>(stmt);
+    curr_env->define(stmt->name.text, function);
+    return {};
+}
     

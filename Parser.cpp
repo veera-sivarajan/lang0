@@ -152,6 +152,7 @@ std::shared_ptr<Stmt> Parser::varDeclaration() {
     return std::make_shared<Var>(name, init);
 }
 
+// Parsing function declaration
 std::shared_ptr<Function> Parser::function(std::string kind) {
     Token funcName = consume(TokenType::IDENTIFIER, "Expect " + kind + " name.");
     consume(TokenType::LEFT_PAREN, "Expect '(' after " + kind + " name.");
@@ -165,7 +166,8 @@ std::shared_ptr<Function> Parser::function(std::string kind) {
                 consume(TokenType::IDENTIFIER, "Expect parameter name."));
         } while (match(TokenType::COMMA));
     }
-    conume(TokenType::RIGHT_PAREN, "Expect ')' after parameters.");
+    consume(TokenType::RIGHT_PAREN, "Expect ')' after parameters.");
+    consume(TokenType::LEFT_BRACE, "Expect '{' before " + kind + " body.");
     std::vector<std::shared_ptr<Stmt>> body = block();
     return std::make_shared<Function>(std::move(funcName),
                                       std::move(parameters),
