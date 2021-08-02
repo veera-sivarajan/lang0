@@ -25,22 +25,6 @@ public:
 };
 
 class Interpreter: public ExprVisitor, public StmtVisitor {
-public: std::shared_ptr<Env> global{new Env};
-private:
-    std::shared_ptr<Env> curr_env = global;
-    friend class DloxFunction;
-
-    void checkNumberOperand(const Token &oper, const std::any &operand);
-    void checkNumberOperands(const Token &oper, const std::any &left,
-                             const std::any &right);
-
-    bool isEqual(const std::any &left, const std::any &right);
-    bool isTruthy(const std::any &object);
-
-    std::string stringify(const std::any &object);
-
-    std::any evaluate(std::shared_ptr<Expr> expr);
-
 public:
     std::any visitBinaryExpr(std::shared_ptr<Binary> expr) override;
     std::any visitLiteralExpr(std::shared_ptr<Literal> expr) override;
@@ -65,4 +49,20 @@ public:
                       std::shared_ptr<Env> new_env);
 
     Interpreter();
+    std::shared_ptr<Env> global{new Env};
+    
+private:
+    std::shared_ptr<Env> curr_env = global;
+    friend class DloxFunction;
+
+    void checkNumberOperand(const Token &oper, const std::any &operand);
+    void checkNumberOperands(const Token &oper, const std::any &left,
+                             const std::any &right);
+
+    bool isEqual(const std::any &left, const std::any &right);
+    bool isTruthy(const std::any &object);
+
+    std::string stringify(const std::any &object);
+
+    std::any evaluate(std::shared_ptr<Expr> expr);
 };
