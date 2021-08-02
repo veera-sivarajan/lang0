@@ -56,6 +56,8 @@ private:
 
     std::vector<std::shared_ptr<Stmt>> block();
 
+    std::shared_ptr<Function> function(std::string kind);
+
 public:
     Parser(const vector<Token> &tokens);
     // std::shared_ptr<Expr> parse();
