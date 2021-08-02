@@ -178,17 +178,6 @@ std::any Interpreter::visitPrintStmt(std::shared_ptr<Print> stmt) {
     return {};
 }
 
-// void Interpreter::interpret(std::shared_ptr<Expr> expr) {
-//     try {
-//         std::any value = evaluate(expr);
-//         std::cout << stringify(value) <<  "\n";
-//     } catch (RuntimeError &error) {
-//         Error::runtimeError(error);
-//     }
-// }
-
-
-
 void Interpreter::execute(std::shared_ptr<Stmt> statement) {
     statement->accept(*this);
 }
@@ -208,6 +197,7 @@ void Interpreter::executeBlock(const std::vector<std::shared_ptr<Stmt>>
     this->curr_env = previous;
 }
 
+// AST interpretation begins here
 void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> &statements) {
     try {
         for (std::shared_ptr<Stmt> &statement : statements) {
