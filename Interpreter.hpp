@@ -3,6 +3,7 @@
 # include <any>
 # include <string>
 # include <vector>
+# include <chrono>
 # include "./Token.hpp"
 # include "./Expression.hpp"
 # include "./Statement.hpp"
@@ -14,9 +15,18 @@
 // because interpreter is a subclass of ExprVisitor or ExprVisitor
 // is the base class of Interpreter
 
+class Clock: public DloxCallable {
+public:
+    int arity() override;
+    std::any call(Interpreter &interpreter,
+                  std::vector<std::any> arguments) override;
+    std::string toString() override;
+};
+
 class Interpreter: public ExprVisitor, public StmtVisitor {
 private:
-    std::shared_ptr<Env> curr_env{new Env};
+    std::shared_ptr<Env> curr_env = global;
+    friend class DloxFunction;
 
     void checkNumberOperand(const Token &oper, const std::any &operand);
     void checkNumberOperands(const Token &oper, const std::any &left,
@@ -50,4 +60,7 @@ public:
     void execute(std::shared_ptr<Stmt> statement);
     void executeBlock(const std::vector<std::shared_ptr<Stmt>> &statements,
                       std::shared_ptr<Env> new_env);
+
+    Interpreter();
+    std::shared_ptr<Env> global{new Env};
 };

@@ -1,5 +1,23 @@
 # include "./Interpreter.hpp"
 
+int Clock::arity() {
+    return 0;
+}
+
+std::any Clock::cal(Interpreter &interpreter,
+                    std::vector<std::any> arguments) {
+    auto ticks = std::chrono::system_clock::now().time_since_epoch();
+    return std::chrono::duration<double>{ticks}.count() / 1000.0;
+}
+
+std::string Clock::toString() {
+    return "<native fn>";
+}
+
+Interpreter::Interpreter() {
+    globals->define("clock", std::shared_ptr<Clock>{});
+}
+
 void Interpreter::checkNumberOperand(const Token &oper,
                                      const std::any &operand) {
     if (operand.type() == typeid(double)) return;
@@ -258,6 +276,7 @@ std::any Interpreter::visitWhileStmt(std::shared_ptr<While> stmt) {
     return {};
 }
 
+// Interpret function calls
 std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
     std::any callee = evaluate(expr->callee); // name of the function
 
@@ -279,5 +298,7 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
                 "Expected " + std::to_string(function->arity()) +
                 " arguments but got " + std::to_string(arguments.size()) + "."};
     }
+    return function.call(*this, std::move(arguments));
+}
 
     
