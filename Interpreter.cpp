@@ -257,3 +257,27 @@ std::any Interpreter::visitWhileStmt(std::shared_ptr<While> stmt) {
     }
     return {};
 }
+
+std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
+    std::any callee = evaluate(expr->callee); // name of the function
+
+    std::vector<std::any> arguments;
+    for (std::shared_ptr<Expr> &argument : expr->arguments) {
+        arguments.push_back(evaluate(argument));
+    }
+
+    std::shared_ptr<DloxCallable> function;
+    if (callee.type() == typeid(std::shared_ptr<DloxFunction>)) {
+        function = std::any_cast<std::shared_ptr<DloxFunction>>(callee);
+    } else {
+        throw RuntimeError{expr->paren,
+                "Can only call functions and classes."};
+    }
+
+    if (arguments.size() != function->arity()) {
+        throw RuntimeError{expr->paren,
+                "Expected " + std::to_string(function->arity()) +
+                " arguments but got " + std::to_string(arguments.size()) + "."};
+    }
+
+    

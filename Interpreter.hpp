@@ -2,11 +2,13 @@
 
 # include <any>
 # include <string>
+# include <vector>
 # include "./Token.hpp"
 # include "./Expression.hpp"
 # include "./Statement.hpp"
 # include "./Error.hpp"
 # include "./Environment.hpp"
+# include "./DloxCallable.hpp"
 
 // An interpreter object is also an object of ExprVisitor
 // because interpreter is a subclass of ExprVisitor or ExprVisitor
@@ -35,6 +37,7 @@ public:
     std::any visitVariableExpr(std::shared_ptr<Variable> expr) override;
     std::any visitAssignExpr(std::shared_ptr<Assign> expr) override;
     std::any visitLogicalExpr(std::shared_ptr<Logical> expr) override;
+    std::any visitCallExpr(std::shared_ptr<Call> expr) override;
 
     std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) override;
     std::any visitPrintStmt(std::shared_ptr<Print> stmt) override;

@@ -62,7 +62,7 @@ void Dlox::runPrompt() {
 }
 
 int main(void) {
-    Dlox::runFile("./test.dlox");
-    // Dlox::runPrompt();
+    // Dlox::runFile("./test.dlox");
+    Dlox::runPrompt();
     return 0;
 }
