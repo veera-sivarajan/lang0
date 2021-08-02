@@ -49,7 +49,7 @@ Function::Function(Token name, std::vector<Token> params,
     name{std::move(name)}, params{std::move(params)}, body{std::move(body)} {}
 
 std::any Function::accept(StmtVisitor &visitor) {
-    visitor.visitFunctionStmt(shared_from_this());
+    return visitor.visitFunctionStmt(shared_from_this());
 }
     
 
