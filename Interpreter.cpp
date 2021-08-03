@@ -159,6 +159,11 @@ std::string Interpreter::stringify(const std::any &object) {
             return result;
         }
     }
+    if (object.type() == typeid(std::shared_ptr<DloxFunction>)) {
+        std::shared_ptr<DloxCallable> function;
+        function = std::any_cast<std::shared_ptr<DloxFunction>>(object);
+        return function->toString();
+    }
 
     return "stringify: cannot recognize type";
 }
