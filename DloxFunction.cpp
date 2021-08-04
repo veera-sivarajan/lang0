@@ -21,4 +21,3 @@ std::any DloxFunction::call(Interpreter &interpreter,
 std::string DloxFunction::toString() {
     return "<fn " + declaration->name.text + ">";
 }
-    

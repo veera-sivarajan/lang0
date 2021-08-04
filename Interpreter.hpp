@@ -16,6 +16,7 @@
 // because interpreter is a subclass of ExprVisitor or ExprVisitor
 // is the base class of Interpreter
 
+// A primitive function for benchmarking
 class Clock: public DloxCallable {
 public: 
     int arity() override;

@@ -302,4 +302,3 @@ std::any Interpreter::visitFunctionStmt(std::shared_ptr<Function> stmt) {
     curr_env->define(stmt->name.text, function);
     return {};
 }
-    
