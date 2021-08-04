@@ -51,5 +51,10 @@ Function::Function(Token name, std::vector<Token> params,
 std::any Function::accept(StmtVisitor &visitor) {
     return visitor.visitFunctionStmt(shared_from_this());
 }
-    
 
+Return::Return(Token keyword, std::shared_ptr<Expr> value) :
+    keyword{std::move(keyword)}, value{std::move(value)} {}
+
+std::any Return::accept(StmtVisitor &visitor) {
+    return visitor.visitReturnStmt(shared_from_this());
+}
