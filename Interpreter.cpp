@@ -302,3 +302,9 @@ std::any Interpreter::visitFunctionStmt(std::shared_ptr<Function> stmt) {
     curr_env->define(stmt->name.text, function);
     return {};
 }
+
+std::any Interpreter::visitReturnStmt(std::shared_ptr<Return> stmt) {
+    std::any value = nullptr;
+    if (stmt->value != nullptr) value = evaluate(stmt->value);
+    throw DloxReturn{value};
+}

@@ -25,6 +25,10 @@ public:
     std::string toString() override;
 };
 
+struct DloxReturn {
+    std::any value;
+};
+
 class Interpreter: public ExprVisitor, public StmtVisitor {
 public:
     std::any visitBinaryExpr(std::shared_ptr<Binary> expr) override;
@@ -43,6 +47,7 @@ public:
     std::any visitIfStmt(std::shared_ptr<If> stmt) override;
     std::any visitWhileStmt(std::shared_ptr<While> stmt) override;
     std::any visitFunctionStmt(std::shared_ptr<Function> stmt) override;
+    std::any visitReturnStmt(std::shared_ptr<Return> stmt) override;
 
     void interpret(std::vector<std::shared_ptr<Stmt>> &statements);
     void execute(std::shared_ptr<Stmt> statement);

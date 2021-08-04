@@ -14,7 +14,11 @@ std::any DloxFunction::call(Interpreter &interpreter,
     for (int i = 0; i < size; ++i) {
         newEnv->define(declaration->params[i].text, arguments[i]);
     }
-    interpreter.executeBlock(declaration->body, newEnv);
+    try {
+        interpreter.executeBlock(declaration->body, newEnv);
+    } catch (DloxReturn returnObject) {
+        return returnObject.value;
+    }
     return nullptr;
 }
 
