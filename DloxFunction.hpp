@@ -12,9 +12,11 @@ class Function;
 class DloxFunction: public DloxCallable {
 private:
     std::shared_ptr<Function> declaration;
+    std::shared_ptr<Env> closure;
 
 public:
-    DloxFunction(std::shared_ptr<Function> declaration);
+    DloxFunction(std::shared_ptr<Function> declaration,
+                 std::shared_ptr<Env> closure);
     int arity();
     std::any call(Interpreter &interpreter, std::vector<std::any> arguments);
     std::string toString();

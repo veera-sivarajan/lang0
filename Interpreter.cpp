@@ -297,8 +297,9 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
     return function->call(*this, std::move(arguments));
 }
 
+// Interpreting function declaration
 std::any Interpreter::visitFunctionStmt(std::shared_ptr<Function> stmt) {
-    auto function = std::make_shared<DloxFunction>(stmt);
+    auto function = std::make_shared<DloxFunction>(stmt, curr_env);
     curr_env->define(stmt->name.text, function);
     return {};
 }
