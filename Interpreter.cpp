@@ -26,6 +26,7 @@ void Interpreter::checkNumberOperand(const Token &oper,
 
 void Interpreter::checkNumberOperands(const Token &oper, const std::any &left,
                                       const std::any &right) {
+
     if (left.type() == typeid(double) && right.type() == typeid(double)) return;
     throw RuntimeError{oper, "Operand must be a number."};
 }
