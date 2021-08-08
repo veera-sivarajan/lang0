@@ -240,12 +240,22 @@ std::any Interpreter::visitIfStmt(std::shared_ptr<If> stmt) {
     }
     return {};
 }
+
+std::any Interpreter::lookUpVariable(Token& name, std::shared_ptr<Expr> expr) {
+    auto elem = locals.find(expr);
+    if (elem != locals.end()) {
+        int distance = elem->second;
+        value = curr_env->getAt(distance, name.text);
+    } else {
+        value = globals->get(name);
+    }
+}
     
 std::any Interpreter::visitVariableExpr(std::shared_ptr<Variable> expr) {
-    // return curr_env->get(expr->name);
-    std::any value = curr_env->get(expr->name);
-    if (value.type() == typeid(nullptr))
-        throw RuntimeError{expr->name, "Variable has not be initialized."};
+    std::any value = lookUpVariable(expr->name, expr);
+    if (value.type() == typeid(nullptr)) {
+        throw RuntimeError{expr->name, "Variable not initialized."};
+    }
     return value;
 }
 
@@ -309,4 +319,8 @@ std::any Interpreter::visitReturnStmt(std::shared_ptr<Return> stmt) {
     std::any value = nullptr;
     if (stmt->value != nullptr) value = evaluate(stmt->value);
     throw DloxReturn{value};
+}
+
+void Interpreter::resolve(std::shared_ptr<Expr> expr, int depth) {
+    locals[expr] = depth;
 }

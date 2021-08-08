@@ -4,6 +4,7 @@
 # include <string>
 # include <vector>
 # include <chrono>
+# include <map>
 # include "./Token.hpp"
 # include "./Expression.hpp"
 # include "./Statement.hpp"
@@ -53,11 +54,13 @@ public:
     void execute(std::shared_ptr<Stmt> statement);
     void executeBlock(const std::vector<std::shared_ptr<Stmt>> &statements,
                       std::shared_ptr<Env> new_env);
+    void resolve(std::shared_ptr<Expr> expr, int depth);
 
     Interpreter();
     std::shared_ptr<Env> global{new Env};
     
 private:
+    std::map<std::shared_ptr<Expr>, int> locals;
     std::shared_ptr<Env> curr_env = global;
     friend class DloxFunction;
 
@@ -71,4 +74,5 @@ private:
     std::string stringify(const std::any &object);
 
     std::any evaluate(std::shared_ptr<Expr> expr);
+    std::any lookUpVariable(Token& name, std::shared_ptr<Expr> expr);
 };
