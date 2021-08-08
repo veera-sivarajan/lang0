@@ -24,12 +24,12 @@ void Resolver::endScope() {
 void Resolver::declare(Token& name) {
     if (scopes.empty()) return;
     std::map<std::string, bool> &currentScope = scopes.back();
-    currentScope[name.lexeme] = false;
+    currentScope[name.text] = false;
 }
 
 void Resolver::define(Token &name) {
     if (scopes.empty()) return;
-    scoeps.back()[name.lexeme] = true;
+    scopes.back()[name.text] = true;
 }
 
 void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
@@ -103,7 +103,7 @@ std::any Resolver::visitReturnStmt(std::shared_ptr<Return> stmt) {
     return {};
 }
 
-std::any Resolver::vistWhileStmt(std::shared_ptr<While> stmt) {
+std::any Resolver::visitWhileStmt(std::shared_ptr<While> stmt) {
     resolve(stmt->condition);
     resolve(stmt->body);
     return {};
@@ -115,8 +115,8 @@ std::any Resolver::visitVariableExpr(std::shared_ptr<Variable> expr) {
         auto& currentScope = scopes.back();
         auto elem = currentScope.find(expr->name.text);
         // variable declared already but not initialized
-        if (elem != scope.end() && elem->second == false) {
-            Dlox::log(expr->name,
+        if (elem != currentScope.end() && elem->second == false) {
+            Error::log(expr->name,
                       "Can't read local variable in its own initializer.");
         }
     }

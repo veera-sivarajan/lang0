@@ -33,7 +33,7 @@ struct Stmt {
 };
 
 struct Block: Stmt, public std::enable_shared_from_this<Block> {
-    const std::vector<std::shared_ptr<Stmt>> statements;
+    std::vector<std::shared_ptr<Stmt>> statements;
 
     Block(std::vector<std::shared_ptr<Stmt>> statements);
     std::any accept(StmtVisitor &visitor) override;
@@ -54,7 +54,7 @@ struct Print: Stmt, public std::enable_shared_from_this<Print> {
 };
 
 struct Var: Stmt, public std::enable_shared_from_this<Var> {
-    const Token name;
+    Token name;
     std::shared_ptr<Expr> init;
 
     Var(Token name, std::shared_ptr<Expr> init);

@@ -71,8 +71,8 @@ struct Variable: Expr, public std::enable_shared_from_this<Variable> {
 };
 
 struct Assign: Expr, public std::enable_shared_from_this<Assign> {
-    const Token name;
-    const std::shared_ptr<Expr> value;
+    Token name;
+    std::shared_ptr<Expr> value;
 
     Assign(Token name, std::shared_ptr<Expr> value);
     std::any accept(ExprVisitor &visitor) override;

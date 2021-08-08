@@ -245,9 +245,9 @@ std::any Interpreter::lookUpVariable(Token& name, std::shared_ptr<Expr> expr) {
     auto elem = locals.find(expr);
     if (elem != locals.end()) {
         int distance = elem->second;
-        value = curr_env->getAt(distance, name.text);
+        return curr_env->getAt(distance, name.text);
     } else {
-        value = globals->get(name);
+        return global->get(name);
     }
 }
     

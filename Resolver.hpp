@@ -2,6 +2,7 @@
 
 # include <vector>
 # include <map>
+# include "./Interpreter.hpp"
 
 class Resolver: public ExprVisitor, public StmtVisitor {
 private:
