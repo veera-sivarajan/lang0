@@ -192,7 +192,7 @@ void Resolver::checkUnusedVariables() {
     for (auto const& [key, val] : currentScope) {
         // std::cout << key.text << ": " << val << std::endl;
         if (val == 0) {
-            Error::log(key, "Unused local variable.");
+            Error::warn(key, "Unused local variable.");
         }
     }
 }

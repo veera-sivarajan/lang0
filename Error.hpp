@@ -14,5 +14,6 @@ public:
     inline static bool hadRuntimeError = false;
     static void log(int line, string message);
     static void log(Token token, string message);
+    static void warn(Token token, string message);
     static void runtimeError(const RuntimeError &error);
 };
