@@ -24,6 +24,9 @@ void Resolver::endScope() {
 void Resolver::declare(Token& name) {
     if (scopes.empty()) return;
     std::map<std::string, bool> &currentScope = scopes.back();
+    if (currentScope.find(name.text) != currentScope.end()) {
+        Error::log(name, "Multiple variables with same name not allowed.");
+    }
     currentScope[name.text] = false;
 }
 
@@ -43,7 +46,10 @@ void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
     }
 }
 
-void Resolver::resolveFunction(std::shared_ptr<Function> function) {
+void Resolver::resolveFunction(std::shared_ptr<Function> function,
+                               FunctionType type) {
+    FunctionType enclosingFunction = currentFunction;
+    currentFunction = type;
     beginScope();
     for (Token& param : function->params) {
         declare(param);
@@ -51,6 +57,7 @@ void Resolver::resolveFunction(std::shared_ptr<Function> function) {
     }
     resolve(function->body);
     endScope();
+    currentFunction = enclosingFunction;
 }
                                 
 // resolve a vector of statements
@@ -77,7 +84,7 @@ std::any Resolver::visitVarStmt(std::shared_ptr<Var> stmt) {
 std::any Resolver::visitFunctionStmt(std::shared_ptr<Function> stmt) {
     declare(stmt->name);
     define(stmt->name);
-    resolveFunction(stmt);
+    resolveFunction(stmt, FunctionType::FUNCTION);
     return {};
 }
 
@@ -99,6 +106,9 @@ std::any Resolver::visitPrintStmt(std::shared_ptr<Print> stmt) {
 }
 
 std::any Resolver::visitReturnStmt(std::shared_ptr<Return> stmt) {
+    if (currentFunction == FunctionType::NONE) {
+        Error::log(stmt->keyword, "Can't return from top level code.");
+    }
     if (stmt->value != nullptr) resolve(stmt->value);
     return {};
 }

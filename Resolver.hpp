@@ -8,6 +8,12 @@ class Resolver: public ExprVisitor, public StmtVisitor {
 private:
     Interpreter& interpreter;
     std::vector<std::map<std::string, bool>> scopes;
+    enum class FunctionType {
+        NONE,
+        FUNCTION,
+    };
+
+    FunctionType currentFunction = FunctionType::NONE;
     
     void resolve(std::shared_ptr<Stmt> statement);
     void resolve(std::shared_ptr<Expr> expression);
@@ -16,7 +22,7 @@ private:
     void declare(Token& name);
     void define(Token& name);
     void resolveLocal(std::shared_ptr<Expr> expr, Token& name);
-    void resolveFunction(std::shared_ptr<Function> function);
+    void resolveFunction(std::shared_ptr<Function> function, FunctionType type);
 
 public:
     Resolver(Interpreter& interpreter);

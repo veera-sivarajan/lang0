@@ -29,6 +29,7 @@ void Dlox::run(string source) {
     Resolver resolver{interpreter};
     resolver.resolve(statements);
 
+    if (Error::hadError) return;
     interpreter.interpret(statements);
 }
     
