@@ -70,6 +70,7 @@ void Resolver::resolve(std::vector<std::shared_ptr<Stmt>>& statements) {
 std::any Resolver::visitBlockStmt(std::shared_ptr<Block> stmt) {
     beginScope();
     resolve(stmt->statements);
+    checkUnusedVariables();
     endScope();
     return {};
 }
@@ -119,12 +120,18 @@ std::any Resolver::visitWhileStmt(std::shared_ptr<While> stmt) {
     return {};
 }
 
-// variable declarations
+// accessing values of a variable
 std::any Resolver::visitVariableExpr(std::shared_ptr<Variable> expr) {
     if (!scopes.empty()) {
         auto& currentScope = scopes.back();
         auto elem = currentScope.find(expr->name.text);
         // variable declared already but not initialized
+        // for cases like:
+        // var b = "ball";
+        // {
+        //     var b = b;
+        //     print b;
+        // }
         if (elem != currentScope.end() && elem->second == false) {
             Error::log(expr->name,
                       "Can't read local variable in its own initializer.");
@@ -172,4 +179,12 @@ std::any Resolver::visitLogicalExpr(std::shared_ptr<Logical> expr) {
 std::any Resolver::visitUnaryExpr(std::shared_ptr<Unary> expr) {
     resolve(expr->right);
     return {};
+}
+
+void Resolver::checkUnusedVariables() {
+    int scopeSize = scopes.size();
+    std::map<std::string, bool> &currentScope = scopes.back();
+    for (auto const& [key, val] : currentScope) {
+        std::cout << key << ": " << val << std::endl;
+    }
 }

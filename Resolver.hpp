@@ -27,6 +27,7 @@ private:
 public:
     Resolver(Interpreter& interpreter);
     void resolve(std::vector<std::shared_ptr<Stmt>>& statements);
+    void checkUnusedVariables();
     
     std::any visitBlockStmt(std::shared_ptr<Block> stmt) override;
     std::any visitVarStmt(std::shared_ptr<Var> stmt) override;
