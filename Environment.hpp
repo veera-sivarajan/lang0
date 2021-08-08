@@ -17,5 +17,9 @@ public:
     Env(std::shared_ptr<Env> previous);
     void assign(const Token &name, std::any value);
     void define(const std::string &name, std::any value);
+    
     std::any get(const Token &name);
+    std::any getAt(int distance, std::string& name);
+
+    std::shared_ptr<Env> anchestor(int distance);
 };

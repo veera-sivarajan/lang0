@@ -21,6 +21,10 @@ std::any Env::get(const Token &name) {
     throw RuntimeError(name, "Undefined variable '" + name.text + "'.");
 }
 
+std::any Env::getAt(int distance, std::string& name) {
+    return anchestor(distance)->values[name];
+}
+
 void Env::assign(const Token &name, std::any value) {
     auto elem = values.find(name.text);
     if (elem != values.end()) {
@@ -32,4 +36,12 @@ void Env::assign(const Token &name, std::any value) {
         return;
     }
     throw RuntimeError(name, "Undefined variable '" + name.text + "'.");
+}
+
+std::shared_ptr<Env> Env::anchestor(int distance) {
+    std::shared_ptr<Env> currentEnv = shared_from_this();
+    for (int i = 0; i < distance; ++i) {
+        currentEnv = currentEnv->previous;
+    }
+    return currentEnv;
 }
