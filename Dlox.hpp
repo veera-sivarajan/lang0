@@ -1,6 +1,7 @@
 # pragma once
 # include <string>
 # include "./Token.hpp"
+# include "./Resolver.hpp"
 
 using std::string;
 

@@ -266,7 +266,7 @@ std::any Interpreter::visitAssignExpr(std::shared_ptr<Assign> expr) {
         int distance = elem->second;
         curr_env->assignAt(distance, expr->name, value);
     } else {
-        globals->assign(expr->name, value);
+        global->assign(expr->name, value);
     }
     return value;
 }
