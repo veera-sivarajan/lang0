@@ -32,5 +32,6 @@ public:
     any literal;
 
     Token(TokenType type, int line, string text, any literal);
+    bool operator<(const Token& obj) const;
     void print();
 };

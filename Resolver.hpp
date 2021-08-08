@@ -8,7 +8,7 @@ class Resolver: public ExprVisitor, public StmtVisitor {
 private:
     Interpreter& interpreter;
     std::vector<std::map<std::string, bool>> scopes;
-    std::vector<std::map<std::string, int>> identifiers; 
+    std::vector<std::map<Token, int>> identifiers; 
     enum class FunctionType {
         NONE,
         FUNCTION,

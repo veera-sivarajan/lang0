@@ -14,7 +14,7 @@ void Resolver::resolve(std::shared_ptr<Expr> expression) {
 }
 
 void Resolver::beginScope() {
-    identifiers.push_back(std::map<std::string, int>{});
+    identifiers.push_back(std::map<Token, int>{});
     scopes.push_back(std::map<std::string, bool>{});
 }
 
@@ -26,11 +26,11 @@ void Resolver::endScope() {
 void Resolver::declare(Token& name) {
     if (scopes.empty() && identifiers.empty()) return;
     std::map<std::string, bool> &currentScope = scopes.back();
-    std::map<std::string, int> &currentBlock = identifiers.back();
+    std::map<Token, int> &currentBlock = identifiers.back();
     if (currentScope.find(name.text) != currentScope.end()) {
         Error::log(name, "Multiple variables with same name not allowed.");
     }
-    currentBlock[name.text] = 0;
+    currentBlock[name] = 0;
     currentScope[name.text] = false;
 }
 
@@ -44,7 +44,7 @@ void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
     for (int i = scopeSize; i >= 0; --i) {
         // if variable found in current scope
         if (scopes[i].find(name.text) != scopes[i].end()) {
-            identifiers[i][name.text] += 1;
+            identifiers[i][name] += 1;
             interpreter.resolve(expr, scopeSize - i);
             return;
         }
@@ -76,14 +76,12 @@ void Resolver::resolve(std::vector<std::shared_ptr<Stmt>>& statements) {
 std::any Resolver::visitBlockStmt(std::shared_ptr<Block> stmt) {
     beginScope();
     resolve(stmt->statements);
-    std::cout << "Calling unused var checker...\n";
     checkUnusedVariables();
     endScope();
     return {};
 }
 
 std::any Resolver::visitVarStmt(std::shared_ptr<Var> stmt) {
-    std::cout << "Visiting var stmt...\n";
     declare(stmt->name);
     if (stmt->init != nullptr) resolve(stmt->init);
     define(stmt->name);
@@ -110,7 +108,6 @@ std::any Resolver::visitIfStmt(std::shared_ptr<If> stmt) {
 }
 
 std::any Resolver::visitPrintStmt(std::shared_ptr<Print> stmt) {
-    std::cout << "Visiting print stmt...\n";
     resolve(stmt->expression);
     return {};
 }
@@ -191,11 +188,11 @@ std::any Resolver::visitUnaryExpr(std::shared_ptr<Unary> expr) {
 }
 
 void Resolver::checkUnusedVariables() {
-    std::map<std::string, int> &currentScope = identifiers.back();
+    std::map<Token, int> &currentScope = identifiers.back();
     for (auto const& [key, val] : currentScope) {
-        std::cout << key << ": " << val << std::endl;
+        // std::cout << key.text << ": " << val << std::endl;
         if (val == 0) {
-            Error::log(key, "Unused variable.");
+            Error::log(key, "Unused local variable.");
         }
     }
 }
