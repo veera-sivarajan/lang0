@@ -61,3 +61,12 @@ Call::Call(std::shared_ptr<Expr> callee, Token paren,
 std::any Call::accept(ExprVisitor &visitor) {
     return visitor.visitCallExpr(shared_from_this());
 }
+
+Lambda::Lambda(std::vector<Token> params,
+               std::vector<std::shared_ptr<Stmt>> body) :
+    params{std::move(params)}, body{std::move(body)} {}
+
+std::any Lambda::accept(ExprVisitor &visitor) {
+    return visitor.visitLambdaExpr(shared_from_this()):
+}
+    
