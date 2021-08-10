@@ -8,8 +8,8 @@
 # include <vector>
 # include <fstream>
 # include <sstream>
-# define BLUE    "\033[34m"    
-# define RESET   "\033[0m"
+# define BOLDBLUE "\033[1m\033[34m"      /* Bold Blue */
+# define RESET    "\033[0m"
 
 using std::string;
 using std::vector;
@@ -51,7 +51,7 @@ void Dlox::runFile(string path) {
 void Dlox::runPrompt() {
     string input;
     while (1) {
-        cout << BLUE << "Dlox> " << RESET;
+        cout << BOLDBLUE << "Dlox> " << RESET;
         std::getline(std::cin, input);
         if (input.empty()) continue;
         if (input == "exit") std::exit(0);

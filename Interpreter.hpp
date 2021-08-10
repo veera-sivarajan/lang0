@@ -56,8 +56,8 @@ public:
                       std::shared_ptr<Env> new_env);
     void resolve(std::shared_ptr<Expr> expr, int depth);
 
-    Interpreter();
     std::shared_ptr<Env> global{new Env};
+    Interpreter();
     
 private:
     std::map<std::shared_ptr<Expr>, int> locals;

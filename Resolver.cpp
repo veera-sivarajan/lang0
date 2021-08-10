@@ -42,7 +42,7 @@ void Resolver::define(Token &name) {
 void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
     int scopeSize = scopes.size() - 1;
     for (int i = scopeSize; i >= 0; --i) {
-        // if variable found in current scope
+        // if variable found in scope i
         if (scopes[i].find(name.text) != scopes[i].end()) {
             identifiers[i][name] += 1;
             interpreter.resolve(expr, scopeSize - i);
