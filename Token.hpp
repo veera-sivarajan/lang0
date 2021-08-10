@@ -19,7 +19,7 @@ enum class TokenType {
     IDENTIFIER, STRING, NUMBER,
     // Keywords
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR, PRINT, RETURN, SUPER,
-    THIS, TRUE, VAR, WHILE,
+    THIS, TRUE, VAR, WHILE, LAMBDA,
 
     EOF_TOKEN                // Using this instead of EOF becuase EOF is keyword
 };
