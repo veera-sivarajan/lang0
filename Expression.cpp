@@ -67,6 +67,6 @@ Lambda::Lambda(std::vector<Token> params,
     params{std::move(params)}, body{std::move(body)} {}
 
 std::any Lambda::accept(ExprVisitor &visitor) {
-    return visitor.visitLambdaExpr(shared_from_this()):
+    return visitor.visitLambdaExpr(shared_from_this());
 }
     

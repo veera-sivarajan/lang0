@@ -5,32 +5,7 @@
 # include <memory>
 
 # include "./Token.hpp"
-# include "./Expression.hpp"
-
-struct Block;
-struct Expression;
-struct Print;
-struct Var;
-struct If;
-struct While;
-struct Function;
-struct Return;
-
-struct StmtVisitor {
-    virtual std::any visitBlockStmt(std::shared_ptr<Block> stmt) = 0;
-    virtual std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) = 0;
-    virtual std::any visitPrintStmt(std::shared_ptr<Print> stmt) = 0;
-    virtual std::any visitVarStmt(std::shared_ptr<Var> stmt) = 0;
-    virtual std::any visitIfStmt(std::shared_ptr<If> stmt) = 0;
-    virtual std::any visitWhileStmt(std::shared_ptr<While> stmt) = 0;
-    virtual std::any visitFunctionStmt(std::shared_ptr<Function> stmt) = 0;
-    virtual std::any visitReturnStmt(std::shared_ptr<Return> stmt) = 0;
-    virtual ~StmtVisitor() = default;
-};
-
-struct Stmt {
-    virtual std::any accept(StmtVisitor &visitor) = 0;
-};
+# include "./Visitor.hpp"
 
 struct Block: Stmt, public std::enable_shared_from_this<Block> {
     std::vector<std::shared_ptr<Stmt>> statements;
