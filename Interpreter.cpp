@@ -330,3 +330,5 @@ std::any Interpreter::visitReturnStmt(std::shared_ptr<Return> stmt) {
 void Interpreter::resolve(std::shared_ptr<Expr> expr, int depth) {
     locals[expr] = depth;
 }
+
+std::any Interpreter::visitLambdaExpr(std::shared_ptr<Lambda> expr) {

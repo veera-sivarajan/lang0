@@ -40,6 +40,7 @@ public:
     std::any visitAssignExpr(std::shared_ptr<Assign> expr) override;
     std::any visitLogicalExpr(std::shared_ptr<Logical> expr) override;
     std::any visitCallExpr(std::shared_ptr<Call> expr) override;
+    std::any visitLambdaExpr(std::shared_ptr<Lambda> expr) override;
 
     std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) override;
     std::any visitPrintStmt(std::shared_ptr<Print> stmt) override;
