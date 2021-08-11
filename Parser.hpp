@@ -44,6 +44,7 @@ private:
     std::shared_ptr<Expr> logicalAnd();
     std::shared_ptr<Expr> call();
     std::shared_ptr<Expr> finishCall(std::shared_ptr<Expr> callee);
+    std::shared_ptr<Expr> lambda();
 
     std::shared_ptr<Stmt> statement();
     std::shared_ptr<Stmt> printStatement();
