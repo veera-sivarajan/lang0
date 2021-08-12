@@ -78,3 +78,7 @@ in Dlox too.
    Programs that use a sequence of statements to produce the desired output. Statements usually have side effects and it comes in two forms:
    A. Produce output -> print statements
    B. Change the state of the program.
+
+* Bugs
+** Lambda Expression
+The region inside a lambda expression should have it's own memory map with a pointer to the previous(closure) memory map. But right now, the region inside has access only to the previous(global) environment. As a result, the body of a lambda expression has no access to its parameters. 

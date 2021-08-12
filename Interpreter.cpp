@@ -202,6 +202,7 @@ void Interpreter::executeBlock(const std::vector<std::shared_ptr<Stmt>>
     try {
         this->curr_env = new_env;
         this->curr_env->printKeys();
+        std::cout << "Statement execution begins...\n";
         for (const std::shared_ptr<Stmt> &statement : statements) {
             execute(statement);
         }
@@ -251,8 +252,10 @@ std::any Interpreter::visitIfStmt(std::shared_ptr<If> stmt) {
 }
 
 std::any Interpreter::lookUpVariable(Token& name, std::shared_ptr<Expr> expr) {
+    std::cout << "lookUpVariable...\n";
     auto elem = locals.find(expr);
     if (elem != locals.end()) {
+        std::cout << "Local variable found...\n";
         int distance = elem->second;
         return curr_env->getAt(distance, name.text);
     } else {
