@@ -195,14 +195,9 @@ void Interpreter::execute(std::shared_ptr<Stmt> statement) {
 
 void Interpreter::executeBlock(const std::vector<std::shared_ptr<Stmt>>
                                &statements, std::shared_ptr<Env> new_env) {
-    std::cout << "Executing block...\n";
     std::shared_ptr<Env> previous = this->curr_env;
-    std::cout << "Previous memory...\n";
-    previous->printKeys();
     try {
         this->curr_env = new_env;
-        this->curr_env->printKeys();
-        std::cout << "Statement execution begins...\n";
         for (const std::shared_ptr<Stmt> &statement : statements) {
             execute(statement);
         }
@@ -252,10 +247,8 @@ std::any Interpreter::visitIfStmt(std::shared_ptr<If> stmt) {
 }
 
 std::any Interpreter::lookUpVariable(Token& name, std::shared_ptr<Expr> expr) {
-    std::cout << "lookUpVariable...\n";
     auto elem = locals.find(expr);
     if (elem != locals.end()) {
-        std::cout << "Local variable found...\n";
         int distance = elem->second;
         return curr_env->getAt(distance, name.text);
     } else {
@@ -313,7 +306,6 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
     if (callee.type() == typeid(std::shared_ptr<DloxFunction>)) {
         function = std::any_cast<std::shared_ptr<DloxFunction>>(callee);
     } else if (callee.type() == typeid(std::shared_ptr<LambdaFunction>)) {
-        std::cout << "Casting to Lambda Function...\n";
         function = std::any_cast<std::shared_ptr<LambdaFunction>>(callee);
     } else {
         throw RuntimeError{expr->paren,

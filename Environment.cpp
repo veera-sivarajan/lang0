@@ -7,13 +7,10 @@ Env::Env(std::shared_ptr<Env> previous) :
     previous{std::move(previous)} {}
 
 void Env::define(const std::string &name, std::any value) {
-    std::cout << "Env::define name: " << name << std::endl;
     values[name] = std::move(value);
 }
 
 std::any Env::get(const Token &name) {
-    std::cout << "Env::get Token name: " << name.text << std::endl;
-    printKeys();
     auto elem = values.find(name.text);
     if (elem != values.end()) {
         return elem->second;
@@ -29,7 +26,6 @@ std::any Env::getAt(int distance, std::string& name) {
 }
 
 void Env::assign(const Token &name, std::any value) {
-    std::cout << "Inside Env::assign\n";
     auto elem = values.find(name.text);
     if (elem != values.end()) {
         elem->second = std::move(value);
@@ -55,7 +51,6 @@ std::shared_ptr<Env> Env::anchestor(int distance) {
 }
 
 void Env::printKeys() {
-    std::cout << "printKeys()...\n";
     for (auto const& [key, val] : shared_from_this()->values)  {
         if (val.type() == typeid(double)) {
             double num = std::any_cast<double>(val);

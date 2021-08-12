@@ -1,5 +1,4 @@
 #+TITLE: Dlox: A simple interpreter
-
 * Features
 ** TODO nor and nand operator
 Most of the mainstream programming languages only have 'and', 'or' and 'not' operators. I'm going to try and add 'nor' and 'nand' operator into my language as I felt its need today while writing the interpreter. I think it might come handy at times. 
@@ -11,7 +10,7 @@ I'm thinking of adding a Replit like interface to Dlox. This would allow more pe
 ** TODO Implement lists
 Currently there is no way to represent a sequence of data. Now that I think more about data structures, there is actually no way to represent any data strctures. The language is completely useless without a way to represent data using structures. So I guess I should add at least lists into the language.
 ** DONE Report error when local variables are unused
-** TODO Implement anonymous functions
+** DONE Implement anonymous functions
 Lambdas were handy in Scheme. So it would be nice if I can implement it
 in Dlox too. 
 ** DONE Report error when accessing uninitialized variables
@@ -82,3 +81,7 @@ in Dlox too.
 * Bugs
 ** Lambda Expression
 The region inside a lambda expression should have it's own memory map with a pointer to the previous(closure) memory map. But right now, the region inside has access only to the previous(global) environment. As a result, the body of a lambda expression has no access to its parameters. 
+
+FIX:
+As I was in a hurry to get lambda expressions working, I had ignored Resolver class. But without Resolver's data, the interpreter does not know if the variable's value exists in local scope. So after I implemented the functions to resolve lambda expressions, the interpreter was able to access the parameter's values and execute the block. 
+

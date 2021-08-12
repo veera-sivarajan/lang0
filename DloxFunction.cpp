@@ -35,9 +35,6 @@ int LambdaFunction::arity() {
     return declaration->params.size();
 }
 
-// PROBLEM: Lambda functions are being associated with a variable name.
-// However, when the assigned variable name is called with a argument,
-// it is not getting assigned to a parameter. 
 std::any LambdaFunction::call(Interpreter &interpreter,
                             std::vector<std::any> arguments) {
     // newEnv's parent environment is closure
