@@ -165,6 +165,11 @@ std::string Interpreter::stringify(const std::any &object) {
         function = std::any_cast<std::shared_ptr<DloxFunction>>(object);
         return function->toString();
     }
+    if (object.type() == typeid(std::shared_ptr<LambdaFunction>)) {
+        std::shared_ptr<LambdaFunction> function;
+        function = std::any_cast<std::shared_ptr<LambdaFunction>>(object);
+        return function->toString();
+    }
 
     return "stringify: cannot recognize type";
 }
@@ -300,7 +305,9 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
     std::shared_ptr<DloxCallable> function;
     if (callee.type() == typeid(std::shared_ptr<DloxFunction>)) {
         function = std::any_cast<std::shared_ptr<DloxFunction>>(callee);
-    } else {
+    } else if 
+
+    {
         throw RuntimeError{expr->paren,
                 "Can only call functions and classes."};
     }
@@ -332,3 +339,5 @@ void Interpreter::resolve(std::shared_ptr<Expr> expr, int depth) {
 }
 
 std::any Interpreter::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
+    return std::make_shared<LambdaFunction>(expr, curr_env);
+}

@@ -51,5 +51,5 @@ std::any LambdaFunction::call(Interpreter &interpreter,
 }
 
 std::string LambdaFunction::toString() {
-    return "<fn " + declaration->name.text + ">";
+    return "<lamdba fn>";
 }
