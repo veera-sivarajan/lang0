@@ -18,6 +18,7 @@ public:
     void assign(const Token &name, std::any value);
     void define(const std::string &name, std::any value);
     void assignAt(int distance, Token& name, std::any value);
+    void printKeys();
     
     std::any get(const Token &name);
     std::any getAt(int distance, std::string& name);

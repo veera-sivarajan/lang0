@@ -305,9 +305,10 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
     std::shared_ptr<DloxCallable> function;
     if (callee.type() == typeid(std::shared_ptr<DloxFunction>)) {
         function = std::any_cast<std::shared_ptr<DloxFunction>>(callee);
-    } else if 
-
-    {
+    } else if (callee.type() == typeid(std::shared_ptr<LambdaFunction>)) {
+        std::cout << "Casting to Lambda Function...\n";
+        function = std::any_cast<std::shared_ptr<LambdaFunction>>(callee);
+    } else {
         throw RuntimeError{expr->paren,
                 "Can only call functions and classes."};
     }
