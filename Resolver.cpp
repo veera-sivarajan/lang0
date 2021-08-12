@@ -95,6 +95,10 @@ std::any Resolver::visitFunctionStmt(std::shared_ptr<Function> stmt) {
     return {};
 }
 
+std::any Resolver::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
+    return {};
+}
+
 std::any Resolver::visitExpressionStmt(std::shared_ptr<Expression> stmt) {
     resolve(stmt->expression);
     return {};

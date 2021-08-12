@@ -47,4 +47,5 @@ public:
     std::any visitLiteralExpr(std::shared_ptr<Literal> expr) override;
     std::any visitLogicalExpr(std::shared_ptr<Logical> expr) override;
     std::any visitUnaryExpr(std::shared_ptr<Unary> expr) override;
+    std::any visitLambdaExpr(std::shared_ptr<Lambda> expr) override;
 };
