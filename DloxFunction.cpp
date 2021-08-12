@@ -44,16 +44,9 @@ std::any LambdaFunction::call(Interpreter &interpreter,
     auto newEnv = std::make_shared<Env>(closure);
     int size = static_cast<int>(declaration->params.size());
     for (int i = 0; i < size; ++i) {
-        std::cout << "Parameter: " << declaration->params[i].text << std::endl;
-        if (arguments[i].type() == typeid(double)) {
-            double arg = std::any_cast<double>(arguments[i]);
-            std::cout << "Argument: " << arg << std::endl;
-        }
         newEnv->define(declaration->params[i].text, arguments[i]);
     }
     try {
-        std::cout << "Executing block...\n"; 
-        newEnv->printKeys();
         interpreter.executeBlock(declaration->body, newEnv);
     } catch (DloxReturn returnObject) {
         return returnObject.value;

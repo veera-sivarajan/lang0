@@ -7,7 +7,8 @@
 # include "./DloxCallable.hpp"
 # include "./Environment.hpp"
 
-class Function;
+// class Function;
+// class Lambda;
 
 class DloxFunction: public DloxCallable {
 private:

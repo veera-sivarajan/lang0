@@ -195,9 +195,13 @@ void Interpreter::execute(std::shared_ptr<Stmt> statement) {
 
 void Interpreter::executeBlock(const std::vector<std::shared_ptr<Stmt>>
                                &statements, std::shared_ptr<Env> new_env) {
+    std::cout << "Executing block...\n";
     std::shared_ptr<Env> previous = this->curr_env;
+    std::cout << "Previous memory...\n";
+    previous->printKeys();
     try {
         this->curr_env = new_env;
+        this->curr_env->printKeys();
         for (const std::shared_ptr<Stmt> &statement : statements) {
             execute(statement);
         }
