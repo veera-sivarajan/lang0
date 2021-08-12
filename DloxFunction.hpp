@@ -21,4 +21,18 @@ public:
     std::any call(Interpreter &interpreter, std::vector<std::any> arguments);
     std::string toString();
 };
+
+class LambdaFunction: public DloxCallable {
+private:
+    std::shared_ptr<Lambda> declaration;
+    std::shared_ptr<Env> closure;
+
+public:
+    LambdaFunction(std::shared_ptr<Lambda> declaration,
+                   std::shared_ptr<Env> closure);
+    int arity();
+    std::any call(Interpreter &interpreter, std::vector<std::any> arguments);
+    std::string toString();
+};
+
     
