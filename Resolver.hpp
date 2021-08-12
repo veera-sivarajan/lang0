@@ -24,7 +24,8 @@ private:
     void declare(Token& name);
     void define(Token& name);
     void resolveLocal(std::shared_ptr<Expr> expr, Token& name);
-    void resolveFunction(std::shared_ptr<Function> function, FunctionType type);
+    void resolveFunction(std::vector<Token> params,
+                         std::vector<std::shared_ptr<Stmt>> body);
     void resolveLambda(std::shared_ptr<Lambda> expr, FunctionType type);
     
 

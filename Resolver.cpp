@@ -51,19 +51,16 @@ void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
     }
 }
 
-void Resolver::resolveFunction(std::shared_ptr<Function> function,
-                               FunctionType type) {
-    FunctionType enclosingFunction = currentFunction;
-    currentFunction = type;
+void Resolver::resolveFunction(std::vector<Token> params,
+                               std::vector<std::shared_ptr<Stmt>> body) {
     beginScope();
-    for (Token& param : function->params) {
+    for (Token& param : params) {
         declare(param);
         define(param);
     }
-    resolve(function->body);
+    resolve(body);
     checkUnusedVariables();
     endScope();
-    currentFunction = enclosingFunction;
 }
                                 
 // resolve a vector of statements
@@ -91,10 +88,11 @@ std::any Resolver::visitVarStmt(std::shared_ptr<Var> stmt) {
 std::any Resolver::visitFunctionStmt(std::shared_ptr<Function> stmt) {
     declare(stmt->name);
     define(stmt->name);
-    resolveFunction(stmt, FunctionType::FUNCTION);
+    currentFunction = FunctionType::FUNCTION;
+    resolveFunction(stmt->params, stmt->body);
+    currentFunction = FunctionType::NONE;
     return {};
 }
-
 
 std::any Resolver::visitExpressionStmt(std::shared_ptr<Expression> stmt) {
     resolve(stmt->expression);
@@ -188,22 +186,11 @@ std::any Resolver::visitUnaryExpr(std::shared_ptr<Unary> expr) {
     return {};
 }
 
-void Resolver::resolveLambda(std::shared_ptr<Lambda> expr, FunctionType type) {
-    FunctionType enclosingFunction = currentFunction;
-    currentFunction = type;
-    beginScope();
-    for (Token& param : expr->params) {
-        declare(param);
-        define(param);
-    }
-    resolve(expr->body);
-    checkUnusedVariables();
-    endScope();
-    currentFunction = enclosingFunction;
-}
-    
 std::any Resolver::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
-    resolveLambda(expr, FunctionType::LAMBDA);
+    // resolveLambda(expr, FunctionType::LAMBDA);
+    currentFunction = FunctionType::LAMBDA;
+    resolveFunction(expr->params, expr->body);
+    currentFunction = FunctionType::NONE;
     return {};
 }
 
