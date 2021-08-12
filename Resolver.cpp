@@ -95,9 +95,6 @@ std::any Resolver::visitFunctionStmt(std::shared_ptr<Function> stmt) {
     return {};
 }
 
-std::any Resolver::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
-    return {};
-}
 
 std::any Resolver::visitExpressionStmt(std::shared_ptr<Expression> stmt) {
     resolve(stmt->expression);
@@ -188,6 +185,25 @@ std::any Resolver::visitLogicalExpr(std::shared_ptr<Logical> expr) {
 
 std::any Resolver::visitUnaryExpr(std::shared_ptr<Unary> expr) {
     resolve(expr->right);
+    return {};
+}
+
+void Resolver::resolveLambda(std::shared_ptr<Lambda> expr, FunctionType type) {
+    FunctionType enclosingFunction = currentFunction;
+    currentFunction = type;
+    beginScope();
+    for (Token& param : expr->params) {
+        declare(param);
+        define(param);
+    }
+    resolve(expr->body);
+    checkUnusedVariables();
+    endScope();
+    currentFunction = enclosingFunction;
+}
+    
+std::any Resolver::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
+    resolveLambda(expr, FunctionType::LAMBDA);
     return {};
 }
 

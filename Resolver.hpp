@@ -12,6 +12,7 @@ private:
     enum class FunctionType {
         NONE,
         FUNCTION,
+        LAMBDA,
     };
 
     FunctionType currentFunction = FunctionType::NONE;
@@ -24,6 +25,8 @@ private:
     void define(Token& name);
     void resolveLocal(std::shared_ptr<Expr> expr, Token& name);
     void resolveFunction(std::shared_ptr<Function> function, FunctionType type);
+    void resolveLambda(std::shared_ptr<Lambda> expr, FunctionType type);
+    
 
 public:
     Resolver(Interpreter& interpreter);
