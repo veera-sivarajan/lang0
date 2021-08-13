@@ -80,3 +80,12 @@ struct Lambda: Expr, public std::enable_shared_from_this<Lambda> {
     Lambda(std::vector<Token> params, std::vector<std::shared_ptr<Stmt>> body);
     std::any accept(ExprVisitor &visitor) override;
 };
+
+struct List: Expr, public std::enable_shared_from_this<List> {
+    std::vector<std::shared_ptr<Expr>> values;
+
+    List(std::vector<std::shared_ptr<Expr>> values);
+    std::any accept(ExprVisitor &visitor) override;
+};
+
+

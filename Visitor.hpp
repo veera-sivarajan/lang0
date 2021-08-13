@@ -8,6 +8,7 @@ struct Assign;
 struct Logical;
 struct Call;
 struct Lambda;
+struct List;
 
 struct ExprVisitor {
     //pure virutal functions
@@ -20,6 +21,7 @@ struct ExprVisitor {
     virtual std::any visitLogicalExpr(std::shared_ptr<Logical> expr) = 0;
     virtual std::any visitCallExpr(std::shared_ptr<Call> expr) = 0;
     virtual std::any visitLambdaExpr(std::shared_ptr<Lambda> expr) = 0;
+    virtual std::any visitListExpr(std::shared_ptr<List> expr) = 0;
     virtual ~ExprVisitor() = default;
 };
 

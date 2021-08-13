@@ -343,8 +343,26 @@ std::shared_ptr<Expr> Parser::lambda() {
     std::vector<std::shared_ptr<Stmt>> body = block();
     return std::make_shared<Lambda>(std::move(parameters), std::move(body));
 }
+
+std::shared_ptr<Expr> Parser::list() {
+    std::vector<std::shared_ptr<Expr>> values = {};
+    if (match(TokenType::RIGHT_BRACKET)) {
+        return std::make_shared<List>(values);
+    } else {
+        do {
+            if (values.size() >= 255) {
+                error(peek(), "Can't have more than 255 elements in a list.");
+            }
+            std::shared_ptr<Expr> value = logicalOr();
+            values.push_back(value);
+        } while (match(TokenType::COMMA));
+    }
+    consume(TokenType::RIGHT_BRACKET, "Expect ']' at end of list.");
+    return std::make_shared<List>(values);
+}
     
 std::shared_ptr<Expr> Parser::primary() {
+    if (match(TokenType::LEFT_BRACKET)) return list();
     if (match(TokenType::LAMBDA)) return lambda();
     if (match(TokenType::FALSE)) return std::make_shared<Literal>(false);
     if (match(TokenType::TRUE)) return std::make_shared<Literal>(true);
@@ -355,11 +373,13 @@ std::shared_ptr<Expr> Parser::primary() {
     if (match(TokenType::NUMBER, TokenType::STRING))
         return std::make_shared<Literal>(previous().literal);
 
+    // Groupings
     if (match(TokenType::LEFT_PAREN)) {
         std::shared_ptr<Expr> expr = expression();
         consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
         return std::make_shared<Grouping>(expr);
     }
+
     // does not match any terminals
     throw error(peek(), "Expect expression.");
 } 

@@ -69,4 +69,10 @@ Lambda::Lambda(std::vector<Token> params,
 std::any Lambda::accept(ExprVisitor &visitor) {
     return visitor.visitLambdaExpr(shared_from_this());
 }
-    
+
+List::List(std::vector<std::shared_ptr<Expr>> values) :
+    values{std::move(values)} {}
+
+std::any List::accept(ExprVisitor &visitor) {
+    return visitor.visitListExpr(shared_from_this());
+}
