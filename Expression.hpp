@@ -91,8 +91,20 @@ struct List: Expr, public std::enable_shared_from_this<List> {
 struct Subscript: Expr, public std::enable_shared_from_this<Subscript> {
     std::shared_ptr<Expr> listName;
     std::shared_ptr<Expr> index;
+    std::shared_ptr<Expr> dummy;
 
-    Subscript(std::shared_ptr<Expr> listName, std::shared_ptr<Expr> index);
+    Subscript(std::shared_ptr<Expr> listName, std::shared_ptr<Expr> index,
+              std::shared_ptr<Expr> dummy);
+    std::any accept(ExprVisitor &visitor) override;
+};
+
+struct Allot: Expr, public std::enable_shared_from_this<Allot> {
+    std::shared_ptr<Expr> listName;
+    std::shared_ptr<Expr> index;
+    std::shared_ptr<Expr> value;
+
+    Allot(std::shared_ptr<Expr> listName, std::shared_ptr<Expr> index,
+          std::shared_ptr<Expr> value);
     std::any accept(ExprVisitor &visitor) override;
 };
 
