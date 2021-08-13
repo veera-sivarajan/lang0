@@ -76,23 +76,3 @@ List::List(std::vector<std::shared_ptr<Expr>> values) :
 std::any List::accept(ExprVisitor &visitor) {
     return visitor.visitListExpr(shared_from_this());
 }
-
-Subscript::Subscript(std::shared_ptr<Expr> listName,
-                     std::shared_ptr<Expr> index,
-                     std::shared_ptr<Expr> dummy) :
-    listName{std::move(listName)}, index{std::move(index)},
-    dummy{std::move(dummy)} {}
-
-std::any Subscript::accept(ExprVisitor &visitor) {
-    return visitor.visitSubscriptExpr(shared_from_this());
-}
-
-Allot::Allot(std::shared_ptr<Expr> listName,
-             std::shared_ptr<Expr> index,
-             std::shared_ptr<Expr> value) :
-    listName{std::move(listName)}, index{std::move(index)},
-    value{std::move(value)} {}
-
-std::any Allot::accept(ExprVisitor &visitor) {
-    return visitor.visitAllotExpr(shared_from_this());
-}

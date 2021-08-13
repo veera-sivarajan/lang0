@@ -237,10 +237,7 @@ std::shared_ptr<Expr> Parser::assignment() {
         if (Variable *e = dynamic_cast<Variable *>(expr.get())) {
             Token name = e->name;
             return std::make_shared<Assign>(std::move(name), value);
-        } else if (Subscript *s = dynamic_cast<Subscript *>(expr.get())) {
-            return std::make_shared<Allot>(std::move(s->listName),
-                                           std::move(s->index), value);
-        }
+        } 
         error(std::move(equals), "Invalid assignment target.");
     }
     return expr;
@@ -312,10 +309,6 @@ std::shared_ptr<Expr> Parser::call() {
     while (true) {
         if (match(TokenType::LEFT_PAREN)) {
             expr = finishCall(expr); // to support currying
-        } else if (match(TokenType::LEFT_BRACKET)) {
-            std::shared_ptr<Expr> index = term();
-            consume(TokenType::RIGHT_BRACKET, "Expect ']' after index.");
-            expr = std::make_shared<Subscript>(expr, index);
         } else {
             break;
         }
