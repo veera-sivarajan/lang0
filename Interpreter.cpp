@@ -170,7 +170,21 @@ std::string Interpreter::stringify(const std::any &object) {
         function = std::any_cast<std::shared_ptr<LambdaFunction>>(object);
         return function->toString();
     }
-
+    if (object.type() == typeid(std::vector<std::any>)) {
+        std::string result = "[";
+        std::vector<std::any> list;
+        list = std::any_cast<std::vector<std::any>>(object);
+        for (std::any value : list) {
+            result.append(stringify(value));
+            result.append(", ");
+        }
+        if (result.length() >= 3) {
+            result.pop_back();
+            result.pop_back();
+        }
+        result.append("]");
+        return result;
+    }
     return "stringify: cannot recognize type";
 }
 
@@ -340,4 +354,12 @@ void Interpreter::resolve(std::shared_ptr<Expr> expr, int depth) {
 
 std::any Interpreter::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
     return std::make_shared<LambdaFunction>(expr, curr_env);
+}
+
+std::any Interpreter::visitListExpr(std::shared_ptr<List> expr) {
+    std::vector<std::any> values;
+    for (std::shared_ptr<Expr> &value : expr->values) {
+        values.push_back(evaluate(value));
+    }
+    return values;
 }

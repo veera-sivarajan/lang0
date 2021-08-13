@@ -194,6 +194,13 @@ std::any Resolver::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
     return {};
 }
 
+std::any Resolver::visitListExpr(std::shared_ptr<List> expr) {
+    for (std::shared_ptr<Expr> value : expr->values) {
+        resolve(value);
+    }
+    return {};
+}
+
 void Resolver::checkUnusedVariables() {
     std::map<Token, int> &currentScope = identifiers.back();
     for (auto const& [key, val] : currentScope) {
