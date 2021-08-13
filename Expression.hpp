@@ -88,4 +88,12 @@ struct List: Expr, public std::enable_shared_from_this<List> {
     std::any accept(ExprVisitor &visitor) override;
 };
 
+struct Subscript: Expr, public std::enable_shared_from_this<Subscript> {
+    std::shared_ptr<Expr> listName;
+    std::shared_ptr<Expr> index;
+
+    Subscript(std::shared_ptr<Expr> listName, std::shared_ptr<Expr> index);
+    std::any accept(ExprVisitor &visitor) override;
+};
+
 

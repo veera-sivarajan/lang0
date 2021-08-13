@@ -300,7 +300,7 @@ std::shared_ptr<Expr> Parser::finishCall(std::shared_ptr<Expr> callee) {
             arguments.push_back(expression());
         } while (match(TokenType::COMMA));
     }
-    Token paren = consume(TokenType::RIGHT_PAREN, "Expect ')' after arguments");
+    Token paren = consume(TokenType::RIGHT_PAREN, "Expect ')' after arguments.");
     return std::make_shared<Call>(callee, paren, arguments);
 }
 
@@ -309,6 +309,10 @@ std::shared_ptr<Expr> Parser::call() {
     while (true) {
         if (match(TokenType::LEFT_PAREN)) {
             expr = finishCall(expr); // to support currying
+        } else if (match(TokenType::LEFT_BRACKET)) {
+            std::shared_ptr<Expr> index = term();
+            consume(TokenType::RIGHT_BRACKET, "Expect ']' after index.");
+            expr = std::make_shared<Subscript>(expr, index);
         } else {
             break;
         }
