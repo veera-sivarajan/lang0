@@ -240,7 +240,7 @@ std::shared_ptr<Expr> Parser::assignment() {
         } else if (Subscript *s = dynamic_cast<Subscript *>(expr.get())) {
             std::shared_ptr<Expr> name = s->name;
             std::shared_ptr<Expr> index = s->index;
-            return std::make_shared<Set>(name, index, value);
+            return std::make_shared<Subscript>(name, index, value, s->paren);
         }
         error(std::move(equals), "Invalid assignment target.");
     }
@@ -312,7 +312,7 @@ std::shared_ptr<Expr> Parser::finishSubscript(std::shared_ptr<Expr> name) {
     std::shared_ptr<Expr> index = logicalOr();
     Token paren = consume(TokenType::RIGHT_BRACKET,
                           "Expect ']' after arguments.");
-    return std::make_shared<Subscript>(name, paren, index);
+    return std::make_shared<Subscript>(name, index, nullptr, paren);
 }
 
 std::shared_ptr<Expr> Parser::subscript() {

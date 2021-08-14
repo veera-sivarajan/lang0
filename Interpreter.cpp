@@ -290,24 +290,29 @@ std::any Interpreter::visitAssignExpr(std::shared_ptr<Assign> expr) {
     return value;
 }
 
-std::any Interpreter::visitSetExpr(std::shared_ptr<Set> expr) {
-    std::any name = evaluate(expr->name);
-    std::any index = evaluate(expr->index);
-    std::any value = evaluate(expr->value);
+// std::any Interpreter::visitSetExpr(std::shared_ptr<Set> expr) {
+//     std::any name = evaluate(expr->name);
+//     std::any index = evaluate(expr->index);
+//     std::any value = evaluate(expr->value);
 
-    if (name.type() == typeid(std::shared_ptr<ListType>)) {
-        if (index.type() == typeid(double)) {
-            std::shared_ptr<ListType> list;
-            int castedIndex;
-            list = std::any_cast<std::shared_ptr<ListType>>(name);
-            castedIndex = std::any_cast<double>(index);
-            list->setAtIndex(castedIndex, value);
-        } else {
-        }
-    } else {
-    }
-    return value;
-}
+//     if (name.type() == typeid(std::shared_ptr<ListType>)) {
+//         if (index.type() == typeid(double)) {
+//             std::shared_ptr<ListType> list;
+//             int castedIndex;
+//             list = std::any_cast<std::shared_ptr<ListType>>(name);
+//             castedIndex = std::any_cast<double>(index);
+//             if (castedIndex >= list->length() || castedIndex < 0) {
+//                 throw RuntimeError{expr->paren, "Index out of bound."};
+//             }
+//             list->setAtIndex(castedIndex, value);
+//         } else {
+//             throw RuntimeError{expr->paren, "Index should be of type int."};
+//         }
+//     } else {
+//         throw RuntimeError{expr->paren, "Only lists can be subscripted."};
+//     }
+//     return value;
+// }
 
 std::any Interpreter::visitLogicalExpr(std::shared_ptr<Logical> expr) {
     std::any left = evaluate(expr->left);
@@ -336,10 +341,19 @@ std::any Interpreter::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
             int castedIndex;
             list = std::any_cast<std::shared_ptr<ListType>>(name);
             castedIndex = std::any_cast<double>(index);
-            if (castedIndex >= list->length() || castedIndex < 0) {
-                throw RuntimeError{expr->paren, "Index out of bound."};
+            if (expr->value != nullptr) {
+                std::any value = evaluate(expr->value);
+                if (list->setAtIndex(castedIndex, value)) {
+                        return {};
+                } else {
+                    throw RuntimeError{expr->paren, "Index out of range."};
+                }
+            } else {
+                if (castedIndex >= list->length() || castedIndex < 0) {
+                    throw RuntimeError{expr->paren, "Index out of bound."};
+                }
+                return list->getEleAt(castedIndex);
             }
-            return list->getEleAt(castedIndex);
         } else {
             throw RuntimeError{expr->paren, "Index should be of type int."};
         }

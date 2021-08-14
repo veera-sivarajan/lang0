@@ -12,6 +12,13 @@ int ListType::length() {
     return values.size();
 }
 
-void ListType::setAtIndex(int index, std::any value) {
-    values.insert(values.begin() + index, value);
+bool ListType::setAtIndex(int index, std::any value) {
+    if (index == length()) {
+        values.insert(values.begin() + index, value);
+    } else if (index < length() && index >= 0) {
+        values[index] = value;
+    } else {
+        return false;
+    }
+    return true;
 }

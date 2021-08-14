@@ -77,18 +77,21 @@ std::any List::accept(ExprVisitor &visitor) {
     return visitor.visitListExpr(shared_from_this());
 }
 
-Subscript::Subscript(std::shared_ptr<Expr> name, Token paren,
-                     std::shared_ptr<Expr> index) :
-    name{std::move(name)}, paren{std::move(paren)}, index{std::move(index)} {}
+Subscript::Subscript(std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
+                     std::shared_ptr<Expr> value, Token paren) :
+    name{std::move(name)}, index{std::move(index)}, value{std::move(value)},
+    paren{std::move(paren)} {}
+                    
 
 std::any Subscript::accept(ExprVisitor &visitor) {
     return visitor.visitSubscriptExpr(shared_from_this());
 }
 
-Set::Set(std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
-         std::shared_ptr<Expr> value) :
-    name{std::move(name)}, index{std::move(index)}, value{std::move(value)} {}
+// Set::Set(Token paren, std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
+//          std::shared_ptr<Expr> value) :
+//     paren{std::move(paren)}, name{std::move(name)}, index{std::move(index)},
+//     value{std::move(value)} {}
 
-std::any Set::accept(ExprVisitor &visitor) {
-    return visitor.visitSetExpr(shared_from_this());
-}
+// std::any Set::accept(ExprVisitor &visitor) {
+//     return visitor.visitSetExpr(shared_from_this());
+// }

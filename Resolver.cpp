@@ -204,15 +204,16 @@ std::any Resolver::visitListExpr(std::shared_ptr<List> expr) {
 std::any Resolver::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
     resolve(expr->name);
     resolve(expr->index);
+    if (expr->value != nullptr) resolve(expr->value);
     return {};
 }
 
-std::any Resolver::visitSetExpr(std::shared_ptr<Set> expr) {
-    resolve(expr->name);
-    resolve(expr->index);
-    resolve(expr->value);
-    return {};
-}
+// std::any Resolver::visitSetExpr(std::shared_ptr<Set> expr) {
+//     resolve(expr->name);
+//     resolve(expr->index);
+//     resolve(expr->value);
+//     return {};
+// }
 
 void Resolver::checkUnusedVariables() {
     std::map<Token, int> &currentScope = identifiers.back();
