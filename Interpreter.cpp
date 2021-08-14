@@ -326,7 +326,7 @@ std::any Interpreter::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
             } else {
                 if (castedIndex >= list->length() || castedIndex < 0) {
                     // throw RuntimeError{expr->paren, "Index out of bound."};
-                    return false;
+                    return nullptr;
                 }
                 return list->getEleAt(castedIndex);
             }
