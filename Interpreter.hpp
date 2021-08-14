@@ -12,6 +12,7 @@
 # include "./Environment.hpp"
 # include "./DloxCallable.hpp"
 # include "./DloxFunction.hpp"
+# include "./ListType.hpp"
 
 // An interpreter object is also an object of ExprVisitor
 // because interpreter is a subclass of ExprVisitor or ExprVisitor

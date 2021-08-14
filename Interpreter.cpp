@@ -170,17 +170,17 @@ std::string Interpreter::stringify(const std::any &object) {
         function = std::any_cast<std::shared_ptr<LambdaFunction>>(object);
         return function->toString();
     }
-    if (object.type() == typeid(std::vector<std::any>)) {
+    if (object.type() == typeid(std::shared_ptr<ListType>)) {
         std::string result = "[";
-        std::vector<std::any> list;
-        list = std::any_cast<std::vector<std::any>>(object);
-        for (std::any value : list) {
-            result.append(stringify(value));
-            result.append(", ");
-        }
-        if (result.length() >= 3) {
-            result.pop_back();
-            result.pop_back();
+        std::shared_ptr<ListType> list;
+        list = std::any_cast<std::shared_ptr<ListType>>(object);
+        auto values = list->values;
+        for (auto i = values.begin(); i != values.end(); ++i) {
+            auto next = i + 1;
+            result.append(stringify(*i));
+            if (next != values.end()) {
+                result.append(", ");
+            }
         }
         result.append("]");
         return result;
@@ -357,9 +357,9 @@ std::any Interpreter::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
 }
 
 std::any Interpreter::visitListExpr(std::shared_ptr<List> expr) {
-    std::vector<std::any> values;
+    auto list = std::make_shared<ListType>();
     for (std::shared_ptr<Expr> &value : expr->values) {
-        values.push_back(evaluate(value));
+        list->append(evaluate(value));
     }
-    return values;
+    return list;
 }
