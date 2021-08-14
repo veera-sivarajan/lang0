@@ -313,11 +313,14 @@ std::any Interpreter::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
 
     if (name.type() == typeid(std::shared_ptr<ListType>)) {
         if (index.type() == typeid(double)) {
-            std::shared_ptr<ListType> listName;
+            std::shared_ptr<ListType> list;
             int castedIndex;
-            listName = std::any_cast<std::shared_ptr<ListType>>(name);
+            list = std::any_cast<std::shared_ptr<ListType>>(name);
             castedIndex = std::any_cast<double>(index);
-            return listName->getEleAt((int)castedIndex);
+            if (castedIndex >= list->length() || castedIndex < 0) {
+                throw RuntimeError{expr->paren, "Index out of bound."};
+            }
+            return list->getEleAt(castedIndex);
         } else {
             throw RuntimeError{expr->paren, "Index should be of type int."};
         }

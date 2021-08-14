@@ -7,3 +7,7 @@ void ListType::append(std::any value) {
 std::any ListType::getEleAt(int index) {
     return values.at(index);
 }
+
+int ListType::length() {
+    return values.size();
+}
