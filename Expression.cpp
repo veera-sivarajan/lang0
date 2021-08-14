@@ -76,3 +76,11 @@ List::List(std::vector<std::shared_ptr<Expr>> values) :
 std::any List::accept(ExprVisitor &visitor) {
     return visitor.visitListExpr(shared_from_this());
 }
+
+Subscript::Subscript(std::shared_ptr<Expr> name, Token paren,
+                     std::shared_ptr<Expr> index) :
+    name{std::move(name)}, paren{std::move(paren)}, index{std::move(index)} {}
+
+std::any Subscript::accept(ExprVisitor &visitor) {
+    return visitor.visitSubscriptExpr(shared_from_this());
+}

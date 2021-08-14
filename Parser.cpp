@@ -304,8 +304,27 @@ std::shared_ptr<Expr> Parser::finishCall(std::shared_ptr<Expr> callee) {
     return std::make_shared<Call>(callee, paren, arguments);
 }
 
+std::shared_ptr<Expr> Parser::finishSubscript(std::shared_ptr<Expr> name) {
+    std::shared_ptr<Expr> index = logicalOr();
+    Token paren = consume(TokenType::RIGHT_BRACKET,
+                          "Expect ']' after arguments.");
+    return std::make_shared<Subscript>(name, paren, index);
+}
+
+std::shared_ptr<Expr> Parser::subscript() {
+    std::shared_ptr<Expr> expr = primary();
+    while (true) {
+        if (match(TokenType::LEFT_BRACKET)) {
+            expr = finishSubscript(expr);
+        } else {
+            break;
+        }
+    }
+    return expr;
+}
+
 std::shared_ptr<Expr> Parser::call() {
-    std::shared_ptr<Expr> expr = primary(); // parses the callee
+    std::shared_ptr<Expr> expr = subscript(); // parses the callee
     while (true) {  // to support currying
         if (match(TokenType::LEFT_PAREN)) {
             expr = finishCall(expr);
