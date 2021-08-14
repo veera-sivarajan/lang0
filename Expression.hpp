@@ -99,11 +99,12 @@ struct Subscript: Expr, public std::enable_shared_from_this<Subscript> {
 };
 
 struct Set: Expr, public std::enable_shared_from_this<Set> {
-    Token name;
+    std::shared_ptr<Expr> name;
     std::shared_ptr<Expr> index;
     std::shared_ptr<Expr> value;
 
-    Set(Token name, std::shared_ptr<Expr> index, std::shared_ptr<Expr> value);
+    Set(std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
+        std::shared_ptr<Expr> value);
     std::any accept(ExprVisitor &visitor) override;
 };
 

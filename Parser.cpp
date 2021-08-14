@@ -237,7 +237,11 @@ std::shared_ptr<Expr> Parser::assignment() {
         if (Variable *e = dynamic_cast<Variable *>(expr.get())) {
             Token name = e->name;
             return std::make_shared<Assign>(std::move(name), value);
-        } 
+        } else if (Subscript *s = dynamic_cast<Subscript *>(expr.get())) {
+            std::shared_ptr<Expr> name = s->name;
+            std::shared_ptr<Expr> index = s->index;
+            return std::make_shared<Set>(name, index, value);
+        }
         error(std::move(equals), "Invalid assignment target.");
     }
     return expr;
