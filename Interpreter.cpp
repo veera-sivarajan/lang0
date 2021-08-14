@@ -290,6 +290,25 @@ std::any Interpreter::visitAssignExpr(std::shared_ptr<Assign> expr) {
     return value;
 }
 
+std::any Interpreter::visitSetExpr(std::shared_ptr<Set> expr) {
+    std::any name = evaluate(expr->name);
+    std::any index = evaluate(expr->index);
+    std::any value = evaluate(expr->value);
+
+    if (name.type() == typeid(std::shared_ptr<ListType>)) {
+        if (index.type() == typeid(double)) {
+            std::shared_ptr<ListType> list;
+            int castedIndex;
+            list = std::any_cast<std::shared_ptr<ListType>>(name);
+            castedIndex = std::any_cast<double>(index);
+            list->setAtIndex(castedIndex, value);
+        } else {
+        }
+    } else {
+    }
+    return value;
+}
+
 std::any Interpreter::visitLogicalExpr(std::shared_ptr<Logical> expr) {
     std::any left = evaluate(expr->left);
     if (expr->oper.type == TokenType::OR) {
