@@ -5,7 +5,7 @@ NAME = dlox #Desired filename
 TODELETE = *.o # the *.o should be the same as the objects
 
 mt-collatz : $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) 
 
 .PHONY: test clean run
 

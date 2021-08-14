@@ -306,9 +306,9 @@ std::shared_ptr<Expr> Parser::finishCall(std::shared_ptr<Expr> callee) {
 
 std::shared_ptr<Expr> Parser::call() {
     std::shared_ptr<Expr> expr = primary(); // parses the callee
-    while (true) {
+    while (true) {  // to support currying
         if (match(TokenType::LEFT_PAREN)) {
-            expr = finishCall(expr); // to support currying
+            expr = finishCall(expr);
         } else {
             break;
         }

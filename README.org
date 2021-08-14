@@ -14,6 +14,9 @@ Currently there is no way to represent a sequence of data. Now that I think more
 Lambdas were handy in Scheme. So it would be nice if I can implement it
 in Dlox too. 
 ** DONE Report error when accessing uninitialized variables
+** TODO Move all AST nodes into a namespace
+The current setup works fine but names might collide with names from other libraries. So its better if I move everything into a namespace. 
+** TODO Get input using Readline in repl
 * Questions
 1. How does the visitor pattern work?
 
