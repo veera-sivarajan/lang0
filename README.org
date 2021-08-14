@@ -88,3 +88,13 @@ The region inside a lambda expression should have it's own memory map with a poi
 FIX:
 As I was in a hurry to get lambda expressions working, I had ignored Resolver class. But without Resolver's data, the interpreter does not know if the variable's value exists in local scope. So after I implemented the functions to resolve lambda expressions, the interpreter was able to access the parameter's values and execute the block. 
 
+
+** Subscript index is of type double
+Since double is the only type for numbers in Dlox, it accepts a double as a valid
+index for subscripting and this gets converted to int during runtime. So currently, if index is 2.5, it gets casted as 2. I'm not sure if there's a way to make parser parse only int between the square brackets.
+
+I should also note that I find this bug harmless as it doesn't cause any big problem and also its funny to look at the syntax as I haven't seen anything like it before. So I might probably leave it as it is. 
+#+BEGIN_SRC
+var a = [1, 2, 3, 4];
+print a[0.5];
+#+END_SRC
