@@ -53,4 +53,5 @@ public:
     std::any visitUnaryExpr(std::shared_ptr<Unary> expr) override;
     std::any visitLambdaExpr(std::shared_ptr<Lambda> expr) override;
     std::any visitListExpr(std::shared_ptr<List> expr) override;
+    std::any visitSubscriptExpr(std::shared_ptr<Subscript> expr) override;
 };

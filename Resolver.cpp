@@ -201,6 +201,12 @@ std::any Resolver::visitListExpr(std::shared_ptr<List> expr) {
     return {};
 }
 
+std::any Resolver::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
+    resolve(expr->name);
+    resolve(expr->index);
+    return {};
+}
+
 void Resolver::checkUnusedVariables() {
     std::map<Token, int> &currentScope = identifiers.back();
     for (auto const& [key, val] : currentScope) {
