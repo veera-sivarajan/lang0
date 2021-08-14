@@ -86,12 +86,3 @@ Subscript::Subscript(std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
 std::any Subscript::accept(ExprVisitor &visitor) {
     return visitor.visitSubscriptExpr(shared_from_this());
 }
-
-// Set::Set(Token paren, std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
-//          std::shared_ptr<Expr> value) :
-//     paren{std::move(paren)}, name{std::move(name)}, index{std::move(index)},
-//     value{std::move(value)} {}
-
-// std::any Set::accept(ExprVisitor &visitor) {
-//     return visitor.visitSetExpr(shared_from_this());
-// }

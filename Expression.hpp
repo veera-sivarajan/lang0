@@ -98,15 +98,3 @@ struct Subscript: Expr, public std::enable_shared_from_this<Subscript> {
               std::shared_ptr<Expr> value, Token paren);
     std::any accept(ExprVisitor &visitor) override;
 };
-
-// struct Set: Expr, public std::enable_shared_from_this<Set> {
-//     Token paren;
-//     std::shared_ptr<Expr> name;
-//     std::shared_ptr<Expr> index;
-//     std::shared_ptr<Expr> value;
-
-//     Set(Token paren, std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
-//         std::shared_ptr<Expr> value);
-//     std::any accept(ExprVisitor &visitor) override;
-// };
-
