@@ -307,6 +307,27 @@ std::any Interpreter::visitWhileStmt(std::shared_ptr<While> stmt) {
     return {};
 }
 
+std::any Interpreter::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
+    std::any name = evaluate(expr->name);
+    std::any index = evaluate(expr->index);
+
+    if (name.type() == typeid(std::shared_ptr<ListType>)) {
+        if (index.type() == typeid(double)) {
+            std::shared_ptr<ListType> listName;
+            int castedIndex;
+            listName = std::any_cast<std::shared_ptr<ListType>>(name);
+            castedIndex = std::any_cast<double>(index);
+            return listName->getEleAt((int)castedIndex);
+        } else {
+            throw RuntimeError{expr->paren, "Index should be of type int."};
+        }
+    } else {
+        throw RuntimeError{expr->paren, "Only lists can be subscripted."};
+    }
+    return {};
+}
+    
+
 // Interpret function calls
 std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
     std::any callee = evaluate(expr->callee); // name of the function

@@ -43,6 +43,7 @@ public:
     std::any visitCallExpr(std::shared_ptr<Call> expr) override;
     std::any visitLambdaExpr(std::shared_ptr<Lambda> expr) override;
     std::any visitListExpr(std::shared_ptr<List> expr) override;
+    std::any visitSubscriptExpr(std::shared_ptr<Subscript> expr) override;
 
     std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) override;
     std::any visitPrintStmt(std::shared_ptr<Print> stmt) override;

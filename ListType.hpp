@@ -9,4 +9,5 @@ class ListType {
 public:
     std::vector<std::any> values;
     void append(std::any value);
+    std::any getEleAt(int index);
 };
