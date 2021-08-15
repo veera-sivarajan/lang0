@@ -9,13 +9,13 @@ private:
     Interpreter& interpreter;
     std::vector<std::map<std::string, bool>> scopes;
     std::vector<std::map<Token, int>> identifiers; 
-    enum class FunctionType {
+    enum class FType{
         NONE,
         FUNCTION,
         LAMBDA,
     };
 
-    FunctionType currentFunction = FunctionType::NONE;
+    FType currentFunction = FType::NONE;
     
     void resolve(std::shared_ptr<Stmt> statement);
     void resolve(std::shared_ptr<Expr> expression);
@@ -25,8 +25,9 @@ private:
     void define(Token& name);
     void resolveLocal(std::shared_ptr<Expr> expr, Token& name);
     void resolveFunction(std::vector<Token> params,
-                         std::vector<std::shared_ptr<Stmt>> body);
-    void resolveLambda(std::shared_ptr<Lambda> expr, FunctionType type);
+                         std::vector<std::shared_ptr<Stmt>> body,
+                         FType type);
+    void resolveLambda(std::shared_ptr<Lambda> expr);
     
 
 public:

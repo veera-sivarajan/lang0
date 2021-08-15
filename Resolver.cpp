@@ -52,7 +52,10 @@ void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
 }
 
 void Resolver::resolveFunction(std::vector<Token> params,
-                               std::vector<std::shared_ptr<Stmt>> body) {
+                               std::vector<std::shared_ptr<Stmt>> body,
+                               FType type) {
+    FType enclosingFunction = currentFunction;
+    currentFunction = type;
     beginScope();
     for (Token& param : params) {
         declare(param);
@@ -61,6 +64,7 @@ void Resolver::resolveFunction(std::vector<Token> params,
     resolve(body);
     checkUnusedVariables();
     endScope();
+    currentFunction = enclosingFunction;
 }
                                 
 // resolve a vector of statements
@@ -88,9 +92,7 @@ std::any Resolver::visitVarStmt(std::shared_ptr<Var> stmt) {
 std::any Resolver::visitFunctionStmt(std::shared_ptr<Function> stmt) {
     declare(stmt->name);
     define(stmt->name);
-    currentFunction = FunctionType::FUNCTION;
-    resolveFunction(stmt->params, stmt->body);
-    currentFunction = FunctionType::NONE;
+    resolveFunction(stmt->params, stmt->body, FType::FUNCTION);
     return {};
 }
 
@@ -112,7 +114,7 @@ std::any Resolver::visitPrintStmt(std::shared_ptr<Print> stmt) {
 }
 
 std::any Resolver::visitReturnStmt(std::shared_ptr<Return> stmt) {
-    if (currentFunction == FunctionType::NONE) {
+    if (currentFunction == FType::NONE) {
         Error::log(stmt->keyword, "Can't return from top level code.");
     }
     if (stmt->value != nullptr) resolve(stmt->value);
@@ -187,10 +189,7 @@ std::any Resolver::visitUnaryExpr(std::shared_ptr<Unary> expr) {
 }
 
 std::any Resolver::visitLambdaExpr(std::shared_ptr<Lambda> expr) {
-    // resolveLambda(expr, FunctionType::LAMBDA);
-    currentFunction = FunctionType::LAMBDA;
-    resolveFunction(expr->params, expr->body);
-    currentFunction = FunctionType::NONE;
+    resolveFunction(expr->params, expr->body, FType::LAMBDA);
     return {};
 }
 
