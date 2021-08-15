@@ -7,7 +7,7 @@ Most of the mainstream programming languages only have 'and', 'or' and 'not' ope
 Its a little annoying to use semicolons in Dlox because for the most part the syntax resembles Python and it does not have semi colons. I get that the author has designed the syntax based on Dart as he works on it for a living. However, in Dlox the use of semicolons is unappealing. So I'm planning to remove it once I add all the features in the language. 
 ** TODO Add a web interface for the interpreter
 I'm thinking of adding a Replit like interface to Dlox. This would allow more people to play with Dlox and I would also get to learn about web hosting.
-** TODO Implement lists
+** DONE Implement lists
 Currently there is no way to represent a sequence of data. Now that I think more about data structures, there is actually no way to represent any data strctures. The language is completely useless without a way to represent data using structures. So I guess I should add at least lists into the language.
 ** DONE Report error when local variables are unused
 ** DONE Implement anonymous functions
@@ -82,14 +82,13 @@ The current setup works fine but names might collide with names from other libra
    B. Change the state of the program.
 
 * Bugs
-** Lambda Expression
+** DONE Lambda Expression
 The region inside a lambda expression should have it's own memory map with a pointer to the previous(closure) memory map. But right now, the region inside has access only to the previous(global) environment. As a result, the body of a lambda expression has no access to its parameters. 
 
 FIX:
 As I was in a hurry to get lambda expressions working, I had ignored Resolver class. But without Resolver's data, the interpreter does not know if the variable's value exists in local scope. So after I implemented the functions to resolve lambda expressions, the interpreter was able to access the parameter's values and execute the block. 
 
-
-** Subscript index is of type double
+** TODO Subscript index is of type double
 Since double is the only type for numbers in Dlox, it accepts a double as a valid
 index for subscripting and this gets converted to int during runtime. So currently, if index is 2.5, it gets casted as 2. I'm not sure if there's a way to make parser parse only int between the square brackets.
 
@@ -98,3 +97,5 @@ I should also note that I find this bug harmless as it doesn't cause any big pro
 var a = [1, 2, 3, 4];
 print a[0.5];
 #+END_SRC
+
+** First line after a function inside a function is considered outside function 
