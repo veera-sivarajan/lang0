@@ -5,7 +5,7 @@ Resolver::Resolver(Interpreter& interpreter) :
 
 // resolve a statement
 // std::vector<std::map<Token, int>> identifiers; 
-void Resolver::resolve(std::shared_ptr<Stmt> statement) {
+void Resolver::resolve(std::shared_ptr<Statement::Stmt> statement) {
     statement->accept(*this);
 }
 
@@ -53,7 +53,7 @@ void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
 }
 
 void Resolver::resolveFunction(std::vector<Token> params,
-                               std::vector<std::shared_ptr<Stmt>> body,
+                               std::vector<std::shared_ptr<Statement::Stmt>> body,
                                FType type) {
     FType enclosingFunction = currentFunction;
     currentFunction = type;
@@ -69,13 +69,14 @@ void Resolver::resolveFunction(std::vector<Token> params,
 }
                                 
 // resolve a vector of statements
-void Resolver::resolve(std::vector<std::shared_ptr<Stmt>>& statements) {
-    for (std::shared_ptr<Stmt>& statement : statements) {
+void Resolver::resolve(std::vector<std::shared_ptr<Statement::Stmt>>&
+                       statements) {
+    for (std::shared_ptr<Statement::Stmt>& statement : statements) {
         resolve(statement);
     }
 }
 
-std::any Resolver::visitBlockStmt(std::shared_ptr<Block> stmt) {
+std::any Resolver::visitBlockStmt(std::shared_ptr<Statement::Block> stmt) {
     beginScope();
     resolve(stmt->statements);
     checkUnusedVariables();
@@ -83,38 +84,38 @@ std::any Resolver::visitBlockStmt(std::shared_ptr<Block> stmt) {
     return {};
 }
 
-std::any Resolver::visitVarStmt(std::shared_ptr<Var> stmt) {
+std::any Resolver::visitVarStmt(std::shared_ptr<Statement::Var> stmt) {
     declare(stmt->name);
     if (stmt->init != nullptr) resolve(stmt->init);
     define(stmt->name);
     return {};
 }
 
-std::any Resolver::visitFunctionStmt(std::shared_ptr<Function> stmt) {
+std::any Resolver::visitFunctionStmt(std::shared_ptr<Statement::Function> stmt) {
     declare(stmt->name);
     define(stmt->name);
     resolveFunction(stmt->params, stmt->body, FType::FUNCTION);
     return {};
 }
 
-std::any Resolver::visitExpressionStmt(std::shared_ptr<Expression> stmt) {
+std::any Resolver::visitExpressionStmt(std::shared_ptr<Statement::Expression> stmt) {
     resolve(stmt->expression);
     return {};
 }
 
-std::any Resolver::visitIfStmt(std::shared_ptr<If> stmt) {
+std::any Resolver::visitIfStmt(std::shared_ptr<Statement::If> stmt) {
     resolve(stmt->condition);
     resolve(stmt->thenBranch);
     if (stmt->elseBranch != nullptr) resolve(stmt->elseBranch);
     return {};
 }
 
-std::any Resolver::visitPrintStmt(std::shared_ptr<Print> stmt) {
+std::any Resolver::visitPrintStmt(std::shared_ptr<Statement::Print> stmt) {
     resolve(stmt->expression);
     return {};
 }
 
-std::any Resolver::visitReturnStmt(std::shared_ptr<Return> stmt) {
+std::any Resolver::visitReturnStmt(std::shared_ptr<Statement::Return> stmt) {
     if (currentFunction == FType::NONE) {
         Error::log(stmt->keyword, "Can't return from top level code.");
     }
@@ -122,7 +123,7 @@ std::any Resolver::visitReturnStmt(std::shared_ptr<Return> stmt) {
     return {};
 }
 
-std::any Resolver::visitWhileStmt(std::shared_ptr<While> stmt) {
+std::any Resolver::visitWhileStmt(std::shared_ptr<Statement::While> stmt) {
     resolve(stmt->condition);
     resolve(stmt->body);
     return {};

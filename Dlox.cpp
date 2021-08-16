@@ -23,7 +23,7 @@ void Dlox::run(string source) {
     vector<Token> tokens = scanner.scanTokens();
     
     Parser parser{tokens};
-    std::vector<std::shared_ptr<Stmt>> statements = parser.parse();
+    std::vector<std::shared_ptr<Statement::Stmt>> statements = parser.parse();
     if (Error::hadError) return;
 
     Resolver resolver{interpreter};
@@ -61,7 +61,7 @@ void Dlox::runPrompt() {
 }
 
 int main(void) {
-    Dlox::runFile("./test.dlox");
-    // Dlox::runPrompt();
+    // Dlox::runFile("./test.dlox");
+    Dlox::runPrompt();
     return 0;
 }

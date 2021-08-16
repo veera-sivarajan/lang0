@@ -49,24 +49,24 @@ private:
     std::shared_ptr<Expr> subscript();
     std::shared_ptr<Expr> finishSubscript(std::shared_ptr<Expr> name);
 
-    std::shared_ptr<Stmt> statement();
-    std::shared_ptr<Stmt> printStatement();
-    std::shared_ptr<Stmt> expressionStatement();
-    std::shared_ptr<Stmt> declaration();
-    std::shared_ptr<Stmt> varDeclaration();
-    std::shared_ptr<Stmt> ifStatement();
-    std::shared_ptr<Stmt> whileStatement();
-    std::shared_ptr<Stmt> forStatement();
-    std::shared_ptr<Stmt> returnStatement();
+    std::shared_ptr<Statement::Stmt> statement();
+    std::shared_ptr<Statement::Stmt> printStatement();
+    std::shared_ptr<Statement::Stmt> expressionStatement();
+    std::shared_ptr<Statement::Stmt> declaration();
+    std::shared_ptr<Statement::Stmt> varDeclaration();
+    std::shared_ptr<Statement::Stmt> ifStatement();
+    std::shared_ptr<Statement::Stmt> whileStatement();
+    std::shared_ptr<Statement::Stmt> forStatement();
+    std::shared_ptr<Statement::Stmt> returnStatement();
 
-    std::vector<std::shared_ptr<Stmt>> block();
+    std::vector<std::shared_ptr<Statement::Stmt>> block();
 
-    std::shared_ptr<Function> function(std::string kind);
+    std::shared_ptr<Statement::Function> function(std::string kind);
 
 public:
     Parser(const vector<Token> &tokens);
     // std::shared_ptr<Expr> parse();
-    std::vector<std::shared_ptr<Stmt>> parse();
+    std::vector<std::shared_ptr<Statement::Stmt>> parse();
 };
 
 

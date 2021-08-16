@@ -1,6 +1,6 @@
 # include "./DloxFunction.hpp"
 
-DloxFunction::DloxFunction(std::shared_ptr<Function> declaration,
+DloxFunction::DloxFunction(std::shared_ptr<Statement::Function> declaration,
                            std::shared_ptr<Env> closure) :
     declaration{std::move(declaration)}, closure{std::move(closure)} {}
 

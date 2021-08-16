@@ -4,7 +4,7 @@
 # include <map>
 # include "./Interpreter.hpp"
 
-class Resolver: public ExprVisitor, public StmtVisitor {
+class Resolver: public ExprVisitor, public Statement::StmtVisitor {
 private:
     Interpreter& interpreter;
     std::vector<std::map<std::string, bool>> scopes;
@@ -17,7 +17,7 @@ private:
 
     FType currentFunction = FType::NONE;
     
-    void resolve(std::shared_ptr<Stmt> statement);
+    void resolve(std::shared_ptr<Statement::Stmt> statement);
     void resolve(std::shared_ptr<Expr> expression);
     void beginScope();
     void endScope();
@@ -25,24 +25,26 @@ private:
     void define(Token& name);
     void resolveLocal(std::shared_ptr<Expr> expr, Token& name);
     void resolveFunction(std::vector<Token> params,
-                         std::vector<std::shared_ptr<Stmt>> body,
+                         std::vector<std::shared_ptr<Statement::Stmt>> body,
                          FType type);
     void resolveLambda(std::shared_ptr<Lambda> expr);
     
 
 public:
     Resolver(Interpreter& interpreter);
-    void resolve(std::vector<std::shared_ptr<Stmt>>& statements);
+    void resolve(std::vector<std::shared_ptr<Statement::Stmt>>& statements);
     void checkUnusedVariables();
     
-    std::any visitBlockStmt(std::shared_ptr<Block> stmt) override;
-    std::any visitVarStmt(std::shared_ptr<Var> stmt) override;
-    std::any visitFunctionStmt(std::shared_ptr<Function> stmt) override;
-    std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) override;
-    std::any visitIfStmt(std::shared_ptr<If> stmt) override;
-    std::any visitPrintStmt(std::shared_ptr<Print> stmt) override;
-    std::any visitReturnStmt(std::shared_ptr<Return> stmt) override;
-    std::any visitWhileStmt(std::shared_ptr<While> stmt) override;
+    std::any visitBlockStmt(std::shared_ptr<Statement::Block> stmt) override;
+    std::any visitVarStmt(std::shared_ptr<Statement::Var> stmt) override;
+    std::any visitFunctionStmt(std::shared_ptr<Statement::Function> stmt)
+        override;
+    std::any visitExpressionStmt(std::shared_ptr<Statement::Expression> stmt)
+        override;
+    std::any visitIfStmt(std::shared_ptr<Statement::If> stmt) override;
+    std::any visitPrintStmt(std::shared_ptr<Statement::Print> stmt) override;
+    std::any visitReturnStmt(std::shared_ptr<Statement::Return> stmt) override;
+    std::any visitWhileStmt(std::shared_ptr<Statement::While> stmt) override;
 
     std::any visitVariableExpr(std::shared_ptr<Variable> expr) override;
     std::any visitAssignExpr(std::shared_ptr<Assign> expr) override;

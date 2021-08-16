@@ -63,7 +63,7 @@ std::any Call::accept(ExprVisitor &visitor) {
 }
 
 Lambda::Lambda(std::vector<Token> params,
-               std::vector<std::shared_ptr<Stmt>> body) :
+               std::vector<std::shared_ptr<Statement::Stmt>> body) :
     params{std::move(params)}, body{std::move(body)} {}
 
 std::any Lambda::accept(ExprVisitor &visitor) {

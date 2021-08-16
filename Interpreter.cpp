@@ -192,27 +192,27 @@ std::any Interpreter::evaluate(std::shared_ptr<Expr> expr) {
     return expr->accept(*this);
 }
 
-std::any Interpreter::visitExpressionStmt(std::shared_ptr<Expression> stmt) {
+std::any Interpreter::visitExpressionStmt(std::shared_ptr<Statement::Expression> stmt) {
     std::any value = evaluate(stmt->expression);
     return {};
 }
 
-std::any Interpreter::visitPrintStmt(std::shared_ptr<Print> stmt) {
+std::any Interpreter::visitPrintStmt(std::shared_ptr<Statement::Print> stmt) {
     std::any value = evaluate(stmt->expression);
     std::cout << stringify(value) << "\n";
     return {};
 }
 
-void Interpreter::execute(std::shared_ptr<Stmt> statement) {
+void Interpreter::execute(std::shared_ptr<Statement::Stmt> statement) {
     statement->accept(*this);
 }
 
-void Interpreter::executeBlock(const std::vector<std::shared_ptr<Stmt>>
+void Interpreter::executeBlock(const std::vector<std::shared_ptr<Statement::Stmt>>
                                &statements, std::shared_ptr<Env> new_env) {
     std::shared_ptr<Env> previous = this->curr_env;
     try {
         this->curr_env = new_env;
-        for (const std::shared_ptr<Stmt> &statement : statements) {
+        for (const std::shared_ptr<Statement::Stmt> &statement : statements) {
             execute(statement);
         }
     } catch(...) {
@@ -223,9 +223,9 @@ void Interpreter::executeBlock(const std::vector<std::shared_ptr<Stmt>>
 }
 
 // AST interpretation begins here
-void Interpreter::interpret(std::vector<std::shared_ptr<Stmt>> &statements) {
+void Interpreter::interpret(std::vector<std::shared_ptr<Statement::Stmt>> &statements) {
     try {
-        for (std::shared_ptr<Stmt> &statement : statements) {
+        for (std::shared_ptr<Statement::Stmt> &statement : statements) {
             execute(statement);
         }
     } catch (RuntimeError &error) {
@@ -237,12 +237,12 @@ std::any Interpreter::visitGroupingExpr(std::shared_ptr<Grouping> expr) {
     return evaluate(expr->expression);
 }
 
-std::any Interpreter::visitBlockStmt(std::shared_ptr<Block> stmt) {
+std::any Interpreter::visitBlockStmt(std::shared_ptr<Statement::Block> stmt) {
     executeBlock(stmt->statements, std::make_shared<Env>(curr_env)); 
     return {};
 }
 
-std::any Interpreter::visitVarStmt(std::shared_ptr<Var> stmt) {
+std::any Interpreter::visitVarStmt(std::shared_ptr<Statement::Var> stmt) {
     std::any value = nullptr;
     if (stmt->init != nullptr) {
         value = evaluate(stmt->init);
@@ -251,7 +251,7 @@ std::any Interpreter::visitVarStmt(std::shared_ptr<Var> stmt) {
     return {};
 }
 
-std::any Interpreter::visitIfStmt(std::shared_ptr<If> stmt) {
+std::any Interpreter::visitIfStmt(std::shared_ptr<Statement::If> stmt) {
     if (isTruthy(evaluate(stmt->condition))) {
         execute(stmt->thenBranch);
     } else if (stmt->elseBranch != nullptr) {
@@ -300,7 +300,7 @@ std::any Interpreter::visitLogicalExpr(std::shared_ptr<Logical> expr) {
     return evaluate(expr->right);
 }
 
-std::any Interpreter::visitWhileStmt(std::shared_ptr<While> stmt) {
+std::any Interpreter::visitWhileStmt(std::shared_ptr<Statement::While> stmt) {
     while (isTruthy(evaluate(stmt->condition))) {
         execute(stmt->body);
     }
@@ -368,13 +368,13 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
 }
 
 // Interpreting function declaration
-std::any Interpreter::visitFunctionStmt(std::shared_ptr<Function> stmt) {
+std::any Interpreter::visitFunctionStmt(std::shared_ptr<Statement::Function> stmt) {
     auto function = std::make_shared<DloxFunction>(stmt, curr_env);
     curr_env->define(stmt->name.text, function);
     return {};
 }
 
-std::any Interpreter::visitReturnStmt(std::shared_ptr<Return> stmt) {
+std::any Interpreter::visitReturnStmt(std::shared_ptr<Statement::Return> stmt) {
     std::any value = nullptr;
     if (stmt->value != nullptr) value = evaluate(stmt->value);
     throw DloxReturn{value};

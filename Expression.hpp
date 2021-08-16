@@ -75,9 +75,10 @@ struct Call: Expr, public std::enable_shared_from_this<Call> {
 
 struct Lambda: Expr, public std::enable_shared_from_this<Lambda> {
     std::vector<Token> params;
-    std::vector<std::shared_ptr<Stmt>> body;
+    std::vector<std::shared_ptr<Statement::Stmt>> body;
 
-    Lambda(std::vector<Token> params, std::vector<std::shared_ptr<Stmt>> body);
+    Lambda(std::vector<Token> params,
+           std::vector<std::shared_ptr<Statement::Stmt>> body);
     std::any accept(ExprVisitor &visitor) override;
 };
 
