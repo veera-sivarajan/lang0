@@ -3,9 +3,10 @@ CFLAGS = -Wall -Wextra -std=c++20
 OBJECTS = $(filter-out test.cpp, $(wildcard *.cpp)) #Source files
 NAME = dlox #Desired filename
 TODELETE = *.o # the *.o should be the same as the objects
+LIBS = -lreadline
 
 mt-collatz : $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) 
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIBS)
 
 .PHONY: test clean run
 

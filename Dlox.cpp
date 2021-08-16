@@ -11,6 +11,9 @@
 # define BOLDBLUE "\033[1m\033[34m"      /* Bold Blue */
 # define RESET    "\033[0m"
 
+# include <readline/readline.h>
+# include <readline/history.h>
+
 using std::string;
 using std::vector;
 using std::cout;
@@ -50,10 +53,16 @@ void Dlox::runFile(string path) {
 
 void Dlox::runPrompt() {
     string input;
+    std::ostringstream builder;
+    builder << BOLDBLUE << "Dlox> " << RESET;
+    std::string prompt = builder.str();
     while (1) {
-        cout << BOLDBLUE << "Dlox> " << RESET;
-        std::getline(std::cin, input);
-        if (input.empty()) continue;
+        input = readline(prompt.c_str());
+        if (input.empty()) {
+            continue;
+        } else {
+            add_history(input.c_str());
+        }
         if (input == "exit") std::exit(0);
         run(input);
         Error::hadError = false;
