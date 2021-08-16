@@ -4,6 +4,7 @@ Resolver::Resolver(Interpreter& interpreter) :
     interpreter{interpreter} {}
 
 // resolve a statement
+// std::vector<std::map<Token, int>> identifiers; 
 void Resolver::resolve(std::shared_ptr<Stmt> statement) {
     statement->accept(*this);
 }

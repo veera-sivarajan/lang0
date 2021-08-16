@@ -98,4 +98,18 @@ var a = [1, 2, 3, 4];
 print a[0.5];
 #+END_SRC
 
-** First line after a function inside a function is considered outside function 
+** DONE Cannot return from function containing another function 
+* Video
+Hello everyone! Over the summer, I wrote a programming language in Cpp based on the book Crafting Interpreters. In this video, I'm going to show some of the features I have implemented on my own.  
+
+1. So firstly I added lambda expressions to the language. In the beginning of the summer, I wrote a lot of Lisp and I really liked it so I wanted to makes this language behave like a lisp even though it has C like syntax. Interpreting a lambda is a lot like interpreting a function declaration but the difference is in a function declaration, I cast the parsed function to the runtime's function type and define it in the current environment whereas in a lambda I cast it and return the function as a value.  
+
+2. Next I made the interpreter throw warnings if any variable in local scope is unused. The original implementation in the book had all the mechanism and I only had to extend it a bit to make it work. Every time the resolver enters a local scope, it pushes an empty map into the stack and when it sees a variable being declared it adds the name as key and zero as value. Whenver a variable gets resolved, its value is incremented by one. So by the end of the scope, the interpreter knows how many times each variable has been used. So to check for unused variables in a local scope, the interpreter iterates through all the variables in the current map and if the value is zero it throws a warning. 
+
+3. Finally, when the interpreter was almost complete I realized I couldn't write any real programs because there was no List data type in the language so I spent the last couple days adding List type to the language and it was so much fun. To interpret a list expression, the interpreter iterates through all parsed values, evaluates them and appends it to runtime's representation of list. To store a new value or to get value from list, we can index it using C like syntax. If the parsed expression has a value, it means the user is trying to set the value at a particular index so the interpreter checks for range and stores the value. Or if the parsed expression has no value, it means they're trying to get the value at a particular index so the interpreter calls the list method for fetching element at a index. If the user is trying to get a value that is out of bounds, the interpreter returns a nullptr instead of an error because its helpful when iterating through lists and also trying to use a null variable is an error so it is safe. 
+   
+4. I should also highlight a bug in the language because its not fair if I only talk about the features. 
+
+   A. The interpreter treats every number as a double. This also includes the index of lists. So to get the first element from list, we can do something like print list[0.879] and it will print the element at index zero because it gets casted during runtime. I can try to make this an error while parsing but its funny to look at in the source code so I'm going to leave it like that.   
+
+   So that's all I have about the language, thanks for watching!
