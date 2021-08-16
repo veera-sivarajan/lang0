@@ -69,8 +69,14 @@ void Dlox::runPrompt() {
     }
 }
 
+void Dlox::loadRunPrompt(string path) {
+    Dlox::runFile(path);
+    Dlox::runPrompt();
+}
+
 int main(void) {
     // Dlox::runFile("./test.dlox");
-    Dlox::runPrompt();
+    // Dlox::runPrompt();
+    Dlox::loadRunPrompt("./primitives.dlox");
     return 0;
 }

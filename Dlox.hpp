@@ -12,4 +12,5 @@ private:
 public:
     static void runPrompt();
     static void runFile(string path);
+    static void loadRunPrompt(string path);
 };
