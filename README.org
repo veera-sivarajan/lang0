@@ -14,9 +14,9 @@ Currently there is no way to represent a sequence of data. Now that I think more
 Lambdas were handy in Scheme. So it would be nice if I can implement it
 in Dlox too. 
 ** DONE Report error when accessing uninitialized variables
-** TODO Move all AST nodes into a namespace
+** DONE Move all AST nodes into a namespace
 The current setup works fine but names might collide with names from other libraries. So its better if I move everything into a namespace. 
-** TODO Get input using Readline in repl
+** DONE Get input using Readline in repl
 * Questions
 1. How does the visitor pattern work?
 
@@ -104,7 +104,7 @@ Hello everyone! Over the summer, I wrote a programming language in Cpp based on 
 
 1. So firstly I added lambda expressions to the language. In the beginning of the summer, I wrote a lot of Lisp and I really liked it so I wanted to makes this language behave like a lisp even though it has C like syntax. Interpreting a lambda is a lot like interpreting a function declaration but the difference is in a function declaration, I cast the parsed function to the runtime's function type and define it in the current environment whereas in a lambda I cast it and return the function as a value.  
 
-2. Next I made the interpreter throw warnings if any variable in local scope is unused. The original implementation in the book had all the mechanism and I only had to extend it a bit to make it work. Every time the resolver enters a local scope, it pushes an empty map into the stack and when it sees a variable being declared it adds the name as key and zero as value. Whenver a variable gets resolved, its value is incremented by one. So by the end of the scope, the interpreter knows how many times each variable has been used. So to check for unused variables in a local scope, the interpreter iterates through all the variables in the current map and if the value is zero it throws a warning. 
+2. Next I made the interpreter throw warnings if any variable in local scope is unused. So the way this works is by using a stack, when the resolver enters a local scope, it pushes an empty map into the stack and when it's about to exit a scope it pops the stack. In the meantime, if the resolvers sees a variable being declared it stores the variable with zero as the value and when the variable is being used in the local scope it increments the value by one. So by the time the resolver exits a scope it has map containing all the declared variables and the number of times each one is used in the scope and to check for unused variables it iterates through all of them and checks if the value is zero.   
 
 3. Finally, when the interpreter was almost complete I realized I couldn't write any real programs because there was no List data type in the language so I spent the last couple days adding List type to the language and it was so much fun. To interpret a list expression, the interpreter iterates through all parsed values, evaluates them and appends it to runtime's representation of list. To store a new value or to get value from list, we can index it using C like syntax. If the parsed expression has a value, it means the user is trying to set the value at a particular index so the interpreter checks for range and stores the value. Or if the parsed expression has no value, it means they're trying to get the value at a particular index so the interpreter calls the list method for fetching element at a index. If the user is trying to get a value that is out of bounds, the interpreter returns a nullptr instead of an error because its helpful when iterating through lists and also trying to use a null variable is an error so it is safe. 
    

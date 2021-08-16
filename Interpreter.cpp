@@ -338,7 +338,6 @@ std::any Interpreter::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
     return {};
 }
     
-
 // Interpret function calls
 std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
     std::any callee = evaluate(expr->callee); // name of the function
