@@ -28,11 +28,10 @@ fun badBoy(a, b) {
     return c * d;
 }
 print badBoy(1, 2);
+// Output
+// [line 1] Warning at 'b': Unused local variable.
+// [line 1] Warning at 'a': Unused local variable.
 #+end_src
-#+RESULTS:
-: [line 1] Warning at 'b': Unused local variable.
-: [line 1] Warning at 'a': Unused local variable.
-
 ** Acknowledgement
 I would not have finished this project without the inspiration I got from the below mentioned links.
 - [[https://github.com/the-lambda-way/CppLox][CppLox]]: Used this as a reference to write the interpreter in modern C++.
