@@ -1,6 +1,7 @@
 #+TITLE: lang0
-A tree walk interpreter written in modern C++ following Bob Nystrom's [[https://craftinginterpreters.com/][Crafting Interpreters]]. I have also added some features that would make the language more usable. 
-** Additional Features
+A tree walk interpreter written in modern C++ following Bob Nystrom's [[https://craftinginterpreters.com/][Crafting Interpreters]]. In this project, my goal was to learn and understand how the scanner, parser, interpreter and environment all work together to form a programming language. In the end, I have gained a better understanding of all the concepts involved in the making on an interpreter and also a better ways to reason about programs. 
+**  Additional Features
+ I have also added some features that would make the language more usable. 
 *** Lists
 Implementing Lists in lang0 was the most exciting part of the project. Internally, Lists are stored as ~std::vector<std::any>~ and uses its methods to add and remove elements from the list. To iterate through all the elements in a list and terminate at the end, the interpreter returns a ~nil~ when indexing out of bound. 
 #+begin_src
