@@ -1,7 +1,7 @@
 #+TITLE: lang0
 A tree walk interpreter written in modern C++ following Bob Nystrom's [[https://craftinginterpreters.com/][Crafting Interpreters]]. I have also added some features that would make the language more usable. 
-* Additional Features
-** Lists
+** Additional Features
+*** Lists
 Implementing Lists in lang0 was the most exciting part of the project. Internally, Lists are stored as ~std::vector<std::any>~ and uses its methods to add and remove elements from the list. To iterate through all the elements in a list and terminate at the end, the interpreter returns a ~nil~ when indexing out of bound. 
 #+begin_src
 var list = [1, 2, 3, 4, 5];
@@ -13,13 +13,13 @@ for (var i = 0; list[i] != nil; i = i + 1) {
 }
 print result; // [10, 20, 30, 40, 50]
 #+end_src
-** Anonymous Functions
+*** Anonymous Functions
 It felt odd to not have lambdas when functions are first class citizens. To evaluate lambda expressions, the interpreter casts the parsed function into runtime's representation of a function (=class LambdaFunction= in ~/include/DloxFunction.hpp~) and returns the value. Here, unlike executing function declarations, it is not defined in the current environment.   
 #+begin_src
 var list = [1, 2, 3, 4, 5];
 print map(lambda(num) { return num * num; }, list); // [1, 4, 9, 16, 25]
 #+end_src
-** Unused Variable Warnings
+*** Unused Variable Warnings
 The interpreter throws warnings when variables in a local scope are not used. While the Resolver scans through the code, it pushes and pops a map when entering and exiting a local scope. When a new variable is declared in the local scope, it gets added to the top most map with zero as value and whenver it gets resolved in the scope, the value is incremented by one. So by the end of scope, calling ~checkUnusedVariables()~ will loop through all the pairs in the map and throw a warning if any value is zero.  
 #+begin_src
 fun badBoy(a, b) {
@@ -32,7 +32,8 @@ print badBoy(1, 2);
 #+RESULTS:
 : [line 1] Warning at 'b': Unused local variable.
 : [line 1] Warning at 'a': Unused local variable.
-* Acknowledgement
+
+** Acknowledgement
 I would not have finished this project without the inspiration I got from the below mentioned links.
 - [[https://github.com/the-lambda-way/CppLox][CppLox]]: Used this as a reference to write the interpreter in modern C++.
 - [[https://calebschoepp.com/blog/2020/adding-a-list-data-type-to-lox/][Adding A List Data Type To Lox:]] Learnt the grammar for parsing lists.  
