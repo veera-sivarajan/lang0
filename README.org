@@ -1,115 +1,38 @@
-#+TITLE: Dlox: A simple interpreter
-* Features
-** TODO nor and nand operator
-Most of the mainstream programming languages only have 'and', 'or' and 'not' operators. I'm going to try and add 'nor' and 'nand' operator into my language as I felt its need today while writing the interpreter. I think it might come handy at times. 
+#+TITLE: lang0
+A tree walk interpreter written in modern C++ following Bob Nystrom's [[https://craftinginterpreters.com/][Crafting Interpreters]]. I have also added some features that would make the language more usable. 
+* Additional Features
+** Lists
+Implementing Lists in lang0 was the most exciting part of the project. Internally, Lists are stored as ~std::vector<std::any>~ and uses its methods to add and remove elements from the list. To iterate through all the elements in a list and terminate at the end, the interpreter returns a ~nil~ when indexing out of bound. 
+#+begin_src
+var list = [1, 2, 3, 4, 5];
+print list[0]; // 1
 
-** TODO Remove semicolons
-Its a little annoying to use semicolons in Dlox because for the most part the syntax resembles Python and it does not have semi colons. I get that the author has designed the syntax based on Dart as he works on it for a living. However, in Dlox the use of semicolons is unappealing. So I'm planning to remove it once I add all the features in the language. 
-** TODO Add a web interface for the interpreter
-I'm thinking of adding a Replit like interface to Dlox. This would allow more people to play with Dlox and I would also get to learn about web hosting.
-** DONE Implement lists
-Currently there is no way to represent a sequence of data. Now that I think more about data structures, there is actually no way to represent any data strctures. The language is completely useless without a way to represent data using structures. So I guess I should add at least lists into the language.
-** DONE Report error when local variables are unused
-** DONE Implement anonymous functions
-Lambdas were handy in Scheme. So it would be nice if I can implement it
-in Dlox too. 
-** DONE Report error when accessing uninitialized variables
-** DONE Move all AST nodes into a namespace
-The current setup works fine but names might collide with names from other libraries. So its better if I move everything into a namespace. 
-** DONE Get input using Readline in repl
-* Questions
-1. How does the visitor pattern work?
-
-   I'm not sure how to explain it clearly but I think I have a basic understanding of the concept.
-
-   Essentially, visitor pattern makes it easy to add more operations to existing classes. In Dlox, there are four core classes: Binary, Grouping, Literal and Unary. As I continue to work on the Dlox, I would be adding a number of methods to manipulate the data inside eash of the classes. Generally, without the use of visitor pattern, I would have to add these methods inside every class. But this would make similar methods spread all over the code base. For example, the interpret method for Binary expressions would be nested inside Binary class and the interpret method for Unary expression would be inside Unary class. 
-
-   With the use of Visitor pattern, I could implement similar operations for any number of classes in one file and with the help of polymorphism, make the object access the right method. For interpretring the parsed source code, I have implemented all the operations inside Interpreter.cpp. ~Interpreter::interpret~ is passed a pointer pointing to the Abstract Syntax Tree(AST) and this tree is composed of expressions of types Binary, Literal, Grouping and Unary. For evaluating the tree, ~evaluate()~ calls ~accept()~ method on the passed expression pointer with a pointer to interpreter object itself as argument. Now polymorphism comes into action and helps the interpreter access the right method based on the type of the expression pointer. If the expression pointer points to to a Binary object, it would access ~Interpreter::visitBinaryExpr()~ and if pointer points to some other object, it would call the method specific for that object. This shows how we can group all the methods for interpreting various types of expressions into one file. If not for visitor pattern, I would have implemented the interpret method for every type inside its own class. 
-
-   To make the visitor pattern work, I'm adding a level of indirection: the evaluate method in a Interpreter object, passes itself to a type class (Binary, Unary, Literal, Grouping) and in return the type class calls its specific method (visit[Binary, Literal, Grouping, Unary]Expr()) inside the interpreter object passing a pointer to itself as argument. Now the execution comes back to the interpreter object and the expression is recursively evaluated. To summarize, it follows the path Interpreter -> Expression Type -> Interpreter. The first step (Interpreter -> Expression Type) decides which method gets called (polymorphism) inside the Interpreter object. So this layer of indirection allows us to easily add operations to existing types without modifying the type classes. 
-
-   Usually, its hard to add new operations on existing types without touching the types in OOP style whereas in Functional programming it is easier to add new operations. So essentially the visitor pattern enables us to approximate functional style within OOP. 
-
-2. Difference between Dynamic and Lexical scope? 
-   #+begin_src python
-     a = 10
-     def add(b):
-         return a + b
-     
-     def temp():
-         a = 50
-         return add(10)
-     
-     print(temp())
-   #+end_src
-
-   *Lexical scope:*
-   #+RESULTS:
-   : 20
-   In lexical scope, the scope of the variable can be determined by its location in the source code without executing it. For example, in the python code above, the value of ~a~ is 50 inside ~temp()~ and in other places its value is 10. Thus we can determine the value of ~a~ inside ~temp()~ by examining the source code. 
-
-   Lexical scope was first introduced in ALGOL. Almost all recent programming language offer lexical scoping as default. 
-
-   *Dynamic scope:*
-   #+RESULTS:
-   : 60
-   In dynamic scope, a reference to the variable points to the most recently initialized value. If the above mentioned code had dynamic scope, the value of ~a~ inside ~add()~ when it is called from ~temp()~ would be 50. Thus the most recently initialized value of 50 is referenced instead of 10. 
-
-   Computer scientists back in the day falsely believed that dynamic scope was faster to execute but this claim has been disproved by Scheme hackers. Emacs Lisp used to have dynamic scope by default until version 27. Also, bash and the original version of Lisp are examples of dynamically scoped programming languages. 
-
-3. Difference between ~if~ statement and conditional operator ~?:~?
-   An ~if~ statement lets the user conditionally execute statements.
-
-   A conditional operator lets the user conditionally execute a expression. The conditional operator is also called the ternary operator as its the only operator in ~C~ that takes three operands. 
-   
-* Quick Look
-1. *Expression statements:*
-   By book's definition, expression statements are expressions with side effects. An other book (K&R) explains expression statements to be expression followed by semicolons and that expression statements do all the real work in C. For example, method calls followed by ~;~ is an expression statement.   
-
-   Since the exact difference between expression and statement is unclear, I'm going to diffrentiate expression and statement. 
-
-   | Expression                      | Statement                        |
-   |---------------------------------+----------------------------------|
-   | Expression evaluates to a value | Changes the state of the program |
-   | Does not have side effects      | Has atleast one side effect      |
-   | Eg. ~1 + 2~, ~2~, ~(1 + 4 / 2)~ | Eg. ~print "Hello, world!"~      |
-
-   The points mentioned above are highly generalized and can differ from language to language. 
-
-2. *Imperative programming:*
-   Programs that use a sequence of statements to produce the desired output. Statements usually have side effects and it comes in two forms:
-   A. Produce output -> print statements
-   B. Change the state of the program.
-
-* Bugs
-** DONE Lambda Expression
-The region inside a lambda expression should have it's own memory map with a pointer to the previous(closure) memory map. But right now, the region inside has access only to the previous(global) environment. As a result, the body of a lambda expression has no access to its parameters. 
-
-FIX:
-As I was in a hurry to get lambda expressions working, I had ignored Resolver class. But without Resolver's data, the interpreter does not know if the variable's value exists in local scope. So after I implemented the functions to resolve lambda expressions, the interpreter was able to access the parameter's values and execute the block. 
-
-** TODO Subscript index is of type double
-Since double is the only type for numbers in Dlox, it accepts a double as a valid
-index for subscripting and this gets converted to int during runtime. So currently, if index is 2.5, it gets casted as 2. I'm not sure if there's a way to make parser parse only int between the square brackets.
-
-I should also note that I find this bug harmless as it doesn't cause any big problem and also its funny to look at the syntax as I haven't seen anything like it before. So I might probably leave it as it is. 
-#+BEGIN_SRC
-var a = [1, 2, 3, 4];
-print a[0.5];
-#+END_SRC
-
-** DONE Cannot return from function containing another function 
-* Video
-Hello everyone! Over the summer, I wrote a programming language in Cpp based on the book Crafting Interpreters. In this video, I'm going to show some of the features I have implemented on my own.  
-
-1. So firstly I added lambda expressions to the language. In the beginning of the summer, I wrote a lot of Lisp and I really liked it so I wanted to makes this language behave like a lisp even though it has C like syntax. Interpreting a lambda is a lot like interpreting a function declaration but the difference is in a function declaration, I cast the parsed function to the runtime's function type and define it in the current environment whereas in a lambda I cast it and return the function as a value.  
-
-2. Next I made the interpreter throw warnings if any variable in local scope is unused. So the way this works is by using a stack, when the resolver enters a local scope, it pushes an empty map into the stack and when it's about to exit a scope it pops the stack. In the meantime, if the resolvers sees a variable being declared it stores the variable with zero as the value and when the variable is being used in the local scope it increments the value by one. So by the time the resolver exits a scope it has map containing all the declared variables and the number of times each one is used in the scope and to check for unused variables it iterates through all of them and checks if the value is zero.   
-
-3. Finally, when the interpreter was almost complete I realized I couldn't write any real programs because there was no List data type in the language so I spent the last couple days adding List type to the language and it was so much fun. For interpreting list expressions, the interpreter loops and evaluates all the parsed values in the list and adds it to the runtime's representation of list. To store and get values from the list, the interpreter checks if the parsed expression has value and if it has value it means the user is trying to set value at a particular index so it calls the list's method to set at an index and throws an error is the index is out of range. But if there is no value, then the user is trying to get the value at an index so it calls the list's method to get element at an index and if the index is out of range it returns a nullptr instead of throwing an error because it helps when looping through all the values in a list. 
-
-4. I should also highlight a bug in the language because its not fair if I only talk about the features. 
-
-   A. The interpreter treats every number as a double. This also includes the index of lists. So to get the first element from list, we can do something like print list[0.879] and it will print the element at index zero because it gets casted during runtime. I can try to make this an error while parsing but its funny to look at in the source code so I'm going to leave it like that.   
-
-   So that's all I have about the language, thanks for watching!
+var result = [];
+for (var i = 0; list[i] != nil; i = i + 1) {
+    result[i] = list[i] * 10;
+}
+print result; // [10, 20, 30, 40, 50]
+#+end_src
+** Anonymous Functions
+It felt odd to not have lambdas when functions are first class citizens. To evaluate lambda expressions, the interpreter casts the parsed function into runtime's representation of a function (=class LambdaFunction= in ~/include/DloxFunction.hpp~) and returns the value. Here, unlike executing function declarations, it is not defined in the current environment.   
+#+begin_src
+var list = [1, 2, 3, 4, 5];
+print map(lambda(num) { return num * num; }, list); // [1, 4, 9, 16, 25]
+#+end_src
+** Unused Variable Warnings
+The interpreter throws warnings when variables in a local scope are not used. While the Resolver scans through the code, it pushes and pops a map when entering and exiting a local scope. When a new variable is declared in the local scope, it gets added to the top most map with zero as value and whenver it gets resolved in the scope, the value is incremented by one. So by the end of scope, calling ~checkUnusedVariables()~ will loop through all the pairs in the map and throw a warning if any value is zero.  
+#+begin_src
+fun badBoy(a, b) {
+    var c = 10;
+    var d = 20;
+    return c * d;
+}
+print badBoy(1, 2);
+#+end_src
+#+RESULTS:
+: [line 1] Warning at 'b': Unused local variable.
+: [line 1] Warning at 'a': Unused local variable.
+* Acknowledgement
+I would not have finished this project without the inspiration I got from the below mentioned links.
+- [[https://github.com/the-lambda-way/CppLox][CppLox]]: Used this as a reference to write the interpreter in modern C++.
+- [[https://calebschoepp.com/blog/2020/adding-a-list-data-type-to-lox/][Adding A List Data Type To Lox:]] Learnt the grammar for parsing lists.  
