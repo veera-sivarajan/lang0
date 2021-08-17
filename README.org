@@ -1,5 +1,5 @@
 #+TITLE: lang0
-A tree walk interpreter written in modern C++ following Bob Nystrom's [[https://craftinginterpreters.com/][Crafting Interpreters]]. In this project, my goal was to learn and understand how the scanner, parser, interpreter and environment all work together to form a programming language. In the end, I have gained a better understanding of all the concepts involved in the making on an interpreter and also a better ways to reason about programs. 
+A tree walk interpreter written in modern C++ following Bob Nystrom's [[https://craftinginterpreters.com/][Crafting Interpreters]]. In this project, my goal was to learn and understand how the scanner, parser, interpreter and environment all work together to form a programming language. In the end, I have gained a better understanding of all the concepts involved in the making of an interpreter and also better ways to reason about programs. 
 **  Additional Features
  I have also added some features that would make the language more usable. 
 *** Lists
@@ -21,7 +21,7 @@ var list = [1, 2, 3, 4, 5];
 print map(lambda(num) { return num * num; }, list); // [1, 4, 9, 16, 25]
 #+end_src
 *** Unused Variable Warnings
-The interpreter throws warnings when variables in a local scope are not used. While the Resolver scans through the code, it pushes and pops a map when entering and exiting a local scope. When a new variable is declared in the local scope, it gets added to the top most map with zero as value and whenver it gets resolved in the scope, the value is incremented by one. So by the end of scope, calling ~checkUnusedVariables()~ will loop through all the pairs in the map and throw a warning if any value is zero.  
+The interpreter throws warnings when variables in a local scope are not used. While the Resolver scans through the code, it pushes and pops a map when entering and exiting a local scope. When a new variable is declared in the local scope, it gets added to the top most map with zero as value and whenver it gets resolved in the scope, the value is incremented by one. So by the end of the scope, calling ~checkUnusedVariables()~ will loop through all the pairs in the map and throw a warning if any value is zero.  
 #+begin_src
 fun badBoy(a, b) {
     var c = 10;
