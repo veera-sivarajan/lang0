@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -Wall -Wextra -std=c++20
-OBJECTS = $(filter-out test.cpp, $(wildcard *.cpp)) #Source files
+OBJECTS = $(filter-out test.cpp, $(wildcard ./src/*.cpp)) #Source files
 NAME = dlox #Desired filename
 TODELETE = *.o # the *.o should be the same as the objects
 LIBS = -lreadline
