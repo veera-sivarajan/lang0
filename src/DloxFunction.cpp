@@ -1,4 +1,4 @@
-# include "./DloxFunction.hpp"
+# include "../include/DloxFunction.hpp"
 
 DloxFunction::DloxFunction(std::shared_ptr<Statement::Function> declaration,
                            std::shared_ptr<Env> closure) :

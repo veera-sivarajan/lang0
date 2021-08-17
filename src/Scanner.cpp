@@ -1,5 +1,5 @@
-# include "./Scanner.hpp"
-# include "./Error.hpp"
+# include "../include/Scanner.hpp"
+# include "../include/Error.hpp"
 # include <string>
 # include <iostream>
 # include <vector>            

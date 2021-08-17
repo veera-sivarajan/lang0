@@ -1,4 +1,4 @@
-# include "./Interpreter.hpp"
+# include "../include/Interpreter.hpp"
 
 int Clock::arity() {
     return 0;
@@ -207,7 +207,8 @@ void Interpreter::execute(std::shared_ptr<Statement::Stmt> statement) {
     statement->accept(*this);
 }
 
-void Interpreter::executeBlock(const std::vector<std::shared_ptr<Statement::Stmt>>
+void Interpreter::executeBlock(
+    const std::vector<std::shared_ptr<Statement::Stmt>>
                                &statements, std::shared_ptr<Env> new_env) {
     std::shared_ptr<Env> previous = this->curr_env;
     try {
@@ -223,7 +224,8 @@ void Interpreter::executeBlock(const std::vector<std::shared_ptr<Statement::Stmt
 }
 
 // AST interpretation begins here
-void Interpreter::interpret(std::vector<std::shared_ptr<Statement::Stmt>> &statements) {
+void Interpreter::interpret(
+    std::vector<std::shared_ptr<Statement::Stmt>> &statements) {
     try {
         for (std::shared_ptr<Statement::Stmt> &statement : statements) {
             execute(statement);
@@ -367,7 +369,8 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
 }
 
 // Interpreting function declaration
-std::any Interpreter::visitFunctionStmt(std::shared_ptr<Statement::Function> stmt) {
+std::any Interpreter::visitFunctionStmt(
+    std::shared_ptr<Statement::Function> stmt) {
     auto function = std::make_shared<DloxFunction>(stmt, curr_env);
     curr_env->define(stmt->name.text, function);
     return {};

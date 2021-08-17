@@ -1,4 +1,4 @@
-# include "./Error.hpp"
+# include "../include/Error.hpp"
 
 # define RESET       "\033[0m"
 # define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */

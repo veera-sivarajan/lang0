@@ -1,4 +1,4 @@
-# include "./Resolver.hpp"
+# include "../include/Resolver.hpp"
 
 Resolver::Resolver(Interpreter& interpreter) :
     interpreter{interpreter} {}

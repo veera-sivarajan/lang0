@@ -1,4 +1,4 @@
-# include "./Ast.hpp"
+# include "../include/Ast.hpp"
 
 std::string Ast::print(std::shared_ptr<Expr> expr) {
     try {

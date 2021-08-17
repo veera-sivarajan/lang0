@@ -1,7 +1,7 @@
-# include "./Dlox.hpp"
-# include "./Parser.hpp"
-# include "./Ast.hpp"
-# include "./Interpreter.hpp"
+# include "../include/Dlox.hpp"
+# include "../include/Parser.hpp"
+# include "../include/Ast.hpp"
+# include "../include/Interpreter.hpp"
 
 # include <string>
 # include <iostream>
@@ -74,9 +74,12 @@ void Dlox::loadRunPrompt(string path) {
     Dlox::runPrompt();
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
     // Dlox::runFile("./test.dlox");
-    // Dlox::runPrompt();
-    Dlox::loadRunPrompt("./primitives.dlox");
+    if (argc == 1) {
+        Dlox::runPrompt();
+    } else if (argc == 2) {
+        Dlox::loadRunPrompt(argv[1]);
+    }
     return 0;
 }
