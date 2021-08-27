@@ -212,7 +212,6 @@ std::any Resolver::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
 void Resolver::checkUnusedVariables() {
     std::map<Token, int> &currentScope = identifiers.back();
     for (auto const& [key, val] : currentScope) {
-        // std::cout << key.text << ": " << val << std::endl;
         if (val == 0) {
             Error::warn(key, "Unused local variable.");
         }
