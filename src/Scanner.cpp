@@ -5,17 +5,11 @@
 # include <vector>            
 # include <map>
 
-using std::string;
-using std::vector;
-using std::map;
-using std::stod;
-using std::any;
-
-void Scanner::setSource(string source) {
+void Scanner::setSource(std::string source) {
     this->source = source;
 }
 
-vector<Token> Scanner::scanTokens() {
+std::vector<Token> Scanner::scanTokens() {
     while(!isAtEnd()) {
         // Beginning of next lexeme
         start = current;
@@ -100,11 +94,11 @@ char Scanner::advance() {
     return source.at(current - 1); // returns character under consideration
 }
 
-void Scanner::addToken(TokenType type, any literal) {
+void Scanner::addToken(TokenType type, std::any literal) {
     // .substr(first_character, number of character after first)
     // Token token(type, line, current - start, literal);
     // tokens.push_back(token);
-    string text{source.substr(start, current - start)};
+    std::string text{source.substr(start, current - start)};
     tokens.emplace_back(type, line, text, literal);
 }
 
@@ -143,7 +137,7 @@ void Scanner::makeString() {
     advance();
 
     // String without surrounding quotes
-    string value{source.substr(start + 1, current - start - 2)};
+    std::string value{source.substr(start + 1, current - start - 2)};
     addToken(TokenType::STRING, value);
 }
 
@@ -166,7 +160,7 @@ void Scanner::makeNumber() {
         while (isDigit(peek())) advance();
     }
 
-    string text = source.substr(start, current - start);
+    std::string text = source.substr(start, current - start);
     double number = std::stod(std::string{text});
     addToken(TokenType::NUMBER, number);
 }
@@ -184,7 +178,7 @@ bool Scanner::isAlphaNumeric(char c) {
 
 void Scanner::makeIdentifier() {
     while (isAlphaNumeric(peek())) advance();
-    string text{source.substr(start, current - start)};
+    std::string text{source.substr(start, current - start)};
     auto found = keywords.find(text); // found is an iterator
     TokenType type;
     if (found != keywords.end()) {

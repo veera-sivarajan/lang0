@@ -82,7 +82,6 @@ Subscript::Subscript(std::shared_ptr<Expr> name, std::shared_ptr<Expr> index,
     name{std::move(name)}, index{std::move(index)}, value{std::move(value)},
     paren{std::move(paren)} {}
                     
-
 std::any Subscript::accept(ExprVisitor &visitor) {
     return visitor.visitSubscriptExpr(shared_from_this());
 }

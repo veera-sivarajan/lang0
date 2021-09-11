@@ -5,9 +5,6 @@
 
 # include "../libs/magic_enum.hpp"
 
-using std::string;
-using std::any;
-
 enum class TokenType {
     // Single Character Tokens
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE, COMMA, DOT, MINUS,
@@ -28,10 +25,10 @@ class Token {
 public:
     TokenType type;
     int line; 
-    string text;
-    any literal;
+    std::string text;
+    std::any literal;
 
-    Token(TokenType type, int line, string text, any literal);
+    Token(TokenType type, int line, std::string text, std::any literal);
     bool operator<(const Token& obj) const;
     void print();
 };

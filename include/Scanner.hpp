@@ -6,20 +6,14 @@
 # include <vector>
 # include <map>
 
-using std::string;
-using std::vector;
-using std::map;
-using std::stod;
-using std::endl;
-
 class Scanner {
 private:
     int start = 0;   // first character in the lexeme being scanned
     int current = 0; // character currently under consideration
     int line = 1;    // line # of current
-    string source;
-    vector<Token> tokens;
-    map<string, TokenType> keywords = {
+    std::string source;
+    std::vector<Token> tokens;
+    std::map<std::string, TokenType> keywords = {
         {"and",    TokenType::AND},
         {"class",  TokenType::CLASS},
         {"else",   TokenType::ELSE},
@@ -47,7 +41,7 @@ private:
     void scanToken();
     char advance();
     void addToken(TokenType type);
-    void addToken(TokenType type, any literal);
+    void addToken(TokenType type, std::any literal);
     char peek();
     char peekNext();
     void makeString();
@@ -55,9 +49,9 @@ private:
     void makeIdentifier();
     
 public:
-    void setSource(string source);
+    void setSource(std::string source);
     void printToken(Token token);
-    vector<Token> scanTokens();
+    std::vector<Token> scanTokens();
     bool isAtEnd();
 };
     

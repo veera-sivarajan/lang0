@@ -14,13 +14,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-using std::string;
-using std::vector;
-using std::cout;
-
 Interpreter interpreter{};
 
-void Dlox::run(string source) {
+void Dlox::run(std::string source) {
     Scanner scanner;
     scanner.setSource(source);
     vector<Token> tokens = scanner.scanTokens();

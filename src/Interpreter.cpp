@@ -46,7 +46,8 @@ bool Interpreter::isEqual(const std::any &left, const std::any &right) {
 
     if (left.type() == typeid(std::string) &&
         right.type() == typeid(std::string)) {
-        return std::any_cast<string>(left) == std::any_cast<string>(right);
+        return std::any_cast<std::string>(left) ==
+            std::any_cast<std::string>(right);
     }
 
     if (left.type() == typeid(bool) && right.type() == typeid(bool)) {
@@ -92,8 +93,10 @@ std::any Interpreter::visitBinaryExpr(std::shared_ptr<Binary> expr) {
         if (left.type() == typeid(double) && right.type() == typeid(double)) {
             return std::any_cast<double>(left) + std::any_cast<double>(right);
         } 
-        if (left.type() == typeid(string) && right.type() == typeid(string)) {
-            return std::any_cast<string>(left) + std::any_cast<string>(right);
+        if (left.type() == typeid(std::string) &&
+            right.type() == typeid(std::string)) {
+            return std::any_cast<std::string>(left) +
+                std::any_cast<std::string>(right);
         }
         throw RuntimeError{expr->oper, "Operands not of same type."};
         
@@ -153,10 +156,10 @@ std::string Interpreter::stringify(const std::any &object) {
 
     if (object.type() == typeid(bool)) {
         if (std::any_cast<bool>(object)) {
-            string result{"true"};
+            std::string result{"true"};
             return result;
         } else {
-            string result{"false"};
+            std::string result{"false"};
             return result;
         }
     }
