@@ -318,7 +318,7 @@ std::any Interpreter::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
     if (name.type() == typeid(std::shared_ptr<ListType>)) {
         if (index.type() == typeid(double)) {
             std::shared_ptr<ListType> list;
-            int castedIndex;
+            double castedIndex;
             list = std::any_cast<std::shared_ptr<ListType>>(name);
             castedIndex = std::any_cast<double>(index);
             if (expr->value != nullptr) {

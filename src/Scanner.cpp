@@ -15,8 +15,6 @@ std::vector<Token> Scanner::scanTokens() {
         start = current;
         scanToken();
     }
-    // Token token(TokenType::EOF_TOKEN, line, current - start, "");
-    // tokens.push_back(token);
     tokens.emplace_back(TokenType::EOF_TOKEN, line, "", nullptr);
     return tokens;
 }
@@ -95,9 +93,6 @@ char Scanner::advance() {
 }
 
 void Scanner::addToken(TokenType type, std::any literal) {
-    // .substr(first_character, number of character after first)
-    // Token token(type, line, current - start, literal);
-    // tokens.push_back(token);
     std::string text{source.substr(start, current - start)};
     tokens.emplace_back(type, line, text, literal);
 }
