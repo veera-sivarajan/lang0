@@ -45,19 +45,21 @@ public:
     std::any visitListExpr(std::shared_ptr<List> expr) override;
     std::any visitSubscriptExpr(std::shared_ptr<Subscript> expr) override;
 
-    std::any visitExpressionStmt(std::shared_ptr<Statement::Expression> stmt) override;
+    std::any visitExpressionStmt(std::shared_ptr<Statement::Expression> stmt)
+        override;
     std::any visitPrintStmt(std::shared_ptr<Statement::Print> stmt) override;
     std::any visitBlockStmt(std::shared_ptr<Statement::Block> stmt) override;
     std::any visitVarStmt(std::shared_ptr<Statement::Var> stmt) override;
     std::any visitIfStmt(std::shared_ptr<Statement::If> stmt) override;
     std::any visitWhileStmt(std::shared_ptr<Statement::While> stmt) override;
-    std::any visitFunctionStmt(std::shared_ptr<Statement::Function> stmt) override;
+    std::any visitFunctionStmt(std::shared_ptr<Statement::Function> stmt)
+        override;
     std::any visitReturnStmt(std::shared_ptr<Statement::Return> stmt) override;
 
     void interpret(std::vector<std::shared_ptr<Statement::Stmt>> &statements);
     void execute(std::shared_ptr<Statement::Stmt> statement);
-    void executeBlock(const std::vector<std::shared_ptr<Statement::Stmt>> &statements,
-                      std::shared_ptr<Env> new_env);
+    void executeBlock(const std::vector<std::shared_ptr<Statement::Stmt>>
+                      &statements, std::shared_ptr<Env> new_env);
     void resolve(std::shared_ptr<Expr> expr, int depth);
 
     std::shared_ptr<Env> global{new Env};
