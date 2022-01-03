@@ -45,7 +45,7 @@ void Resolver::resolveLocal(std::shared_ptr<Expr> expr, Token& name) {
     for (int i = scopeSize; i >= 0; --i) {
         // if variable found in scope i
         if (scopes[i].find(name.text) != scopes[i].end()) {
-            identifiers[i][name] += 1;
+            identifiers[i].erase(name);
             interpreter.resolve(expr, scopeSize - i);
             return;
         }
@@ -212,8 +212,6 @@ std::any Resolver::visitSubscriptExpr(std::shared_ptr<Subscript> expr) {
 void Resolver::checkUnusedVariables() {
     std::map<Token, int> &currentScope = identifiers.back();
     for (auto const& [key, val] : currentScope) {
-        if (val == 0) {
-            Error::warn(key, "Unused local variable.");
-        }
+        Error::warn(key, "Unused local variable.");
     }
 }
